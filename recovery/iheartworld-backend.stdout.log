@@ -1,0 +1,90 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------------< com.myfirstapp:i-heart-world >--------------------
+[INFO] Building i-heart-world 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.5.3:run (default-cli) > test-compile @ i-heart-world >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ i-heart-world ---
+[INFO] Copying 3 resources from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ i-heart-world ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 22 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ i-heart-world ---
+[INFO] skip non existing resourceDirectory D:\CodingAndSoftware\IHeartWorld_FullProject\IHeartWorld_Project\Back_End\i-heart-world-spring\i-heart-world\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ i-heart-world ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 2 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] /D:/CodingAndSoftware/IHeartWorld_FullProject/IHeartWorld_Project/Back_End/i-heart-world-spring/i-heart-world/src/test/java/com/myfirstapp/i_heart_world/controllers/PostControllerTest.java: D:\CodingAndSoftware\IHeartWorld_FullProject\IHeartWorld_Project\Back_End\i-heart-world-spring\i-heart-world\src\test\java\com\myfirstapp\i_heart_world\controllers\PostControllerTest.java uses or overrides a deprecated API.
+[INFO] /D:/CodingAndSoftware/IHeartWorld_FullProject/IHeartWorld_Project/Back_End/i-heart-world-spring/i-heart-world/src/test/java/com/myfirstapp/i_heart_world/controllers/PostControllerTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] <<< spring-boot:3.5.3:run (default-cli) < test-compile @ i-heart-world <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.5.3:run (default-cli) @ i-heart-world ---
+[INFO] Attaching agents: []
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.3)
+
+2026-09-02T20:32:44.823-04:00  INFO 45252 --- [           main] c.m.i.IHeartWorldApplication             : Starting IHeartWorldApplication using Java 21.0.3 with PID 45252 (D:\CodingAndSoftware\IHeartWorld_FullProject\IHeartWorld_Project\Back_End\i-heart-world-spring\i-heart-world\target\classes started by darkm in D:\CodingAndSoftware\IHeartWorld_FullProject\IHeartWorld_Project\Back_End\i-heart-world-spring\i-heart-world)
+2026-09-02T20:32:44.824-04:00  INFO 45252 --- [           main] c.m.i.IHeartWorldApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-09-02T20:32:45.117-04:00  INFO 45252 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-02T20:32:45.146-04:00  INFO 45252 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 6 JPA repository interfaces.
+2026-09-02T20:32:45.367-04:00  INFO 45252 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-02T20:32:45.374-04:00  INFO 45252 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-02T20:32:45.375-04:00  INFO 45252 --- [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.42]
+2026-09-02T20:32:45.407-04:00  INFO 45252 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-02T20:32:45.408-04:00  INFO 45252 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 561 ms
+Standard Commons Logging discovery in action with spring-jcl: please remove commons-logging.jar from classpath in order to avoid potential conflicts
+2026-09-02T20:32:45.470-04:00  INFO 45252 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-02T20:32:45.489-04:00  INFO 45252 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.18.Final
+2026-09-02T20:32:45.502-04:00  INFO 45252 --- [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-02T20:32:45.608-04:00  INFO 45252 --- [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-02T20:32:45.619-04:00  INFO 45252 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-02T20:32:45.696-04:00  INFO 45252 --- [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6dc2279c
+2026-09-02T20:32:45.697-04:00  INFO 45252 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-02T20:32:45.716-04:00  WARN 45252 --- [           main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-02T20:32:45.721-04:00  WARN 45252 --- [           main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2026-09-02T20:32:45.729-04:00  INFO 45252 --- [           main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-02T20:32:46.099-04:00  INFO 45252 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-02T20:32:46.154-04:00  INFO 45252 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-02T20:32:46.299-04:00  WARN 45252 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-02T20:32:46.552-04:00  INFO 45252 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-02T20:32:46.556-04:00  INFO 45252 --- [           main] c.m.i.IHeartWorldApplication             : Started IHeartWorldApplication in 1.954 seconds (process running for 2.14)
+2026-09-02T20:32:46.823-04:00  INFO 45252 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-02T20:32:46.824-04:00  INFO 45252 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-02T20:32:46.824-04:00  INFO 45252 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:04 min
+[INFO] Finished at: 2026-09-02T20:33:45-04:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.springframework.boot:spring-boot-maven-plugin:3.5.3:run (default-cli) on project i-heart-world: Process terminated with exit code: -1 -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

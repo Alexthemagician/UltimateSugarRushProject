@@ -1,0 +1,189 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/boot_screen.gd" id="1_boot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleCard"]
+bg_color = Color(1, 0.970588, 0.92549, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.78)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+shadow_color = Color(0.25098, 0.101961, 0.160784, 0.18)
+shadow_size = 24
+shadow_offset = Vector2(0, 12)
+
+[sub_resource type="StyleBoxFlat" id="StyleProgressBackground"]
+bg_color = Color(0.831373, 0.698039, 0.643137, 0.35)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleProgressFill"]
+bg_color = Color(0.607843, 0.192157, 0.352941, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBadge"]
+bg_color = Color(0.368627, 0.611765, 0.509804, 0.16)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleButton"]
+bg_color = Color(0.607843, 0.192157, 0.352941, 1)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0.25098, 0.101961, 0.160784, 0.22)
+shadow_size = 10
+shadow_offset = Vector2(0, 6)
+
+[node name="BootScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_boot")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+mouse_filter = 2
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 96
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 72
+
+[node name="Layout" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+theme_override_constants/separation = 34
+alignment = 1
+
+[node name="TopSpacer" type="Control" parent="SafeArea/Layout"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Badge" type="PanelContainer" parent="SafeArea/Layout"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBadge")
+
+[node name="BadgeLabel" type="Label" parent="SafeArea/Layout/Badge"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.227451, 0.427451, 0.352941, 1)
+theme_override_font_sizes/font_size = 30
+text = "A COZY CAFE ADVENTURE"
+horizontal_alignment = 1
+
+[node name="LogoCard" type="PanelContainer" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 590)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleCard")
+
+[node name="LogoMargin" type="MarginContainer" parent="SafeArea/Layout/LogoCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 56
+theme_override_constants/margin_top = 52
+theme_override_constants/margin_right = 56
+theme_override_constants/margin_bottom = 52
+
+[node name="LogoStack" type="VBoxContainer" parent="SafeArea/Layout/LogoCard/LogoMargin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="PastryMark" type="Label" parent="SafeArea/Layout/LogoCard/LogoMargin/LogoStack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.843137, 0.431373, 0.239216, 1)
+theme_override_font_sizes/font_size = 116
+text = "USC"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="SafeArea/Layout/LogoCard/LogoMargin/LogoStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 74
+text = "ULTIMATE\nSUGAR RUSH"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Tagline" type="Label" parent="SafeArea/Layout/LogoCard/LogoMargin/LogoStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 1)
+theme_override_font_sizes/font_size = 30
+text = "Merge. Bake. Make your cafe magical."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Status" type="Label" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 0.82)
+theme_override_font_sizes/font_size = 27
+text = "Warming up the ovens..."
+horizontal_alignment = 1
+
+[node name="Progress" type="ProgressBar" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+value = 8.0
+show_percentage = false
+theme_override_styles/background = SubResource("StyleProgressBackground")
+theme_override_styles/fill = SubResource("StyleProgressFill")
+
+[node name="ContinueButton" type="Button" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.941176, 0.921569, 1)
+theme_override_font_sizes/font_size = 34
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "ENTER THE CAFE"
+
+[node name="BottomSpacer" type="Control" parent="SafeArea/Layout"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Version" type="Label" parent="SafeArea/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 0.56)
+theme_override_font_sizes/font_size = 22
+text = "PRE-ALPHA 0.1.0"
+horizontal_alignment = 1

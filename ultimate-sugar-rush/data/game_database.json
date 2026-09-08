@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "food_drinks": [
+    {"id":"lemonade","name":"Fresh Lemonade","type":"drink","station_id":"lemon_bar","unlock_level":1,"prep_seconds":20,"base_coin_value":18,"xp_reward_id":"xp_small"},
+    {"id":"strawberry_lemonade","name":"Strawberry Lemonade","type":"drink","station_id":"lemon_bar","unlock_level":2,"prep_seconds":35,"base_coin_value":30,"xp_reward_id":"xp_small"},
+    {"id":"butter_croissant","name":"Butter Croissant","type":"food","station_id":"bakery","unlock_level":1,"prep_seconds":30,"base_coin_value":22,"xp_reward_id":"xp_small"},
+    {"id":"lemon_tart","name":"Lemon Tart","type":"food","station_id":"bakery","unlock_level":3,"prep_seconds":60,"base_coin_value":48,"xp_reward_id":"xp_medium"},
+    {"id":"berry_cupcake","name":"Berry Cupcake","type":"food","station_id":"sweets","unlock_level":2,"prep_seconds":45,"base_coin_value":36,"xp_reward_id":"xp_small"},
+    {"id":"vanilla_macaron","name":"Vanilla Macaron","type":"food","station_id":"sweets","unlock_level":4,"prep_seconds":75,"base_coin_value":60,"xp_reward_id":"xp_medium"},
+    {"id":"honey_tea","name":"Honey Tea","type":"drink","station_id":"tea_bar","unlock_level":2,"prep_seconds":30,"base_coin_value":28,"xp_reward_id":"xp_small"},
+    {"id":"berry_tea","name":"Wild Berry Tea","type":"drink","station_id":"tea_bar","unlock_level":4,"prep_seconds":55,"base_coin_value":52,"xp_reward_id":"xp_medium"}
+  ],
+  "items": [
+    {"id":"lemon","name":"Lemon","type":"ingredient","rarity":"common","max_stack":99,"sell_value":2},
+    {"id":"strawberry","name":"Strawberry","type":"ingredient","rarity":"common","max_stack":99,"sell_value":3},
+    {"id":"flour","name":"Flour","type":"ingredient","rarity":"common","max_stack":99,"sell_value":2},
+    {"id":"honey","name":"Honey","type":"ingredient","rarity":"uncommon","max_stack":99,"sell_value":4},
+    {"id":"instant_finish","name":"Instant Finish","type":"booster","rarity":"rare","max_stack":20,"sell_value":0}
+  ],
+  "xp_rewards": [
+    {"id":"xp_tiny","amount":5},
+    {"id":"xp_small","amount":10},
+    {"id":"xp_medium","amount":25},
+    {"id":"xp_large","amount":75}
+  ],
+  "currency_rewards": [
+    {"id":"coins_small","currency":"coins","amount":50},
+    {"id":"coins_medium","currency":"coins","amount":150},
+    {"id":"coins_large","currency":"coins","amount":500},
+    {"id":"gems_tiny","currency":"gems","amount":2},
+    {"id":"gems_small","currency":"gems","amount":5}
+  ],
+  "quests": [
+    {"id":"first_order","name":"First Order","description":"Complete your first cafe order.","type":"story","objective_type":"complete_orders","target":1,"required_level":1,"xp_reward_id":"xp_small","currency_reward_id":"coins_small","next_quest_id":"lemonade_rush"},
+    {"id":"lemonade_rush","name":"Lemonade Rush","description":"Serve five lemonade drinks.","type":"story","objective_type":"serve_recipe","objective_id":"lemonade","target":5,"required_level":1,"xp_reward_id":"xp_medium","currency_reward_id":"coins_medium","next_quest_id":""},
+    {"id":"daily_baker","name":"Daily Baker","description":"Prepare ten food orders.","type":"daily","objective_type":"serve_type","objective_id":"food","target":10,"required_level":2,"xp_reward_id":"xp_medium","currency_reward_id":"gems_tiny","next_quest_id":""}
+  ]
+}

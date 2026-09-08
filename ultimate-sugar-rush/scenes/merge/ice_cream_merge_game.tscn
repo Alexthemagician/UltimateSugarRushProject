@@ -1,0 +1,345 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/ice_cream_merge_game.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/merge/merge_board.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/merge/milk_pitcher.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/merge/trash_icon.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/merge/coin_icon.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/merge/vanilla_ice_cream_bowl.png" id="6"]
+[ext_resource type="Texture2D" path="res://assets/merge/chocolate_ice_cream_bowl.png" id="7"]
+[ext_resource type="Texture2D" path="res://assets/merge/pistachio_ice_cream_bowl.png" id="8"]
+[ext_resource type="Texture2D" path="res://assets/merge/pistachio_ice_cream_bowl.png" id="9"]
+[ext_resource type="Texture2D" path="res://assets/merge/ice_cream_ingredients_icon.png" id="10"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.968627, 0.941176, 1, 0.98)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_left = 28
+corner_radius_bottom_right = 28
+shadow_color = Color(0.239216, 0.129412, 0.352941, 0.2)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="PurpleButton"]
+bg_color = Color(0.521569, 0.329412, 0.701961, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_left = 22
+corner_radius_bottom_right = 22
+
+[sub_resource type="StyleBoxFlat" id="GreenButton"]
+bg_color = Color(0.368627, 0.611765, 0.509804, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_left = 22
+corner_radius_bottom_right = 22
+
+[sub_resource type="StyleBoxFlat" id="TrashCard"]
+bg_color = Color(0.968627, 0.941176, 1, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.521569, 0.329412, 0.701961, 0.35)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_left = 18
+corner_radius_bottom_right = 18
+
+[node name="IceCreamMergeGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.788235, 0.933333, 0.968627, 1)
+
+[node name="SafeArea" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 46
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 42
+
+[node name="Layout" type="VBoxContainer" parent="SafeArea"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Header" type="HBoxContainer" parent="SafeArea/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="BackButton" type="Button" parent="SafeArea/Layout/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("GreenButton")
+theme_override_styles/hover = SubResource("GreenButton")
+theme_override_styles/pressed = SubResource("GreenButton")
+text = "BACK"
+
+[node name="Title" type="Label" parent="SafeArea/Layout/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.286275, 0.137255, 0.388235, 1)
+theme_override_font_sizes/font_size = 42
+text = "FROZEN SCOOPS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResetButton" type="Button" parent="SafeArea/Layout/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("GreenButton")
+theme_override_styles/hover = SubResource("GreenButton")
+theme_override_styles/pressed = SubResource("GreenButton")
+text = "RESET"
+
+[node name="StatusLabel" type="Label" parent="SafeArea/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.286275, 0.137255, 0.388235, 0.85)
+theme_override_font_sizes/font_size = 25
+text = "Match free ingredients with frozen copies to thaw and merge."
+horizontal_alignment = 1
+
+[node name="TopSpacer" type="Control" parent="SafeArea/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Objectives" type="HBoxContainer" parent="SafeArea/Layout"]
+custom_minimum_size = Vector2(0, 178)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ChocolateCard" type="PanelContainer" parent="SafeArea/Layout/Objectives"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("TrashCard")
+
+[node name="Content" type="VBoxContainer" parent="SafeArea/Layout/Objectives/ChocolateCard"]
+layout_mode = 2
+alignment = 1
+
+[node name="Cake" type="TextureRect" parent="SafeArea/Layout/Objectives/ChocolateCard/Content"]
+custom_minimum_size = Vector2(0, 122)
+layout_mode = 2
+texture = ExtResource("6")
+expand_mode = 1
+stretch_mode = 5
+texture_filter = 6
+
+[node name="ChocolateObjective" type="Label" parent="SafeArea/Layout/Objectives/ChocolateCard/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.337255, 0.160784, 0.0941176, 1)
+theme_override_font_sizes/font_size = 20
+text = "VANILLA\n0 / 8"
+horizontal_alignment = 1
+
+[node name="StrawberryCard" type="PanelContainer" parent="SafeArea/Layout/Objectives"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("TrashCard")
+
+[node name="Content" type="VBoxContainer" parent="SafeArea/Layout/Objectives/StrawberryCard"]
+layout_mode = 2
+alignment = 1
+
+[node name="Cake" type="TextureRect" parent="SafeArea/Layout/Objectives/StrawberryCard/Content"]
+custom_minimum_size = Vector2(0, 122)
+layout_mode = 2
+texture = ExtResource("7")
+expand_mode = 1
+stretch_mode = 5
+texture_filter = 6
+
+[node name="StrawberryObjective" type="Label" parent="SafeArea/Layout/Objectives/StrawberryCard/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.686275, 0.14902, 0.286275, 1)
+theme_override_font_sizes/font_size = 20
+text = "CHOCOLATE\n0 / 8"
+horizontal_alignment = 1
+
+[node name="VanillaCard" type="PanelContainer" parent="SafeArea/Layout/Objectives"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("TrashCard")
+
+[node name="Content" type="VBoxContainer" parent="SafeArea/Layout/Objectives/VanillaCard"]
+layout_mode = 2
+alignment = 1
+
+[node name="Cake" type="TextureRect" parent="SafeArea/Layout/Objectives/VanillaCard/Content"]
+custom_minimum_size = Vector2(0, 122)
+layout_mode = 2
+texture = ExtResource("8")
+expand_mode = 1
+stretch_mode = 5
+texture_filter = 6
+
+[node name="VanillaObjective" type="Label" parent="SafeArea/Layout/Objectives/VanillaCard/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.196078, 0.376471, 0.647059, 1)
+theme_override_font_sizes/font_size = 20
+text = "PISTACHIO\n0 / 8"
+horizontal_alignment = 1
+
+[node name="BlueberryCard" type="PanelContainer" parent="SafeArea/Layout/Objectives"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("TrashCard")
+
+[node name="Content" type="VBoxContainer" parent="SafeArea/Layout/Objectives/BlueberryCard"]
+layout_mode = 2
+alignment = 1
+
+[node name="Cake" type="TextureRect" parent="SafeArea/Layout/Objectives/BlueberryCard/Content"]
+custom_minimum_size = Vector2(0, 122)
+layout_mode = 2
+texture = ExtResource("9")
+expand_mode = 1
+stretch_mode = 5
+texture_filter = 6
+
+[node name="BlueberryObjective" type="Label" parent="SafeArea/Layout/Objectives/BlueberryCard/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.243137, 0.196078, 0.592157, 1)
+theme_override_font_sizes/font_size = 20
+text = "LUCKY CHARMS\n0 / 8"
+horizontal_alignment = 1
+
+[node name="ActionRow" type="HBoxContainer" parent="SafeArea/Layout"]
+custom_minimum_size = Vector2(0, 108)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="AddItemButton" type="Button" parent="SafeArea/Layout/ActionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 108)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("PurpleButton")
+theme_override_styles/hover = SubResource("PurpleButton")
+theme_override_styles/pressed = SubResource("PurpleButton")
+text = "ADD ITEMS"
+icon = ExtResource("10")
+icon_max_width = 76
+expand_icon = true
+
+[node name="Stats" type="HBoxContainer" parent="SafeArea/Layout/ActionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Xp" type="VBoxContainer" parent="SafeArea/Layout/ActionRow/Stats"]
+layout_mode = 2
+alignment = 1
+
+[node name="Caption" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Xp"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.521569, 0.329412, 0.701961, 1)
+theme_override_font_sizes/font_size = 24
+text = "XP +"
+horizontal_alignment = 1
+
+[node name="XpAmount" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Xp"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.286275, 0.137255, 0.388235, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
+[node name="Coin" type="HBoxContainer" parent="SafeArea/Layout/ActionRow/Stats"]
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/ActionRow/Stats/Coin"]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+texture = ExtResource("5")
+expand_mode = 1
+stretch_mode = 5
+texture_filter = 6
+
+[node name="Values" type="VBoxContainer" parent="SafeArea/Layout/ActionRow/Stats/Coin"]
+layout_mode = 2
+alignment = 1
+
+[node name="Plus" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Coin/Values"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.784314, 0.498039, 0.0588235, 1)
+theme_override_font_sizes/font_size = 24
+text = "+"
+horizontal_alignment = 1
+
+[node name="CoinAmount" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Coin/Values"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.286275, 0.137255, 0.388235, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
+[node name="TrashDrop" type="PanelContainer" parent="SafeArea/Layout/ActionRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 96)
+layout_mode = 2
+theme_override_styles/panel = SubResource("TrashCard")
+tooltip_text = "Drag an unwanted item here to discard it."
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/ActionRow/TrashDrop"]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 5
+texture_filter = 6
+
+[node name="BoardPanel" type="PanelContainer" parent="SafeArea/Layout"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="BoardMargin" type="MarginContainer" parent="SafeArea/Layout/BoardPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="MergeBoard" type="Control" parent="SafeArea/Layout/BoardPanel/BoardMargin"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(948, 1264)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("2")
+board_kind = "ice_cream"

@@ -1,0 +1,231 @@
+[gd_scene format=3 uid="uid://dsn6kmntg1qjs"]
+
+[ext_resource type="Script" uid="uid://bwyys13tykrw8" path="res://scripts/ui/candy_match_game.gd" id="1"]
+[ext_resource type="Script" uid="uid://d2npy03anfunl" path="res://scripts/match3/match_three_board.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://i1prsaba3vri" path="res://assets/match3/red_round_candy.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://dp8sdp4lrsbby" path="res://assets/match3/green_hard_candy.png" id="4"]
+[ext_resource type="Texture2D" uid="uid://c1s8flfs1muiq" path="res://assets/match3/gold_butterscotch.png" id="5"]
+[ext_resource type="Texture2D" uid="uid://p0n5i02e5hro" path="res://assets/match3/blue_heart_candy.png" id="6"]
+
+[sub_resource type="StyleBoxFlat" id="Button"]
+bg_color = Color(0.91, 0.25, 0.45, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="Board"]
+bg_color = Color(0.925, 0.84, 1, 0.98)
+corner_radius_top_left = 26
+corner_radius_top_right = 26
+corner_radius_bottom_right = 26
+corner_radius_bottom_left = 26
+shadow_color = Color(0.35, 0.14, 0.42, 0.22)
+shadow_size = 10
+
+[node name="CandyMatchGame" type="Control" unique_id=512204364]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=447452860]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0.78, 0.86, 1)
+
+[node name="SafeArea" type="MarginContainer" parent="." unique_id=2078954715]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 46
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 42
+
+[node name="Layout" type="VBoxContainer" parent="SafeArea" unique_id=1947508332]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="HBoxContainer" parent="SafeArea/Layout" unique_id=1804860861]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="BackButton" type="Button" parent="SafeArea/Layout/Header" unique_id=1788663048]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 82)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("Button")
+theme_override_styles/hover = SubResource("Button")
+text = "BACK"
+
+[node name="Title" type="Label" parent="SafeArea/Layout/Header" unique_id=2078199557]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.43, 0.08, 0.3, 1)
+theme_override_font_sizes/font_size = 43
+text = "CANDY MATCH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MovesLabel" type="Label" parent="SafeArea/Layout/Header" unique_id=395815415]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132, 82)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43, 0.08, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "MOVES
+40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResetButton" type="Button" parent="SafeArea/Layout/Header" unique_id=117443681]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 82)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("Button")
+theme_override_styles/hover = SubResource("Button")
+text = "RESET"
+
+[node name="StatusLabel" type="Label" parent="SafeArea/Layout" unique_id=1363451019]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43, 0.08, 0.3, 0.9)
+theme_override_font_sizes/font_size = 23
+text = "Swap neighboring candies to match 3 or more!"
+horizontal_alignment = 1
+
+[node name="Objectives" type="HBoxContainer" parent="SafeArea/Layout" unique_id=1586618599]
+custom_minimum_size = Vector2(0, 175)
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="Red" type="VBoxContainer" parent="SafeArea/Layout/Objectives" unique_id=438898226]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/Objectives/Red" unique_id=558097850]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+texture = ExtResource("3")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RedObjective" type="Label" parent="SafeArea/Layout/Objectives/Red" unique_id=740850651]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.31, 0.075, 0.2, 1)
+theme_override_colors/font_outline_color = Color(1, 0.96, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "RED ROUND
+0 / 55"
+horizontal_alignment = 1
+
+[node name="Green" type="VBoxContainer" parent="SafeArea/Layout/Objectives" unique_id=1591477909]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/Objectives/Green" unique_id=337693800]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GreenObjective" type="Label" parent="SafeArea/Layout/Objectives/Green" unique_id=1268081660]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.31, 0.075, 0.2, 1)
+theme_override_colors/font_outline_color = Color(1, 0.96, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "GREEN HARD
+0 / 55"
+horizontal_alignment = 1
+
+[node name="Gold" type="VBoxContainer" parent="SafeArea/Layout/Objectives" unique_id=764227702]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/Objectives/Gold" unique_id=828523603]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+texture = ExtResource("5")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GoldObjective" type="Label" parent="SafeArea/Layout/Objectives/Gold" unique_id=1405931286]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.31, 0.075, 0.2, 1)
+theme_override_colors/font_outline_color = Color(1, 0.96, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 19
+text = "BUTTERSCOTCH
+0 / 55"
+horizontal_alignment = 1
+
+[node name="Blue" type="VBoxContainer" parent="SafeArea/Layout/Objectives" unique_id=225363253]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/Objectives/Blue" unique_id=1319911772]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+texture = ExtResource("6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BlueObjective" type="Label" parent="SafeArea/Layout/Objectives/Blue" unique_id=87214645]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.31, 0.075, 0.2, 1)
+theme_override_colors/font_outline_color = Color(1, 0.96, 1, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 20
+text = "BLUE HEART
+0 / 55"
+horizontal_alignment = 1
+
+[node name="BoardPanel" type="PanelContainer" parent="SafeArea/Layout" unique_id=817885828]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("Board")
+
+[node name="Margin" type="MarginContainer" parent="SafeArea/Layout/BoardPanel" unique_id=521944692]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="MatchThreeBoard" type="Control" parent="SafeArea/Layout/BoardPanel/Margin" unique_id=2075387884]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(900, 900)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("2")
+
+[node name="Rules" type="Label" parent="SafeArea/Layout" unique_id=1322303323]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.43, 0.08, 0.3, 0.85)
+theme_override_font_sizes/font_size = 18
+text = "4 in a line: row/column rocket  •  2×2: flying rocket  •  + shape: bomb  •  5: targeting bomb"
+horizontal_alignment = 1
+autowrap_mode = 2

@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/match3/candy_match_game.tscn" id="1"]
+[ext_resource type="Script" path="res://scripts/ui/variant_match_game.gd" id="2"]
+[ext_resource type="Texture2D" path="res://assets/match3/gummy_raspberry.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/match3/gummy_orange.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/match3/gummy_lime.png" id="5"]
+[ext_resource type="Texture2D" path="res://assets/match3/gummy_blueberry.png" id="6"]
+
+[node name="GummyMatchGame" instance=ExtResource("1")]
+script = ExtResource("2")
+target = 60
+move_limit = 42
+save_section = "gummy_match_objectives"
+piece_names = Array[String](["RASPBERRY", "ORANGE", "LIME", "BLUEBERRY"])
+piece_textures = Array[Texture2D]([ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")])
+initial_locks = Array[Vector2i]([Vector2i(1, 1), Vector2i(3, 1), Vector2i(5, 1), Vector2i(2, 3), Vector2i(4, 3), Vector2i(6, 3), Vector2i(1, 5), Vector2i(3, 5), Vector2i(5, 5), Vector2i(7, 5), Vector2i(2, 6), Vector2i(6, 6)])
+completion_message = "GUMMY GREAT!"
+completion_flag = "level_7_complete"
+unlock_flag = "level_8_unlocked"
+
+[node name="Background" parent="." index="0"]
+color = Color(0.78, 0.93, 1, 1)
+
+[node name="Title" parent="SafeArea/Layout/Header" index="1"]
+text = "GUMMY GROVE"
+
+[node name="StatusLabel" parent="SafeArea/Layout" index="1"]
+text = "Match beside barred bears to break them free!"
+
+[node name="Rules" parent="SafeArea/Layout" index="4"]
+text = "Barred bears cannot move or match  •  Clear beside them to break the bars  •  Power-ups keep their candy effects"

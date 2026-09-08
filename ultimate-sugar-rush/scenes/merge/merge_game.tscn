@@ -1,0 +1,321 @@
+[gd_scene format=3 uid="uid://c37f4ej7k3xki"]
+
+[ext_resource type="Script" uid="uid://des8xnidtrn85" path="res://scripts/ui/merge_game.gd" id="1"]
+[ext_resource type="Script" uid="uid://hqgxydky4wkh" path="res://scripts/merge/merge_board.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://dwo2hn6c0gqx5" path="res://assets/merge/magic_pitcher.png" id="3_lemon_pitcher"]
+[ext_resource type="Texture2D" uid="uid://7t8x7g8rw2bf" path="res://assets/merge/orange_pitcher.png" id="4_orange_pitcher"]
+[ext_resource type="Texture2D" uid="uid://dhlqy65xn7btg" path="res://assets/merge/apple_pitcher.png" id="5_apple_pitcher"]
+[ext_resource type="Texture2D" uid="uid://gal3unpjibjk" path="res://assets/merge/multi_fruit_icon.png" id="6_fruit_icon"]
+[ext_resource type="Texture2D" uid="uid://y36aeekcdxuo" path="res://assets/merge/coin_icon.png" id="7_coin_icon"]
+[ext_resource type="Texture2D" uid="uid://dlaqwtkpasjpj" path="res://assets/merge/trash_icon.png" id="8_trash_icon"]
+
+[sub_resource type="StyleBoxFlat" id="GreenButton"]
+bg_color = Color(0.368627, 0.611765, 0.509804, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="ObjectiveCard"]
+bg_color = Color(1, 0.968627, 0.92549, 0.94)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.607843, 0.192157, 0.352941, 0.28)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="PinkButton"]
+bg_color = Color(0.607843, 0.192157, 0.352941, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(1, 0.968627, 0.92549, 0.97)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0.25098, 0.101961, 0.160784, 0.18)
+shadow_size = 12
+
+[node name="MergeGame" type="Control" unique_id=92800344]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1087236004]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.988235, 0.886275, 0.831373, 1)
+
+[node name="SafeArea" type="MarginContainer" parent="." unique_id=1588195293]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 46
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 42
+
+[node name="Layout" type="VBoxContainer" parent="SafeArea" unique_id=660878051]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Header" type="HBoxContainer" parent="SafeArea/Layout" unique_id=1453579819]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="BackButton" type="Button" parent="SafeArea/Layout/Header" unique_id=1523136966]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("GreenButton")
+theme_override_styles/pressed = SubResource("GreenButton")
+theme_override_styles/hover = SubResource("GreenButton")
+text = "BACK"
+
+[node name="Title" type="Label" parent="SafeArea/Layout/Header" unique_id=1912371060]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 44
+text = "FRUIT JUICE MERGE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResetButton" type="Button" parent="SafeArea/Layout/Header" unique_id=1678676820]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("GreenButton")
+theme_override_styles/pressed = SubResource("GreenButton")
+theme_override_styles/hover = SubResource("GreenButton")
+text = "RESET"
+
+[node name="StatusLabel" type="Label" parent="SafeArea/Layout" unique_id=1882069099]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 0.8)
+theme_override_font_sizes/font_size = 25
+text = "Drag matching items together to merge them."
+horizontal_alignment = 1
+
+[node name="TopSpacer" type="Control" parent="SafeArea/Layout" unique_id=265604447]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Objectives" type="HBoxContainer" parent="SafeArea/Layout" unique_id=614256019]
+custom_minimum_size = Vector2(0, 188)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="LemonCard" type="PanelContainer" parent="SafeArea/Layout/Objectives" unique_id=1958955225]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("ObjectiveCard")
+
+[node name="Content" type="HBoxContainer" parent="SafeArea/Layout/Objectives/LemonCard" unique_id=1506738854]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Pitcher" type="TextureRect" parent="SafeArea/Layout/Objectives/LemonCard/Content" unique_id=277181264]
+texture_filter = 6
+custom_minimum_size = Vector2(174, 174)
+layout_mode = 2
+texture = ExtResource("3_lemon_pitcher")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LemonObjective" type="Label" parent="SafeArea/Layout/Objectives/LemonCard/Content" unique_id=770778790]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.439216, 0.227451, 0.0980392, 1)
+theme_override_font_sizes/font_size = 20
+text = "LEMONADE
+0 / 7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OrangeCard" type="PanelContainer" parent="SafeArea/Layout/Objectives" unique_id=2030559635]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("ObjectiveCard")
+
+[node name="Content" type="HBoxContainer" parent="SafeArea/Layout/Objectives/OrangeCard" unique_id=1531793800]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Pitcher" type="TextureRect" parent="SafeArea/Layout/Objectives/OrangeCard/Content" unique_id=2053633414]
+texture_filter = 6
+custom_minimum_size = Vector2(174, 174)
+layout_mode = 2
+texture = ExtResource("4_orange_pitcher")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="OrangeObjective" type="Label" parent="SafeArea/Layout/Objectives/OrangeCard/Content" unique_id=2019232979]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.784314, 0.305882, 0.0588235, 1)
+theme_override_font_sizes/font_size = 20
+text = "ORANGE
+0 / 12"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AppleCard" type="PanelContainer" parent="SafeArea/Layout/Objectives" unique_id=1825922754]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("ObjectiveCard")
+
+[node name="Content" type="HBoxContainer" parent="SafeArea/Layout/Objectives/AppleCard" unique_id=1100410069]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Pitcher" type="TextureRect" parent="SafeArea/Layout/Objectives/AppleCard/Content" unique_id=1726567563]
+texture_filter = 6
+custom_minimum_size = Vector2(174, 174)
+layout_mode = 2
+texture = ExtResource("5_apple_pitcher")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AppleObjective" type="Label" parent="SafeArea/Layout/Objectives/AppleCard/Content" unique_id=257884328]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.666667, 0.117647, 0.180392, 1)
+theme_override_font_sizes/font_size = 20
+text = "APPLE
+0 / 18"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionRow" type="HBoxContainer" parent="SafeArea/Layout" unique_id=511069768]
+custom_minimum_size = Vector2(0, 108)
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="AddItemButton" type="Button" parent="SafeArea/Layout/ActionRow" unique_id=1410152313]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 108)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("PinkButton")
+theme_override_styles/pressed = SubResource("PinkButton")
+theme_override_styles/hover = SubResource("PinkButton")
+text = "ADD FRUIT"
+icon = ExtResource("6_fruit_icon")
+expand_icon = true
+
+[node name="Stats" type="HBoxContainer" parent="SafeArea/Layout/ActionRow" unique_id=282806660]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Xp" type="VBoxContainer" parent="SafeArea/Layout/ActionRow/Stats" unique_id=818578492]
+layout_mode = 2
+alignment = 1
+
+[node name="Caption" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Xp" unique_id=842456403]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.607843, 0.192157, 0.352941, 1)
+theme_override_font_sizes/font_size = 24
+text = "XP +"
+horizontal_alignment = 1
+
+[node name="XpAmount" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Xp" unique_id=1899828692]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
+[node name="Coin" type="HBoxContainer" parent="SafeArea/Layout/ActionRow/Stats" unique_id=2124922555]
+layout_mode = 2
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/ActionRow/Stats/Coin" unique_id=712677162]
+texture_filter = 6
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+texture = ExtResource("7_coin_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Values" type="VBoxContainer" parent="SafeArea/Layout/ActionRow/Stats/Coin" unique_id=1036975873]
+layout_mode = 2
+alignment = 1
+
+[node name="Plus" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Coin/Values" unique_id=1580580565]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.784314, 0.498039, 0.0588235, 1)
+theme_override_font_sizes/font_size = 24
+text = "+"
+horizontal_alignment = 1
+
+[node name="CoinAmount" type="Label" parent="SafeArea/Layout/ActionRow/Stats/Coin/Values" unique_id=11957453]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 1)
+theme_override_font_sizes/font_size = 25
+text = "0"
+horizontal_alignment = 1
+
+[node name="TrashDrop" type="PanelContainer" parent="SafeArea/Layout/ActionRow" unique_id=1450163168]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 96)
+layout_mode = 2
+tooltip_text = "Drag an unwanted item here to discard it."
+theme_override_styles/panel = SubResource("ObjectiveCard")
+
+[node name="Icon" type="TextureRect" parent="SafeArea/Layout/ActionRow/TrashDrop" unique_id=2125564970]
+texture_filter = 6
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_trash_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BoardPanel" type="PanelContainer" parent="SafeArea/Layout" unique_id=1965857473]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="BoardMargin" type="MarginContainer" parent="SafeArea/Layout/BoardPanel" unique_id=1223187801]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="MergeBoard" type="Control" parent="SafeArea/Layout/BoardPanel/BoardMargin" unique_id=1842358163]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(948, 1264)
+layout_mode = 2
+mouse_filter = 1
+script = ExtResource("2")

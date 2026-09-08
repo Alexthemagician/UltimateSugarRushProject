@@ -1,0 +1,541 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/main_cafe.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/world/cafe_world_preview.gd" id="2_world"]
+[ext_resource type="Script" path="res://scripts/navigation/touch_camera_controller.gd" id="3_camera"]
+
+[sub_resource type="StyleBoxFlat" id="StyleHud"]
+bg_color = Color(1, 0.968627, 0.92549, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.72)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+shadow_color = Color(0.25098, 0.101961, 0.160784, 0.18)
+shadow_size = 12
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleButton"]
+bg_color = Color(0.607843, 0.192157, 0.352941, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleButtonSoft"]
+bg_color = Color(0.368627, 0.611765, 0.509804, 0.92)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleHelp"]
+bg_color = Color(0.25098, 0.101961, 0.164706, 0.92)
+corner_radius_top_left = 28
+corner_radius_top_right = 28
+corner_radius_bottom_right = 28
+corner_radius_bottom_left = 28
+
+[sub_resource type="StyleBoxFlat" id="StyleDismiss"]
+bg_color = Color(1, 1, 1, 0.16)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="MainCafe" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="World" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -140)
+script = ExtResource("2_world")
+
+[node name="TouchCamera" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, 620)
+zoom = Vector2(1, 1)
+position_smoothing_enabled = false
+script = ExtResource("3_camera")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="TopSafeArea" type="MarginContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 210.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 38
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 20
+
+[node name="TopBar" type="PanelContainer" parent="HUD/TopSafeArea"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleHud")
+
+[node name="TopMargin" type="MarginContainer" parent="HUD/TopSafeArea/TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="TopRow" type="HBoxContainer" parent="HUD/TopSafeArea/TopBar/TopMargin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="BackButton" type="Button" parent="HUD/TopSafeArea/TopBar/TopMargin/TopRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleButtonSoft")
+theme_override_styles/hover = SubResource("StyleButtonSoft")
+theme_override_styles/pressed = SubResource("StyleButtonSoft")
+text = "BACK"
+
+[node name="TitleStack" type="VBoxContainer" parent="HUD/TopSafeArea/TopBar/TopMargin/TopRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="HUD/TopSafeArea/TopBar/TopMargin/TopRow/TitleStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 38
+text = "SUGAR BLOSSOM CAFE"
+
+[node name="Subtitle" type="Label" parent="HUD/TopSafeArea/TopBar/TopMargin/TopRow/TitleStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 0.72)
+theme_override_font_sizes/font_size = 24
+text = "Navigation prototype"
+
+[node name="Coins" type="Label" parent="HUD/TopSafeArea/TopBar/TopMargin/TopRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.709804, 0.490196, 0.133333, 1)
+theme_override_font_sizes/font_size = 32
+text = "1,250 C"
+vertical_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="HUD/TopSafeArea/TopBar/TopMargin/TopRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleButtonSoft")
+theme_override_styles/hover = SubResource("StyleButtonSoft")
+theme_override_styles/pressed = SubResource("StyleButtonSoft")
+text = "SETTINGS"
+
+[node name="OrderButton" type="Button" parent="HUD"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -360.0
+offset_top = 240.0
+offset_right = -34.0
+offset_bottom = 340.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "ORDER: LEMONADE"
+
+[node name="MergeButton" type="Button" parent="HUD"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_left = 34.0
+offset_top = 240.0
+offset_right = 360.0
+offset_bottom = 340.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "MERGE BOARD"
+
+[node name="BottomSafeArea" type="MarginContainer" parent="HUD"]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -190.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 34
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 34
+theme_override_constants/margin_bottom = 38
+
+[node name="BottomBar" type="PanelContainer" parent="HUD/BottomSafeArea"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleHud")
+
+[node name="BottomMargin" type="MarginContainer" parent="HUD/BottomSafeArea/BottomBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 18
+
+[node name="Controls" type="HBoxContainer" parent="HUD/BottomSafeArea/BottomBar/BottomMargin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ZoomOutButton" type="Button" parent="HUD/BottomSafeArea/BottomBar/BottomMargin/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "-"
+
+[node name="ZoomLabel" type="Label" parent="HUD/BottomSafeArea/BottomBar/BottomMargin/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 30
+text = "100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ZoomInButton" type="Button" parent="HUD/BottomSafeArea/BottomBar/BottomMargin/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "+"
+
+[node name="ResetButton" type="Button" parent="HUD/BottomSafeArea/BottomBar/BottomMargin/Controls"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 86)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleButtonSoft")
+theme_override_styles/hover = SubResource("StyleButtonSoft")
+theme_override_styles/pressed = SubResource("StyleButtonSoft")
+text = "FIT CAFE"
+
+[node name="HelpPanel" type="PanelContainer" parent="HUD"]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -160.0
+offset_right = 400.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleHelp")
+
+[node name="HelpMargin" type="MarginContainer" parent="HUD/HelpPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 38
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 38
+theme_override_constants/margin_bottom = 30
+
+[node name="HelpStack" type="VBoxContainer" parent="HUD/HelpPanel/HelpMargin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="HelpTitle" type="Label" parent="HUD/HelpPanel/HelpMargin/HelpStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.92549, 0.870588, 1)
+theme_override_font_sizes/font_size = 34
+text = "EXPLORE YOUR CAFE"
+horizontal_alignment = 1
+
+[node name="HelpBody" type="Label" parent="HUD/HelpPanel/HelpMargin/HelpStack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 0.88)
+theme_override_font_sizes/font_size = 27
+text = "Drag to pan. Pinch or use +/- to zoom.\nThe camera angle stays fixed."
+horizontal_alignment = 1
+
+[node name="DismissHelpButton" type="Button" parent="HUD/HelpPanel/HelpMargin/HelpStack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleDismiss")
+theme_override_styles/hover = SubResource("StyleDismiss")
+theme_override_styles/pressed = SubResource("StyleDismiss")
+text = "GOT IT"
+
+[node name="StationPanel" type="PanelContainer" parent="HUD"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -390.0
+offset_top = -430.0
+offset_right = 390.0
+offset_bottom = -230.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleHud")
+
+[node name="StationMargin" type="MarginContainer" parent="HUD/StationPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 24
+
+[node name="StationRow" type="HBoxContainer" parent="HUD/StationPanel/StationMargin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="StationText" type="VBoxContainer" parent="HUD/StationPanel/StationMargin/StationRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StationTitle" type="Label" parent="HUD/StationPanel/StationMargin/StationRow/StationText"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 34
+text = "STATION"
+
+[node name="StationHint" type="Label" parent="HUD/StationPanel/StationMargin/StationRow/StationText"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 0.76)
+theme_override_font_sizes/font_size = 24
+text = "Ready for recipes and upgrades."
+
+[node name="CloseStationButton" type="Button" parent="HUD/StationPanel/StationMargin/StationRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 82)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleButtonSoft")
+theme_override_styles/hover = SubResource("StyleButtonSoft")
+theme_override_styles/pressed = SubResource("StyleButtonSoft")
+text = "CLOSE"
+
+[node name="SettingsPanel" type="PanelContainer" parent="HUD"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -370.0
+offset_right = 420.0
+offset_bottom = 370.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleHud")
+
+[node name="Margin" type="MarginContainer" parent="HUD/SettingsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 54
+theme_override_constants/margin_top = 44
+theme_override_constants/margin_right = 54
+theme_override_constants/margin_bottom = 44
+
+[node name="Stack" type="VBoxContainer" parent="HUD/SettingsPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="HUD/SettingsPanel/Margin/Stack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 46
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="MusicHeader" type="HBoxContainer" parent="HUD/SettingsPanel/Margin/Stack"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUD/SettingsPanel/Margin/Stack/MusicHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 1)
+theme_override_font_sizes/font_size = 30
+text = "Music volume"
+
+[node name="MusicValue" type="Label" parent="HUD/SettingsPanel/Margin/Stack/MusicHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.607843, 0.192157, 0.352941, 1)
+theme_override_font_sizes/font_size = 28
+text = "80%"
+horizontal_alignment = 2
+
+[node name="MusicSlider" type="HSlider" parent="HUD/SettingsPanel/Margin/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+value = 80.0
+rounded = true
+
+[node name="SfxHeader" type="HBoxContainer" parent="HUD/SettingsPanel/Margin/Stack"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HUD/SettingsPanel/Margin/Stack/SfxHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 1)
+theme_override_font_sizes/font_size = 30
+text = "Sound effects"
+
+[node name="SfxValue" type="Label" parent="HUD/SettingsPanel/Margin/Stack/SfxHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.607843, 0.192157, 0.352941, 1)
+theme_override_font_sizes/font_size = 28
+text = "80%"
+horizontal_alignment = 2
+
+[node name="SfxSlider" type="HSlider" parent="HUD/SettingsPanel/Margin/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+value = 80.0
+rounded = true
+
+[node name="NotificationsToggle" type="CheckButton" parent="HUD/SettingsPanel/Margin/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 1)
+theme_override_font_sizes/font_size = 30
+text = "Notifications"
+
+[node name="NotificationNote" type="Label" parent="HUD/SettingsPanel/Margin/Stack"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.305882, 0.2, 0.168627, 0.65)
+theme_override_font_sizes/font_size = 22
+text = "Off by default. Device notifications will be connected later."
+autowrap_mode = 2
+
+[node name="Spacer" type="Control" parent="HUD/SettingsPanel/Margin/Stack"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CloseSettingsButton" type="Button" parent="HUD/SettingsPanel/Margin/Stack"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "DONE"
+
+[node name="BakeryEditPanel" type="PanelContainer" parent="HUD"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -430.0
+offset_top = -455.0
+offset_right = 430.0
+offset_bottom = -225.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleHud")
+
+[node name="Margin" type="MarginContainer" parent="HUD/BakeryEditPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="Stack" type="VBoxContainer" parent="HUD/BakeryEditPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="BakeryEditStatus" type="Label" parent="HUD/BakeryEditPanel/Margin/Stack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
+theme_override_font_sizes/font_size = 25
+text = "Choose move or rotate."
+horizontal_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="HUD/BakeryEditPanel/Margin/Stack"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="MoveBakeryButton" type="Button" parent="HUD/BakeryEditPanel/Margin/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleButton")
+theme_override_styles/hover = SubResource("StyleButton")
+theme_override_styles/pressed = SubResource("StyleButton")
+text = "MOVE"
+
+[node name="RotateBakeryButton" type="Button" parent="HUD/BakeryEditPanel/Margin/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleButtonSoft")
+theme_override_styles/hover = SubResource("StyleButtonSoft")
+theme_override_styles/pressed = SubResource("StyleButtonSoft")
+text = "ROTATE"
+
+[node name="CloseBakeryEditButton" type="Button" parent="HUD/BakeryEditPanel/Margin/Stack/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 25
+theme_override_styles/normal = SubResource("StyleButtonSoft")
+theme_override_styles/hover = SubResource("StyleButtonSoft")
+theme_override_styles/pressed = SubResource("StyleButtonSoft")
+text = "DONE"
