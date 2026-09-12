@@ -80,4 +80,4 @@ func _finish_boot() -> void:
 func _on_continue_pressed() -> void:
 	status_label.text = "Your Sugar Blossom journey is ready!"
 	continue_button.disabled = true
-	SceneRouter.go_to_scene("res://scenes/map/world_map.tscn")
+	SceneRouter.go_to_scene(CafeProgress.HUB)

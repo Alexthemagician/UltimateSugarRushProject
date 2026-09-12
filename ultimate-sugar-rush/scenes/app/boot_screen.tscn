@@ -74,18 +74,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_top = 96
-theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 72
+theme_override_constants/margin_left = 400
+theme_override_constants/margin_top = 35
+theme_override_constants/margin_right = 400
+theme_override_constants/margin_bottom = 25
 
 [node name="Layout" type="VBoxContainer" parent="SafeArea"]
 layout_mode = 2
-theme_override_constants/separation = 34
+theme_override_constants/separation = 20
 alignment = 1
 
 [node name="TopSpacer" type="Control" parent="SafeArea/Layout"]
-custom_minimum_size = Vector2(0, 110)
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -103,16 +103,16 @@ horizontal_alignment = 1
 
 [node name="LogoCard" type="PanelContainer" parent="SafeArea/Layout"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 590)
+custom_minimum_size = Vector2(0, 440)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleCard")
 
 [node name="LogoMargin" type="MarginContainer" parent="SafeArea/Layout/LogoCard"]
 layout_mode = 2
 theme_override_constants/margin_left = 56
-theme_override_constants/margin_top = 52
+theme_override_constants/margin_top = 26
 theme_override_constants/margin_right = 56
-theme_override_constants/margin_bottom = 52
+theme_override_constants/margin_bottom = 26
 
 [node name="LogoStack" type="VBoxContainer" parent="SafeArea/Layout/LogoCard/LogoMargin"]
 layout_mode = 2
@@ -123,14 +123,14 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.843137, 0.431373, 0.239216, 1)
-theme_override_font_sizes/font_size = 116
+theme_override_font_sizes/font_size = 80
 text = "USC"
 horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="SafeArea/Layout/LogoCard/LogoMargin/LogoStack"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.392157, 0.129412, 0.239216, 1)
-theme_override_font_sizes/font_size = 74
+theme_override_font_sizes/font_size = 60
 text = "ULTIMATE\nSUGAR RUSH"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -177,7 +177,7 @@ theme_override_styles/pressed = SubResource("StyleButton")
 text = "ENTER THE CAFE"
 
 [node name="BottomSpacer" type="Control" parent="SafeArea/Layout"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_vertical = 3
 

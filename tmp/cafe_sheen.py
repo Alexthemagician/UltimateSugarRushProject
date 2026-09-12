@@ -1,0 +1,4 @@
+from pathlib import Path
+p=Path('prototypes/fixed_cafe/cafe.gd')
+s=p.read_text(encoding='utf-8').replace('# Painted animation-cel surfaces: broad light bands, no metal reflections.','# Keep broad cartoon light bands with a glazed, softly reflective finish.').replace('material.roughness = 0.9','material.roughness = rough').replace('material.specular_mode = BaseMaterial3D.SPECULAR_DISABLED','material.specular_mode = BaseMaterial3D.SPECULAR_SCHLICK_GGX\n\tmaterial.metallic_specular = 0.45').replace('environment.reflected_light_source = 2','environment.reflected_light_source = 1').replace('glass.roughness = 0.85','glass.roughness = 0.22').replace('glass.specular_mode = BaseMaterial3D.SPECULAR_DISABLED','glass.specular_mode = BaseMaterial3D.SPECULAR_SCHLICK_GGX').replace('pass_08.png','pass_09.png')
+p.write_text(s,encoding='utf-8')

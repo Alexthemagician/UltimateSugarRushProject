@@ -70,6 +70,8 @@ func _change_scene(scene_path: String) -> void:
 	fade_out.tween_property(_overlay, "modulate:a", 1.0, DEFAULT_FADE_DURATION)
 	await fade_out.finished
 
+	if scene_path.begins_with("res://scenes/merge/") or scene_path.begins_with("res://scenes/match3/"):
+		CafeProgress.begin_board(scene_path)
 	var result: Error = get_tree().change_scene_to_file(scene_path)
 	if result != OK:
 		push_error("Unable to change scene to %s (error %s)." % [scene_path, result])

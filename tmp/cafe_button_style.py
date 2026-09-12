@@ -1,0 +1,2 @@
+from pathlib import Path
+p=Path('ultimate-sugar-rush/scripts/cafe/cafe_hub.gd');s=p.read_text(encoding='utf-8').replace('node.add_theme_stylebox_override("pressed",style(PINK))','node.add_theme_stylebox_override("pressed",style(PINK))\n\tnode.add_theme_stylebox_override("disabled",style(Color("e4d8d6")))\n\tnode.add_theme_color_override("font_disabled_color",Color("9b838d"))');p.write_text(s,encoding='utf-8')

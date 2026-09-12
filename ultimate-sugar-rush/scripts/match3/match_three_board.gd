@@ -46,11 +46,14 @@ var lock_overlays: Dictionary = {}
 var initial_locks: Array[Vector2i] = []
 var shift_bottom_each_move := false
 var objective_targets: Array[Control] = []
+var collection_starts: Dictionary = {}
 
 
 func _ready() -> void:
 	rng.randomize()
 	piece_textures.assign(DEFAULT_TEXTURES)
+	for kind in [Candy.GREEN, Candy.GOLD]:
+		piece_textures[kind] = CandyCutout.clean(DEFAULT_TEXTURES[kind])
 	_build_buttons()
 	reset_board()
 
@@ -104,6 +107,9 @@ func set_objective_targets(targets: Array[Control]) -> void:
 	# Keep the live controls, not positions sampled during _ready(). Containers do
 	# their final layout afterward and early positions all collapse to one corner.
 	objective_targets = targets.duplicate()
+	for kind in mini(targets.size(), piece_textures.size()):
+		if targets[kind] is TextureRect:
+			targets[kind].texture = piece_textures[kind]
 
 
 func _next_random_kind() -> int:
@@ -503,6 +509,7 @@ func _resolve_cascades(preferred: Vector2i) -> void:
 			# The candy transformed into a power-up still belongs to the match and
 			# must count toward its objective (four matched means four collected).
 			score_set[creation.pos] = true
+		await _animate_chained_effects(clear_set)
 		await _animate_clear(clear_set)
 		await _damage_adjacent_locks(clear_set)
 		await _score_clear(score_set)
@@ -605,7 +612,7 @@ func _animate_clear(clear_set: Dictionary) -> void:
 	for pos: Vector2i in clear_set:
 		var item := candy_items[pos.y * COLS + pos.x]
 		item.scale = Vector2.ONE
-		item.modulate = Color.WHITE
+		item.modulate.a = 0.0
 
 
 func _animate_refill(fall_rows: Dictionary) -> void:
@@ -618,7 +625,7 @@ func _animate_refill(fall_rows: Dictionary) -> void:
 		var distance := maxi(1, int(fall_rows[pos]))
 		# Bottom pieces settle first, while higher pieces naturally follow them.
 		var delay := float(ROWS - 1 - pos.y) * 0.012
-		var duration := 0.15 + sqrt(float(distance)) * 0.055
+		var duration := sqrt(2.0 * CELL_PITCH * float(distance) / 2600.0)
 		longest_time = maxf(longest_time, delay + duration + 0.12)
 		item.position = target - Vector2(0, CELL_PITCH * distance)
 		item.pivot_offset = item.size * 0.5
@@ -764,6 +771,7 @@ func _activate_special(pos: Vector2i, kind: int) -> void:
 		_expand_triggered_specials(clear_set)
 	_remove_locked_from_clear(clear_set)
 	await _animate_power_effect(special, pos, clear_set)
+	await _animate_chained_effects(clear_set, pos)
 	await _animate_clear(clear_set)
 	await _damage_adjacent_locks(clear_set)
 	await _score_clear(clear_set)
@@ -780,10 +788,23 @@ func _activate_target(pos: Vector2i, kind: int) -> void:
 	await _activate_special(pos, kind)
 
 
+func _animate_chained_effects(clear_set: Dictionary, already_played := Vector2i(-1, -1)) -> void:
+	for pos: Vector2i in clear_set:
+		if pos == already_played:
+			continue
+		var special := int(cells[pos.y][pos.x].special)
+		if special in [Special.ROW, Special.COLUMN, Special.BOMB]:
+			await _animate_power_effect(special, pos, clear_set)
+
+
 func _animate_power_effect(special: int, origin: Vector2i, clear_set: Dictionary) -> void:
 	match special:
 		Special.BOMB:
-			await _animate_bomb_charge(clear_set)
+			var neighbors: Dictionary = {}
+			for pos: Vector2i in clear_set:
+				if absi(pos.x - origin.x) <= 1 and absi(pos.y - origin.y) <= 1:
+					neighbors[pos] = true
+			await _animate_bomb_charge(origin, neighbors)
 		Special.ROW, Special.COLUMN:
 			await _animate_directional_blast(origin, special == Special.ROW)
 		Special.FLYER:
@@ -792,106 +813,66 @@ func _animate_power_effect(special: int, origin: Vector2i, clear_set: Dictionary
 			await _animate_disco_electricity(origin, clear_set)
 
 
-func _animate_bomb_charge(clear_set: Dictionary) -> void:
-	var center := Vector2.ZERO
-	for pos: Vector2i in clear_set: center += buttons[pos.y * COLS + pos.x].position + buttons[0].size * 0.5
-	center /= maxi(1, clear_set.size())
-	var grow := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	for pos: Vector2i in clear_set:
-		var item := candy_items[pos.y * COLS + pos.x]
-		item.pivot_offset = item.size * 0.5
-		grow.tween_property(item, "scale", Vector2(1.28, 1.28), 0.18)
-		grow.tween_property(item, "rotation", randf_range(-0.09, 0.09), 0.18)
-	await grow.finished
+func _animate_bomb_charge(origin: Vector2i, clear_set: Dictionary) -> void:
+	var center := buttons[origin.y * COLS + origin.x].position + buttons[0].size * 0.5
+	var bomb := candy_items[origin.y * COLS + origin.x]
+	var charge := create_tween()
+	charge.tween_property(bomb, "scale", Vector2(1.3, 1.3), 0.18)
+	await charge.finished
 	_spawn_impact_flash(center, Color("ffd66b"))
 	_spawn_shockwave(center, Color("ff73b9"))
 	_spawn_sugar_burst(center, Color("ffd66b"), 30)
-	await get_tree().create_timer(0.07).timeout
-	var bounce := create_tween().set_parallel(true).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	var blast := create_tween().set_parallel(true)
 	for pos: Vector2i in clear_set:
 		var item := candy_items[pos.y * COLS + pos.x]
-		bounce.tween_property(item, "scale", Vector2.ONE, 0.12)
-		bounce.tween_property(item, "rotation", 0.0, 0.12)
-	await bounce.finished
+		var offset := item.position + item.size * 0.5 - center
+		var destination := item.position + offset.normalized() * 75.0
+		var delay := 0.045 + offset.length() / 1800.0
+		blast.tween_property(item, "position", destination, 0.18).set_delay(delay).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		blast.tween_property(item, "rotation", offset.x * 0.003, 0.18).set_delay(delay)
+		collection_starts[pos] = destination + Vector2(8, 8)
+	await blast.finished
+	await get_tree().create_timer(0.10).timeout
 
 
 func _animate_directional_blast(origin: Vector2i, horizontal: bool) -> void:
 	var center := buttons[origin.y * COLS + origin.x].position + buttons[0].size * 0.5
-	var affected: Array[Vector2i] = []
-	for index in (COLS if horizontal else ROWS):
-		affected.append(Vector2i(index, origin.y) if horizontal else Vector2i(origin.x, index))
-	# Charge the whole lane so this reads as an energetic blast, not a drawn line.
-	var charge := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	for pos: Vector2i in affected:
-		var candy := candy_items[pos.y * COLS + pos.x]
-		candy.pivot_offset = candy.size * 0.5
-		charge.tween_property(candy, "scale", Vector2(1.13, 1.13), 0.11).set_delay(absf(float(pos.x - origin.x if horizontal else pos.y - origin.y)) * 0.012)
-	await charge.finished
-	var glow := ColorRect.new()
-	glow.color = Color(1.0, 0.48, 0.72, 0.34)
-	glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	glow.z_index = 78
-	var beam := ColorRect.new()
-	beam.color = Color("fff8cb")
-	beam.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	beam.z_index = 80
-	if horizontal:
-		glow.position = Vector2(0, center.y - 52)
-		glow.size = Vector2(CELL_PITCH * COLS, 104)
-		glow.pivot_offset = Vector2(center.x, 52)
-		glow.scale = Vector2(0.02, 0.4)
-		beam.position = Vector2(0, center.y - 27)
-		beam.size = Vector2(CELL_PITCH * COLS, 54)
-		beam.pivot_offset = Vector2(center.x, 27)
-		beam.scale = Vector2(0.02, 1.0)
-	else:
-		glow.position = Vector2(center.x - 52, 0)
-		glow.size = Vector2(104, CELL_PITCH * ROWS)
-		glow.pivot_offset = Vector2(52, center.y)
-		glow.scale = Vector2(0.4, 0.02)
-		beam.position = Vector2(center.x - 27, 0)
-		beam.size = Vector2(54, CELL_PITCH * ROWS)
-		beam.pivot_offset = Vector2(27, center.y)
-		beam.scale = Vector2(1.0, 0.02)
-	add_child(glow)
-	add_child(beam)
-	var blast_a := _make_moving_sprite(SPECIAL_TEXTURES[Special.ROW], center - Vector2(48, 48))
-	var blast_b := _make_moving_sprite(SPECIAL_TEXTURES[Special.ROW], center - Vector2(48, 48))
-	blast_a.pivot_offset = blast_a.size * 0.5
-	blast_b.pivot_offset = blast_b.size * 0.5
-	blast_a.scale = Vector2(0.72, 0.72)
-	blast_b.scale = Vector2(0.72, 0.72)
-	if not horizontal:
-		blast_a.rotation = PI * 0.5
-		blast_b.rotation = PI * 0.5
-	_spawn_shockwave(center, Color("fff4a8"))
-	_spawn_sugar_burst(center, Color("fff4a8"), 30)
-	var tween := create_tween().set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
-	tween.tween_property(beam, "scale", Vector2.ONE, 0.13)
-	tween.parallel().tween_property(glow, "scale", Vector2.ONE, 0.16)
-	tween.parallel().tween_property(beam, "color", Color("ff8bbb"), 0.13)
-	var head_a_target := Vector2(CELL_PITCH * COLS - 96, center.y - 48) if horizontal else Vector2(center.x - 48, -18)
-	var head_b_target := Vector2(-18, center.y - 48) if horizontal else Vector2(center.x - 48, CELL_PITCH * ROWS - 96)
-	tween.parallel().tween_property(blast_a, "position", head_a_target, 0.20)
-	tween.parallel().tween_property(blast_b, "position", head_b_target, 0.20)
-	tween.tween_property(beam, "modulate:a", 0.0, 0.15)
-	tween.parallel().tween_property(glow, "modulate:a", 0.0, 0.18)
-	tween.parallel().tween_property(blast_a, "modulate:a", 0.0, 0.12)
-	tween.parallel().tween_property(blast_b, "modulate:a", 0.0, 0.12)
+	var axis := Vector2.RIGHT if horizontal else Vector2.DOWN
+	var trails: Array[Line2D] = []
+	for _direction in 2:
+		var trail := Line2D.new()
+		trail.width = 42.0
+		trail.z_index = 80
+		trail.begin_cap_mode = Line2D.LINE_CAP_ROUND
+		trail.end_cap_mode = Line2D.LINE_CAP_ROUND
+		var gradient := Gradient.new()
+		gradient.colors = PackedColorArray([Color(1, 0.3, 0.6, 0), Color(1, 0.65, 0.3, 0.6), Color(1, 1, 0.8, 1)])
+		gradient.offsets = PackedFloat32Array([0, 0.6, 1])
+		trail.gradient = gradient
+		add_child(trail)
+		trails.append(trail)
+	_spawn_impact_flash(center, Color("fff4a8"))
+	var hit: Dictionary = {}
+	var tween := create_tween()
+	tween.tween_method(_advance_lane_blast.bind(origin, center, axis, trails, hit), 0.0, CELL_PITCH * 9.0, 0.62)
 	await tween.finished
-	for pos: Vector2i in affected:
+	for trail: Line2D in trails:
+		trail.queue_free()
+
+
+func _advance_lane_blast(distance: float, origin: Vector2i, center: Vector2, axis: Vector2, trails: Array[Line2D], hit: Dictionary) -> void:
+	for index in 2:
+		var direction := axis * (-1.0 if index == 0 else 1.0)
+		trails[index].points = PackedVector2Array([center + direction * maxf(0.0, distance - CELL_PITCH * 1.6), center + direction * distance])
+	for index in COLS:
+		var pos := Vector2i(index, origin.y) if axis.x > 0 else Vector2i(origin.x, index)
+		if hit.has(pos) or locked_cells.has(pos):
+			continue
 		var impact := buttons[pos.y * COLS + pos.x].position + buttons[0].size * 0.5
-		if (pos.x if horizontal else pos.y) % 2 == 0:
-			_spawn_sugar_burst(impact, Color("ff9cc8"), 9)
-		candy_items[pos.y * COLS + pos.x].scale = Vector2.ONE
-	var edge_a := Vector2(CELL_PITCH * COLS - 8, center.y) if horizontal else Vector2(center.x, 8)
-	var edge_b := Vector2(8, center.y) if horizontal else Vector2(center.x, CELL_PITCH * ROWS - 8)
-	_spawn_sugar_burst(edge_a, Color("ff73b9"), 24)
-	_spawn_sugar_burst(edge_b, Color("ff73b9"), 24)
-	blast_a.queue_free()
-	blast_b.queue_free()
-	glow.queue_free()
-	beam.queue_free()
+		if impact.distance_to(center) <= distance:
+			hit[pos] = true
+			candy_items[pos.y * COLS + pos.x].modulate.a = 0.0
+			_spawn_sugar_burst(impact, Color("ffb679"), 10)
 
 
 func _animate_flying_rocket(origin: Vector2i, clear_set: Dictionary) -> void:
@@ -921,6 +902,7 @@ func _animate_flying_rocket(origin: Vector2i, clear_set: Dictionary) -> void:
 	add_child(trail)
 	# Keep the rocket readable and fly it along one continuous quadratic arc.
 	# The impact owns the scale/flash so launch never looks like a spinning pulse.
+	_move_flying_rocket(0.0, sprite, trail, start_center, arc, end_center)
 	var tween := create_tween()
 	tween.tween_method(
 		_move_flying_rocket.bind(sprite, trail, start_center, arc, end_center),
@@ -942,7 +924,7 @@ func _animate_flying_rocket(origin: Vector2i, clear_set: Dictionary) -> void:
 	await explode.finished
 	for pos: Vector2i in targets:
 		candy_items[pos.y * COLS + pos.x].scale = Vector2.ONE
-	origin_item.modulate.a = 1.0
+	origin_item.modulate.a = 0.0
 	trail.queue_free()
 	sprite.queue_free()
 
@@ -961,8 +943,8 @@ func _move_flying_rocket(
 	var center := inverse * inverse * start + 2.0 * inverse * progress * control + progress * progress * finish
 	var tangent := 2.0 * inverse * (control - start) + 2.0 * progress * (finish - control)
 	sprite.position = center - sprite.size * 0.5
-	# The source art points upward, so add a quarter turn to face the trajectory.
-	sprite.rotation = tangent.angle() + PI * 0.5
+	# The sprite nose points diagonally up-right (-45 degrees).
+	sprite.rotation = tangent.angle() + PI * 0.25
 	var points := PackedVector2Array()
 	var steps := maxi(2, int(12.0 * progress))
 	for index in steps + 1:
@@ -1190,10 +1172,12 @@ func _score_clear(clear_set: Dictionary) -> void:
 		positions_by_kind[kind].append(pos)
 	for kind: int in positions_by_kind:
 		_animate_objective_collection(kind, positions_by_kind[kind])
+	collection_starts.clear()
 	# Counters change on arrival, not while their candies are still on the board.
-	await get_tree().create_timer(0.64).timeout
-	for kind: int in positions_by_kind:
-		objective_changed.emit(kind, positions_by_kind[kind].size())
+	get_tree().create_timer(0.64).timeout.connect(func() -> void:
+		for kind: int in positions_by_kind:
+			objective_changed.emit(kind, positions_by_kind[kind].size())
+	)
 
 
 func _animate_objective_collection(kind: int, cleared_positions: Array) -> void:
@@ -1210,7 +1194,7 @@ func _animate_objective_collection(kind: int, cleared_positions: Array) -> void:
 	var fly_count := cleared_positions.size()
 	for index in fly_count:
 		var pos: Vector2i = cleared_positions[index]
-		var start := buttons[pos.y * COLS + pos.x].position + Vector2(14, 14)
+		var start: Vector2 = collection_starts.get(pos, buttons[pos.y * COLS + pos.x].position + Vector2(14, 14))
 		var sprite := _make_moving_sprite(piece_textures[kind], start)
 		sprite.size = Vector2(78, 78)
 		sprite.pivot_offset = sprite.size * 0.5
@@ -1263,7 +1247,7 @@ func _collapse_and_refill() -> Dictionary:
 			var spawn_order := 1
 			while write >= segment_top:
 				cells[write][x] = {"kind": _next_random_kind(), "special": Special.NONE}
-				fall_rows[Vector2i(x, write)] = write - segment_top + spawn_order
+				fall_rows[Vector2i(x, write)] = write + spawn_order
 				spawn_order += 1
 				write -= 1
 			segment_bottom = segment_top - 1

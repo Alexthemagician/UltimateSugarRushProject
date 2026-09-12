@@ -1,0 +1,2 @@
+from pathlib import Path
+p=Path('ultimate-sugar-rush/scripts/ui/world_map.gd');s=p.read_text(encoding='utf-8').replace('%SettingsButton.pressed.connect(_show_settings_note)','%SettingsButton.text = "CAFÉ"\n\t%SettingsButton.pressed.connect(func() -> void: SceneRouter.replace_scene(CafeProgress.HUB))').replace('%CollectionsButton.visible = not collectible_rewards.get_collection().is_empty()','%CollectionsButton.visible = false');p.write_text(s,encoding='utf-8')

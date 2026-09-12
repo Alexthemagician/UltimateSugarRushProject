@@ -1,0 +1,344 @@
+{
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 1250.0,
+				"gems": 0.0,
+				"id": "local_player",
+				"level": 1.0,
+				"orders_completed": 0.0,
+				"quests_completed": 0.0,
+				"total_play_seconds": 0.0,
+				"xp": 0.0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789188417.0,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789188417.0
+			}
+		]
+	},
+	"merge_board": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 2,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 4,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 6,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 8,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 0
+			},
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 2,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 6,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 8,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 2,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 4,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 6,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 8,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 2
+			},
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 2,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 4,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 6,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 8,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 4,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 6,
+				"frozen": true,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "orange",
+				"row": 4
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "orange",
+				"row": 4
+			},
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 5
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 5
+			}
+		]
+	},
+	"save_version": 1
+}

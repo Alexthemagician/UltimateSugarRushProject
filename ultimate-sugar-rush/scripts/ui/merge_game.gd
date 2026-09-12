@@ -23,6 +23,7 @@ var _board_finishing := false
 
 
 func _ready() -> void:
+	preload("res://scripts/ui/landscape_layout.gd").apply(self)
 	%BackButton.pressed.connect(_go_back)
 	%AddItemButton.button_down.connect(_start_adding_fruit)
 	%AddItemButton.button_up.connect(_stop_adding_fruit)
@@ -173,4 +174,4 @@ func _complete_board() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, "LEVEL COMPLETED!")
-	SceneRouter.replace_scene("res://scenes/map/world_map.tscn")
+	SceneRouter.replace_scene(CafeProgress.HUB)

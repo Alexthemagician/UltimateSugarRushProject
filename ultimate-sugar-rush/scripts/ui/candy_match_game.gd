@@ -13,6 +13,7 @@ var completing := false
 
 
 func _ready() -> void:
+	preload("res://scripts/ui/landscape_layout.gd").apply(self)
 	var saved := SaveSystem.get_section(SAVE_SECTION)
 	for kind in 4: progress[kind] = int(saved.get(str(kind), 0))
 	moves_remaining = int(saved.get("moves_remaining", MOVE_LIMIT))
@@ -89,7 +90,7 @@ func _complete_level() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, "SWEET MATCH COMPLETE!")
-	SceneRouter.replace_scene("res://scenes/map/world_map.tscn")
+	SceneRouter.replace_scene(CafeProgress.HUB)
 
 
 func _reset() -> void:

@@ -1,0 +1,3 @@
+from pathlib import Path
+p=Path('prototypes/fixed_cafe/cafe.gd');s=p.read_text().replace('environment.ambient_light_energy = 0.7','environment.ambient_light_energy = 0.28\n\tenvironment.ssao_enabled = true\n\tenvironment.ssao_radius = 0.65\n\tenvironment.ssao_intensity = 2.0\n\tenvironment.ssao_detail = 0.7\n\tenvironment.tonemap_exposure = 0.85').replace('key.light_energy = 1.35','key.light_energy = 0.9').replace('fill.light_energy = 0.55','fill.light_energy = 0.3').replace('2.83,-0.05','3.0,-0.36').replace('0.1,1.55','0.1,0.88').replace('2.76,0.7','2.93,0.06').replace('2.8,-0.54','2.97,-0.54').replace('pass_01.png','pass_02.png');p.write_text(s)
+p=Path('prototypes/fixed_cafe/project.godot');s=p.read_text().replace('"gl_compatibility"','"forward_plus"');p.write_text(s)

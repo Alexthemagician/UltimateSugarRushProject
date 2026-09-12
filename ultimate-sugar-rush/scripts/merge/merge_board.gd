@@ -5,8 +5,8 @@ signal board_changed
 signal item_merged(item_id: String)
 signal item_discarded(item_id: String)
 
-const COLUMNS := 6
-const ROWS := 8
+const COLUMNS := 10
+const ROWS := 6
 const CELL_SIZE := Vector2(158, 158)
 const ITEM_INSET := 2.0
 const ITEM_SCENE := preload("res://scenes/merge/merge_item.tscn")
@@ -196,7 +196,7 @@ func _seed_board() -> void:
 			"chocolate_bar": [Vector2i(0, 1), Vector2i(1, 1)],
 			"strawberry": [Vector2i(3, 1), Vector2i(4, 1)],
 			"vanilla_flowers": [Vector2i(1, 5), Vector2i(2, 5)],
-			"blueberries": [Vector2i(4, 6), Vector2i(5, 6)],
+			"blueberries": [Vector2i(8, 4), Vector2i(9, 4)],
 		}
 		for item_id: String in cake_seeds:
 			for cell: Vector2i in cake_seeds[item_id]:
@@ -208,7 +208,7 @@ func _seed_board() -> void:
 			"chocolate_chip_cookie": [Vector2i(0, 1), Vector2i(1, 1)],
 			"pink_sugar_cookie": [Vector2i(3, 1), Vector2i(4, 1)],
 			"sandwich_cookie": [Vector2i(1, 5), Vector2i(2, 5)],
-			"lucky_cookie": [Vector2i(4, 6), Vector2i(5, 6)],
+			"lucky_cookie": [Vector2i(8, 4), Vector2i(9, 4)],
 		}
 		for item_id: String in cookie_seeds:
 			for cell: Vector2i in cookie_seeds[item_id]:
@@ -216,7 +216,7 @@ func _seed_board() -> void:
 		_save_board()
 		return
 	if board_kind == "ice_cream":
-		var frozen_seeds := {"milk_pitcher":Vector2i(0, 2), "chocolate_milk":Vector2i(5, 3), "pistachios":Vector2i(2, 6)}
+		var frozen_seeds := {"milk_pitcher":Vector2i(0, 2), "chocolate_milk":Vector2i(5, 3), "pistachios":Vector2i(7, 4)}
 		var free_seeds := {"milk_pitcher":Vector2i(1, 1), "chocolate_milk":Vector2i(4, 1), "pistachios":Vector2i(3, 5)}
 		for item_id: String in frozen_seeds:
 			_spawn_item(item_id, frozen_seeds[item_id], true, true)
@@ -224,7 +224,7 @@ func _seed_board() -> void:
 		_save_board()
 		return
 	if board_kind == "mixed":
-		var frozen_seeds := {"chocolate_milk":Vector2i(0, 2), "pink_sugar_cookie":Vector2i(5, 2), "vanilla_flowers":Vector2i(1, 6), "apple":Vector2i(4, 6)}
+		var frozen_seeds := {"chocolate_milk":Vector2i(0, 2), "pink_sugar_cookie":Vector2i(5, 2), "vanilla_flowers":Vector2i(6, 4), "apple":Vector2i(8, 4)}
 		var free_seeds := {"chocolate_milk":Vector2i(1, 1), "pink_sugar_cookie":Vector2i(4, 1), "vanilla_flowers":Vector2i(2, 5), "apple":Vector2i(3, 5)}
 		for item_id: String in frozen_seeds:
 			_spawn_item(item_id, frozen_seeds[item_id], true, true)
@@ -233,7 +233,7 @@ func _seed_board() -> void:
 		return
 	for cell in [Vector2i(1, 1), Vector2i(3, 1), Vector2i(2, 3), Vector2i(4, 4)]:
 		_spawn_item("lemon", cell, true)
-	for cell in [Vector2i(1, 6), Vector2i(4, 6)]:
+	for cell in [Vector2i(6, 4), Vector2i(8, 4)]:
 		_spawn_item("orange", cell, true)
 	for cell in [Vector2i(0, 4), Vector2i(5, 4)]:
 		_spawn_item("apple", cell, true)
@@ -484,6 +484,7 @@ func _save_board() -> void:
 		var item: TextureRect = _items[cell]
 		records.append({"item_id": item.item_id, "column": cell.x, "row": cell.y, "frozen": item.frozen})
 	SaveSystem.set_value(_save_section(), "items", records)
+	SaveSystem.set_value(_save_section(), "columns", COLUMNS)
 	board_changed.emit()
 
 
@@ -495,4 +496,7 @@ func _load_board() -> void:
 		return
 	for record: Variant in records:
 		if record is Dictionary:
-			_spawn_item(str(record.get("item_id", "lemon")), Vector2i(int(record.get("column", 0)), int(record.get("row", 0))), false, bool(record.get("frozen", false)))
+			var old_columns := int(SaveSystem.get_value(_save_section(), "columns", 6))
+			var slot := int(record.get("row", 0)) * old_columns + int(record.get("column", 0))
+			var cell := Vector2i(slot % COLUMNS, slot / COLUMNS)
+			_spawn_item(str(record.get("item_id", "lemon")), cell, false, bool(record.get("frozen", false)))

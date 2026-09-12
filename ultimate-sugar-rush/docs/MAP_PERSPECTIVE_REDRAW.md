@@ -1,0 +1,11 @@
+# Map perspective redraw
+
+Built-in imagegen edits; originals retained. New assets: assets/map/sugar_landscape_v3.png and assets/map/cocoa_landscape_v3.png.
+
+## Sugar Blossom
+
+Redraw this Sugar Blossom game map with corrected coherent perspective. Preserve its pastel anime hand-painted candy orchard theme, pink blossom trees, patisserie cottages, sparkling water and frosting castle, landscape 16:9 format. Redesign terrain and route as needed: a high bird's-eye near-orthographic view over a mostly level garden landscape, all paths lying naturally flat on the ground, consistent width and foreshortening. ONE unbranched cream walking path from lower left, gently curves up through the middle left, sweeps down across the middle, then curves up toward a castle on the right. Natural broad asymmetrical bends, no repetitive sine-wave ribbon, no vertical roads, no impossible floating edges or steep ramps. Eight evenly spaced clear locations along route for game stage buttons added later. Main playable route within x 8%-92%, y 25%-78%. Keep top left 35% width and top 15% height for UI. No text, numbers, buttons, markers. Scenery fills entire canvas.
+
+## Cocoa Moon
+
+Redraw this Cocoa Moon game map to correct its odd perspective. Preserve purple twilight, glowing chocolate cottages, cocoa trees, caramel water, luminous chocolate palace and rich anime hand-painted style. Wide 16:9 landscape. Change terrain and path to a high bird's-eye near-orthographic view of a gently rolling mostly level chocolate garden, with consistent ground perspective everywhere. ONE continuous unbranched cream path: starts lower RIGHT, winds LEFT around a small caramel pond across the lower-middle, turns in a broad hairpin at middle LEFT, and returns RIGHT across the upper-middle to the chocolate palace. Distinct sweeping reverse-S route. No crossings, no branching loop, no elevated highway, no giant ramps, no path climbing a cliff. A short flat bridge if needed has abutments at equal elevation. Consistent path width, gently foreshortened, naturally embedded into ground. Six clear well-spaced locations for stage buttons added by game. Playable path stays within x 10%-90%, y 25%-78%, UI safe space top-left. No text, numbers, stage markers or UI. Fill entire canvas with scenery.

@@ -1,0 +1,148 @@
+{
+	"cafe": {
+		"attempt_serial": 6,
+		"boards_won": 6,
+		"claimed": {
+			"region_0_stage_0:1": true,
+			"region_0_stage_1:2": true,
+			"region_1_stage_0:3": true,
+			"region_1_stage_1:4": true,
+			"region_2_stage_0:5": true,
+			"region_2_stage_1:6": true
+		},
+		"last_reward": {
+			"coins": 160,
+			"ingredients": {
+				"chocolate_frosting": 3,
+				"strawberry_frosting": 3,
+				"vanilla_frosting": 3
+			},
+			"source": "region_2_stage_1",
+			"xp": 60
+		}
+	},
+	"cafe_completed": {
+		"region_0_stage_0": true,
+		"region_0_stage_1": true,
+		"region_1_stage_0": true,
+		"region_1_stage_1": true,
+		"region_2_stage_0": true,
+		"region_2_stage_1": true
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"item_id": "sugar_cubes",
+				"quantity": 1
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"item_id": "ultra_fine_flour",
+				"quantity": 0
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"item_id": "creamy_butter",
+				"quantity": 1
+			},
+			{
+				"id": "ingredient_eggs",
+				"item_id": "eggs",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_fondant",
+				"item_id": "fondant",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"item_id": "sugar_syrup",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"item_id": "edible_flowers",
+				"quantity": 2
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"item_id": "honey_glob",
+				"quantity": 2
+			},
+			{
+				"id": "ingredient_spring_water",
+				"item_id": "spring_water",
+				"quantity": 2
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"item_id": "oolong_leaves",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"item_id": "peppermint_leaves",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"item_id": "strawberry_syrup",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"item_id": "coffee_beans",
+				"quantity": 2
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"item_id": "caramel_syrup",
+				"quantity": 2
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"item_id": "chocolate_syrup",
+				"quantity": 2
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"item_id": "vanilla_frosting",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"item_id": "strawberry_frosting",
+				"quantity": 3
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"item_id": "chocolate_frosting",
+				"quantity": 3
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 2060,
+				"gems": 0,
+				"id": "local_player",
+				"level": 2,
+				"orders_completed": 1,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 305
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789004383,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789004383
+			}
+		]
+	},
+	"save_version": 1
+}

@@ -19,6 +19,7 @@ var completing := false
 
 
 func _ready() -> void:
+	preload("res://scripts/ui/landscape_layout.gd").apply(self)
 	moves_remaining = move_limit
 	board.configure(piece_textures, initial_locks, shift_bottom_row)
 	var saved := SaveSystem.get_section(save_section)
@@ -103,7 +104,7 @@ func _complete_level() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, completion_message)
-	SceneRouter.replace_scene("res://scenes/map/world_map.tscn")
+	SceneRouter.replace_scene(CafeProgress.HUB)
 
 
 func _reset() -> void:
