@@ -13,6 +13,11 @@ const CATALOG := {
 	"smart_tarts": {"name":"Smart Tarts", "description":"Box of assorted tarts", "texture":"res://assets/collectibles/smart_tarts.png"},
 	"cinnamon_yums": {"name":"Cinnamon Yums", "description":"Plate of cinnamon buns", "texture":"res://assets/collectibles/cinnamon_yums.png"},
 }
+const ALBUM_SETS := {
+	"Garden Pantry":{"name":"Garden Pantry","items":["autumn_harvest","summer_fruits","berry_sweets"],"reward":180},
+	"Baker's Shelf":{"name":"Baker's Shelf","items":["sugar_sack","flour_mill","cookie_jar_collectible"],"reward":220},
+	"Mallow's Favorites":{"name":"Mallow's Favorites","items":["honey_pot","waffle_jacks","smart_tarts","cinnamon_yums"],"reward":300}
+}
 
 func get_collection() -> Dictionary:
 	var value: Variant = SaveSystem.get_value(SAVE_SECTION, "items", {})
@@ -25,12 +30,46 @@ func award_random() -> String:
 		if int(collection.get(item_id, 0)) == 0: candidates.append(item_id)
 	if candidates.is_empty(): candidates.assign(CATALOG.keys())
 	var awarded: String = candidates.pick_random()
+	var duplicate := int(collection.get(awarded,0)) > 0
 	collection[awarded] = int(collection.get(awarded, 0)) + 1
 	SaveSystem.set_value(SAVE_SECTION, "items", collection)
+	if duplicate: SaveSystem.set_value(SAVE_SECTION,"sprinkles",sprinkles()+10)
 	SaveSystem.save_now()
 	return awarded
 
+func sprinkles() -> int:
+	return int(SaveSystem.get_value(SAVE_SECTION,"sprinkles",0))
+
+func set_complete(set_id: String) -> bool:
+	if not ALBUM_SETS.has(set_id): return false
+	var collection := get_collection()
+	for item_id: String in ALBUM_SETS[set_id].items:
+		if int(collection.get(item_id,0)) <= 0: return false
+	return true
+
+func claim_set_reward(set_id: String) -> int:
+	if not set_complete(set_id) or bool(SaveSystem.get_value(SAVE_SECTION,"set_"+set_id,false)): return 0
+	var reward := int(ALBUM_SETS[set_id].reward)
+	var stats := GameDatabase.get_player_stats(); stats.coins=int(stats.coins)+reward; GameDatabase.upsert_record("player_stats",stats)
+	SaveSystem.set_value(SAVE_SECTION,"set_"+set_id,true); SaveSystem.save_now()
+	return reward
+
+func exchange_sprinkles() -> String:
+	if sprinkles() < 50: return ""
+	var collection := get_collection()
+	var missing: Array[String] = []
+	for item_id: String in CATALOG:
+		if int(collection.get(item_id,0)) <= 0: missing.append(item_id)
+	if missing.is_empty(): return ""
+	var item_id: String = missing.pick_random()
+	collection[item_id]=1
+	SaveSystem.set_value(SAVE_SECTION,"items",collection)
+	SaveSystem.set_value(SAVE_SECTION,"sprinkles",sprinkles()-50)
+	SaveSystem.save_now()
+	return item_id
+
 func play_completion(root: Control, board: Control, message: String) -> void:
+	CafeProgress.mark_stage_cleared_today()
 	var receipt := CafeProgress.award_board(root.scene_file_path)
 	await board.play_completion_clear()
 	var item_id := award_random()

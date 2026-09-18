@@ -1,0 +1,10 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Hosted snapshot preserves chosen furniture and finishes
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_hosted_social.gd:7)
+       [1] run (res://tests/check_hosted_social.gd:37)
+       [2] call_service (res://scripts/core/cafe_online.gd:51)
+       [3] _request (res://scripts/core/cafe_online.gd:104)
+Hosted social: 1 failures

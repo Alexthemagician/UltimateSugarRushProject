@@ -1,0 +1,77 @@
+{
+	"cafe_layout": {
+		"position_version": 2
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 97
+			},
+			{
+				"id": "product_vanilla_latte",
+				"quantity": 99
+			},
+			{
+				"id": "product_petal_bonbons",
+				"quantity": 100
+			},
+			{
+				"id": "product_strawberry_cake",
+				"quantity": 99
+			},
+			{
+				"id": "product_honey_mint_tea",
+				"quantity": 100
+			},
+			{
+				"id": "product_caramel_cloud_buns",
+				"quantity": 100
+			},
+			{
+				"id": "product_mocha_latte",
+				"quantity": 100
+			},
+			{
+				"id": "product_honey_truffles",
+				"quantity": 100
+			},
+			{
+				"id": "product_cocoa_cake",
+				"quantity": 100
+			},
+			{
+				"id": "product_blossom_oolong",
+				"quantity": 100
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1289,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 5,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789680698,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789680698
+			}
+		]
+	},
+	"quest_progress": {
+		"coins": 39
+	},
+	"regular_friendship": {
+		"berry": 1
+	},
+	"save_version": 1
+}

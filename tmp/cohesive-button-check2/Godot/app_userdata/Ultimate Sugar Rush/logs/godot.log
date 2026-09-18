@@ -1,0 +1,33 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Condition "format != p_src->format" is true.
+   at: blend_rect (core/io/image.cpp:3218)
+   GDScript backtrace (most recent call first):
+       [0] _build_add_items_icon (res://scripts/ui/regional_merge_game.gd:144)
+       [1] _decorate_add_items_button (res://scripts/ui/regional_merge_game.gd:123)
+       [2] _ready (res://scripts/ui/regional_merge_game.gd:32)
+       [3] run (res://tests/check_daily_board_progression.gd:63)
+ERROR: Condition "format != p_src->format" is true.
+   at: blend_rect (core/io/image.cpp:3218)
+   GDScript backtrace (most recent call first):
+       [0] _build_add_items_icon (res://scripts/ui/regional_merge_game.gd:144)
+       [1] _decorate_add_items_button (res://scripts/ui/regional_merge_game.gd:123)
+       [2] _ready (res://scripts/ui/regional_merge_game.gd:32)
+       [3] run (res://tests/check_daily_board_progression.gd:63)
+ERROR: Condition "format != p_src->format" is true.
+   at: blend_rect (core/io/image.cpp:3218)
+   GDScript backtrace (most recent call first):
+       [0] _build_add_items_icon (res://scripts/ui/regional_merge_game.gd:144)
+       [1] _decorate_add_items_button (res://scripts/ui/regional_merge_game.gd:123)
+       [2] _ready (res://scripts/ui/regional_merge_game.gd:32)
+       [3] run (res://tests/check_daily_board_progression.gd:63)
+ERROR: Condition "format != p_src->format" is true.
+   at: blend_rect (core/io/image.cpp:3218)
+   GDScript backtrace (most recent call first):
+       [0] _build_add_items_icon (res://scripts/ui/regional_merge_game.gd:144)
+       [1] _decorate_add_items_button (res://scripts/ui/regional_merge_game.gd:123)
+       [2] _ready (res://scripts/ui/regional_merge_game.gd:32)
+       [3] run (res://tests/check_daily_board_progression.gd:63)
+Daily board progression: 0 failures

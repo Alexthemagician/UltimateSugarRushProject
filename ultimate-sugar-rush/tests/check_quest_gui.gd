@@ -6,6 +6,9 @@ func check(ok: bool, message: String) -> void:
 		failures += 1
 		push_error(message)
 func click(control: Control) -> void:
+	# Newly created containers settle their minimum sizes over deferred layout passes.
+	await process_frame
+	await process_frame
 	var position := root.get_final_transform() * control.get_global_rect().get_center()
 	var motion := InputEventMouseMotion.new()
 	motion.position = position
@@ -34,7 +37,10 @@ func run() -> void:
 		check(hub.world.display_products[i].visible,"Collected batch appears in its display")
 	var customer: Dictionary = hub.world.actors[1]
 	customer.state = "shop"
-	customer.product_choice = 0
+	var requested: int = customer.regular_request.recipe_index
+	customer.product_choice = requested
+	var stock_before: int = progress.product_stock(requested)
+	var expected_coins: int = progress.RECIPES[requested].price + root.get_node("CafeLife").event_sale_bonus(requested)
 	customer.node.position = Vector3(-3.6,0.14,5.5)
 	customer.wait = 0.0
 	var database := root.get_node("GameDatabase")
@@ -43,13 +49,13 @@ func run() -> void:
 		hub.world._animate_customer(customer,1.0/60.0)
 		if customer.state == "pickup": break
 	check(customer.state == "pickup","Customer buys GUI-collected stock")
-	check(progress.product_stock(0)==49,"Sale removes one bun")
-	check(database.get_player_stats().coins==coins_before+4,"Sale pays four coins")
-	check(int(save.get_value("quest_progress","coins",0))==4,"Sale advances coin quest")
+	check(progress.product_stock(requested)==stock_before-1,"Sale removes one requested recipe")
+	check(database.get_player_stats().coins==coins_before+expected_coins,"Sale pays recipe price plus event bonus")
+	check(int(save.get_value("quest_progress","coins",0))==expected_coins,"Sale advances coin quest")
 	check(int(save.get_value("quest_progress","butter_cloud_buns",0))==50,"Collection advances crafting quest")
 	save.save_now()
 	save.load_save()
-	check(int(save.get_value("quest_progress","coins",0))==4,"Quest progress persists")
+	check(int(save.get_value("quest_progress","coins",0))==expected_coins,"Quest progress persists")
 	await click(hub.get_node("QuestsButton"))
 	check(is_instance_valid(hub.modal),"Quest button opens journal")
 	if is_instance_valid(hub.modal):
@@ -57,6 +63,7 @@ func run() -> void:
 		for i in 6:
 			await click(hub.modal.find_child("QuestTab%d" % i,true,false))
 			check(hub.modal.find_child("QuestObjective",true,false).text==load("res://scripts/cafe/quest_journal.gd").QUESTS[i].title,"Quest tab changes full view")
+			if DisplayServer.get_name()=="headless": continue
 			await RenderingServer.frame_post_draw
 			root.get_texture().get_image().save_png("res://../tmp/quest_tab_%d.png" % i)
 	var colors: Array = []
@@ -67,6 +74,7 @@ func run() -> void:
 		var color: Color = panel.get_theme_stylebox("panel").bg_color
 		check(color not in colors,"Menu has distinct palette")
 		colors.append(color)
+		if DisplayServer.get_name()=="headless": continue
 		await RenderingServer.frame_post_draw
 		root.get_texture().get_image().save_png("res://../tmp/menu"+method+".png")
 	print("Quest GUI: %d failures" % failures)

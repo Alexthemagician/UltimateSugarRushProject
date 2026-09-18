@@ -1,0 +1,21 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+SCRIPT ERROR: Parse Error: Value of type "GradientTexture1D" cannot be assigned to a variable of type "Gradient".
+   at: GDScript::reload (res://scripts/merge/merge_board.gd:483)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/render_add_items_cluster.gd:9)
+ERROR: Failed to load script "res://scripts/merge/merge_board.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/render_add_items_cluster.gd:9)
+SCRIPT ERROR: Invalid access to property or key 'board_changed' on a base object of type 'Control'.
+   at: _ready (res://scripts/ui/cake_merge_game.gd:31)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/ui/cake_merge_game.gd:31)
+       [1] run (res://tests/render_add_items_cluster.gd:10)
+SCRIPT ERROR: Invalid assignment of property or key 'persistence_enabled' with value of type 'bool' on a base object of type 'Control'.
+   at: run (res://tests/render_add_items_cluster.gd:12)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/render_add_items_cluster.gd:12)

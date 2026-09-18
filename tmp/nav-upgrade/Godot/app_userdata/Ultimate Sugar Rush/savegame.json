@@ -1,0 +1,44 @@
+{
+	"cafe_layout": {
+		"position_version": 2
+	},
+	"cafe_upgrades": {
+		"display": true,
+		"garden": true,
+		"oven": true,
+		"seating": true
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 0
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 805,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 1,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789680142,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789680142
+			}
+		]
+	},
+	"quest_progress": {
+		"coins": 5
+	},
+	"save_version": 1
+}

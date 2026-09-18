@@ -1,0 +1,76 @@
+{
+	"database": {
+		"inventory": [
+			{
+				"id": "stored_butter_cloud_buns",
+				"quantity": 90
+			},
+			{
+				"id": "stored_vanilla_latte",
+				"quantity": 94
+			},
+			{
+				"id": "stored_petal_bonbons",
+				"quantity": 88
+			},
+			{
+				"id": "stored_strawberry_cake",
+				"quantity": 97
+			},
+			{
+				"id": "stored_honey_mint_tea",
+				"quantity": 87
+			},
+			{
+				"id": "stored_caramel_cloud_buns",
+				"quantity": 100
+			},
+			{
+				"id": "stored_mocha_latte",
+				"quantity": 100
+			},
+			{
+				"id": "stored_honey_truffles",
+				"quantity": 100
+			},
+			{
+				"id": "stored_cocoa_cake",
+				"quantity": 100
+			},
+			{
+				"id": "stored_blossom_oolong",
+				"quantity": 100
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1890,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 195
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789272609,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789272609
+			}
+		]
+	},
+	"quest_progress": {
+		"xp": 195
+	},
+	"save_version": 1,
+	"special_orders": {
+		"birthday_picnic": true,
+		"delivery_thanks": true,
+		"sketch_club": true
+	}
+}

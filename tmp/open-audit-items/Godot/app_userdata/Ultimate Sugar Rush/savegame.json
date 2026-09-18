@@ -1,0 +1,48 @@
+{
+	"cafe_item_storage": {
+		"cupcake_counter": false,
+		"purchased_station_0_1": true
+	},
+	"cafe_layout": {
+		"cupcake_counter": [
+			-20.0,
+			-16.0
+		],
+		"cupcake_counter_rotation": 0,
+		"position_version": 2
+	},
+	"cafe_purchases": {
+		"items": [
+			{
+				"id": "purchased_station_0_1",
+				"template": "station_0"
+			}
+		],
+		"serial": 1
+	},
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 600,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789758385,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789758385
+			}
+		]
+	},
+	"save_version": 1
+}

@@ -1,0 +1,125 @@
+{
+	"cafe": {
+		"boards_won": 5.0
+	},
+	"cafe_jobs": {
+		"caramel_cloud_buns": [
+			{
+				"quantity": 40.0,
+				"ready_at": 1789758030.222
+			}
+		],
+		"mocha_latte": [
+			{
+				"quantity": 20.0,
+				"ready_at": 1789758024.224
+			}
+		]
+	},
+	"cafe_layout": {
+		"position_version": 2
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"quantity": 98.0
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"quantity": 98.0
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"quantity": 98.0
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_spring_water",
+				"quantity": 99.0
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"quantity": 99.0
+			},
+			{
+				"id": "ingredient_fondant",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"quantity": 98.0
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"quantity": 100.0
+			},
+			{
+				"id": "ingredient_eggs",
+				"quantity": 100.0
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1250.0,
+				"gems": 0.0,
+				"id": "local_player",
+				"level": 1.0,
+				"orders_completed": 0.0,
+				"quests_completed": 0.0,
+				"total_play_seconds": 0.0,
+				"xp": 0.0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789758012.0,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789758012.0
+			}
+		]
+	},
+	"regular_friendship": {
+		"berry": 3.0,
+		"coco": 3.0,
+		"mint": 3.0
+	},
+	"save_version": 1
+}

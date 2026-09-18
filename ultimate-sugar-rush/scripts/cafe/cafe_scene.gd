@@ -2,7 +2,13 @@ extends Node3D
 
 signal station_selected(index: int)
 signal customer_purchased(receipt: Dictionary)
+signal customer_selected(customer: Dictionary)
+signal object_actions_requested(entry: Dictionary)
+signal object_moved(entry: Dictionary)
 var actors: Array[Dictionary] = []
+var visiting := false
+var visit_layout: Dictionary = {}
+var cafe_display_name := ""
 
 const CREAM = Color("fff0d5")
 const PINK = Color("e96c8c")
@@ -12,9 +18,19 @@ const GOLD = Color("dba451")
 const COCOA = Color("63414a")
 const MIN_ZOOM := 10.5
 const MAX_ZOOM := 22.0
-const PAN_LIMIT := 6.0
+const PAN_LIMIT := 18.0
 const WALK_SPEED := 0.72
 const STRIDE_LENGTH := 0.40
+const CUSTOMER_PATIENCE_SECONDS := 12.0
+const PLACEMENT_GRID_SIZE := 0.5
+const PLACEABLE_PLOT_LIMIT := 25.5
+const MOVABLE_PICK_LAYER := 128
+const CAFE_ORIGIN := Vector3(-18.5,0,-18.5)
+const NAV_CELL_SIZE := 0.38
+const NAV_LOCAL_MIN := Vector2(-6.7,-6.2)
+const NAV_LOCAL_MAX := Vector2(6.7,6.2)
+const CUSTOMER_RADIUS := 0.30
+const CUSTOMER_EAT_SECONDS := 4.0
 var pan_offset := Vector2.ZERO
 var camera_home := Vector3(12,13,16)
 var mouse_down := false
@@ -36,6 +52,20 @@ var batch_icons: Array[Sprite3D] = []
 var batch_labels: Array[Label3D] = []
 var display_products: Array[Node3D] = []
 var display_counts: Array[Label3D] = []
+var movable_objects: Array[Dictionary] = []
+var pickup_counter: Node3D
+var cupcake_counter: Node3D
+var hold_target: Dictionary = {}
+var hold_elapsed := 0.0
+var hold_triggered := false
+var hold_point := Vector2.ZERO
+var placement_target: Dictionary = {}
+var placement_marker: Node3D
+var placement_origin := Vector3.ZERO
+var placement_valid := true
+var placement_footprint_material: StandardMaterial3D
+var placement_pointer_offset := Vector2.ZERO
+var navigation_revision := 0
 const ROOM_SPREAD := Vector3(1.5, 1.0, 1.5)
 
 func mat(color: Color, metal := 0.0, rough := 0.12) -> StandardMaterial3D:
@@ -141,6 +171,10 @@ func label3(text: String, p: Vector3, font_size: int, color: Color, parent: Node
 	parent.add_child(label)
 	return label
 
+func _cafe_name() -> String:
+	if visiting and not cafe_display_name.strip_edges().is_empty(): return cafe_display_name.strip_edges()
+	return str(SaveSystem.get_value("cafe_profile","name","Sugar & Sunshine")).strip_edges()
+
 func _ready() -> void:
 	RenderingServer.set_default_clear_color(Color("f3dedb"))
 	var world := WorldEnvironment.new()
@@ -204,6 +238,7 @@ func _ready() -> void:
 	_build_coffee(Vector3(0.35, 0, -2.75))
 	_build_candy(Vector3(-3.15, 0, 0.05))
 	_build_display(Vector3(1.75, 0, 1.6))
+	_build_pickup_counter(Vector3(2.5,0,-2.67))
 	_table(Vector3(3.0, 0, -1.0))
 	_plant(Vector3(3.6, 0, -3.2))
 	_plant(Vector3(-3.2, 0, 3.65))
@@ -214,46 +249,313 @@ func _ready() -> void:
 			child.position *= ROOM_SPREAD
 	_build_tea_machine()
 	_build_product_displays()
-	_build_actors()
-	_build_batch_indicators()
+	if not visiting:
+		_build_actors()
+		_build_batch_indicators()
+	else:
+		for product in display_products: product.visible = false
+		for count in display_counts: count.visible = false
+	_move_cafe_to_plot_corner()
+	_setup_movable_objects()
+	_restore_purchased_items()
+	_refresh_upgrades()
+	if not visiting: CafeLife.life_changed.connect(_refresh_upgrades)
+	_apply_decor_theme()
+	if not visiting: CafeLife.life_changed.connect(_apply_decor_theme)
+
+func _move_cafe_to_plot_corner() -> void:
+	for child in get_children():
+		if not child is Node3D or child == camera or child.name == "Neighborhood" or child is DirectionalLight3D: continue
+		child.position += CAFE_ORIGIN
+	for actor: Dictionary in actors:
+		actor.base_y = actor.node.position.y
+		if actor.chef:
+			for i in actor.route.size(): actor.route[i] += CAFE_ORIGIN
+	camera_home = Vector3(12,13,16)+CAFE_ORIGIN
+	camera.position = camera_home
+	camera.look_at(CAFE_ORIGIN+Vector3(0,0.7,0))
+
+func _apply_decor_theme() -> void:
+	var finish_id := str(visit_layout.get("display_style","rose")) if visiting else CafeLife.display_style()
+	var finish: Dictionary = CafeLife.DISPLAY_STYLES[finish_id]
+	for index in 5:
+		for mesh in get_node("ProductDisplay%d" % index).get_children():
+			if mesh is MeshInstance3D and mesh.has_meta("display_finish"):
+				mesh.material_override = mat(Color(finish[mesh.get_meta("display_finish")]))
+	if has_node("CafeTable"):
+		var saved_table: Array = SaveSystem.get_value("cafe_layout","cafe_table",[])
+		var point := (Vector2(float(visit_layout.table_position[0]),float(visit_layout.table_position[1]))+Vector2(CAFE_ORIGIN.x,CAFE_ORIGIN.z)) if visiting else (Vector2(float(saved_table[0]),float(saved_table[1])) if saved_table.size()==2 else CafeLife.table_position()+Vector2(CAFE_ORIGIN.x,CAFE_ORIGIN.z))
+		get_node("CafeTable").position = Vector3(point.x,0,point.y)
+	var theme: Dictionary = CafeLife.DECOR_THEMES[str(visit_layout.theme) if visiting else CafeLife.decor_theme()]
+	for child in get_children():
+		if child is MeshInstance3D and child.has_meta("decor_surface"):
+			child.material_override = mat(Color(theme[child.get_meta("decor_surface")]))
+
+func _has_upgrade(id: String) -> bool:
+	return bool(visit_layout.get("upgrades",{}).get(id,false)) if visiting else CafeLife.has_upgrade(id)
+
+func _refresh_upgrades() -> void:
+	if _has_upgrade("display"):
+		for index in 5:
+			var display := get_node("ProductDisplay%d" % index)
+			if display.has_node("ShowcaseUpgrade"): continue
+			var upgrade := Node3D.new()
+			upgrade.name = "ShowcaseUpgrade"
+			display.add_child(upgrade)
+			# Keep the premium trim around the open counter instead of rebuilding
+			# the old overhead cover that hid products from the gameplay camera.
+			box(Vector3(0,1.035,0),Vector3(1.27,0.035,0.68),GOLD,0.01,upgrade)
+			var glow := OmniLight3D.new()
+			glow.position = Vector3(0,1.32,0)
+			glow.light_color = Color("ffe4a0")
+			glow.light_energy = 0.45
+			glow.omni_range = 1.0
+			upgrade.add_child(glow)
+	if _has_upgrade("garden") and not has_node("GardenUpgrade"):
+		var garden := Node3D.new()
+		garden.name = "GardenUpgrade"
+		garden.position = CAFE_ORIGIN+Vector3(-5.7,-0.2,6.1)
+		garden.set_meta("movable_decor",true)
+		garden.set_meta("display_name","Flower garden")
+		garden.set_meta("placement_radius",1.0)
+		add_child(garden)
+		box(Vector3.ZERO,Vector3(1.6,0.45,0.65),CREAM,0.08,garden)
+		for i in 5:
+			var flower := Vector3(-0.6+i*0.3,0.6,0)
+			rod(Vector3(flower.x,0.15,0),flower,0.025,MINT,garden)
+			for petal in 5:
+				var angle := petal*TAU/5
+				ball(flower+Vector3(cos(angle)*0.12,sin(angle)*0.12,0),Vector3.ONE*0.17,PINK,garden)
+			ball(flower,Vector3.ONE*0.13,GOLD,garden)
+		if not visiting: _register_movable(garden,"garden_upgrade","Flower garden",1.0)
+	if _has_upgrade("seating") and not has_meta("seating_upgrade"):
+		set_meta("seating_upgrade",true)
+		_table(CAFE_ORIGIN+Vector3(6.6,-0.65,0),4)
+		if not visiting and has_node("TerraceTable"): _register_movable(get_node("TerraceTable"),"terrace_table","Terrace table",1.1)
+	if _has_upgrade("oven"):
+		for index in [0,3]:
+			var station: Node3D = stations[index].node
+			if station.has_node("UpgradeBadge"): continue
+			var badge := ball(Vector3(0.65,1.5,0.72),Vector3(0.18,0.18,0.04),GOLD,station)
+			badge.name = "UpgradeBadge"
 
 func _build_product_displays() -> void:
 	for i in CafeProgress.RECIPES.size():
-		var display := Node3D.new()
-		display.name = "ProductDisplay%d" % i
-		display.position = Vector3(-1.9 + i * 1.55, 0, 4.6)
-		add_child(display)
-		box(Vector3(0,0.48,0),Vector3(1.35,0.96,0.8),PINK,0.06,display)
-		box(Vector3(0,1.0,0),Vector3(1.45,0.12,0.9),CREAM,0.04,display)
-		for x in [-0.64,0.64]:
-			for z in [-0.35,0.35]: rod(Vector3(x,1.04,z),Vector3(x,1.7,z),0.025,GOLD,display)
-		box(Vector3(0,1.72,0),Vector3(1.4,0.07,0.85),CREAM,0.03,display)
-		var glass := box(Vector3(0,1.39,0.4),Vector3(1.3,0.6,0.02),Color("b7e7ec"),0.0,display)
-		var material := StandardMaterial3D.new()
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		material.albedo_color = Color(0.7,0.93,1,0.18)
-		material.roughness = 0.08
-		glass.material_override = material
+		var display: Node3D
+		if i >= 5:
+			display = get_node("ProductDisplay%d" % CafeProgress.machine_for_recipe(i))
+		else:
+			display = Node3D.new()
+			display.name = "ProductDisplay%d" % i
+			display.position = Vector3(-1.9 + CafeProgress.machine_for_recipe(i) * 1.55, 0, 4.6)
+			add_child(display)
+			box(Vector3(0,0.48,0),Vector3(1.35,0.96,0.8),PINK,0.06,display).set_meta("display_finish","body")
+			box(Vector3(0,1.0,0),Vector3(1.45,0.12,0.9),CREAM,0.04,display).set_meta("display_finish","top")
 		var products := Node3D.new()
-		products.position = Vector3(0,1.18,0)
-		products.scale = Vector3.ONE * 2.2
+		products.position = Vector3(-0.34 if i < 5 else 0.34,1.18,0)
+		products.scale = Vector3.ONE * 1.65
 		display.add_child(products)
 		_set_carried_product(products,i)
 		display_products.append(products)
 		var count := Label3D.new()
-		count.position = Vector3(0,0.7,0.44)
+		count.position = Vector3(-0.34 if i < 5 else 0.34,0.7,0.44)
 		count.font_size = 40
 		count.pixel_size = 0.004
 		display.add_child(count)
 		display_counts.append(count)
 
+func _build_pickup_counter(p: Vector3) -> void:
+	pickup_counter = Node3D.new()
+	pickup_counter.name = "OrderPickupCounter"
+	pickup_counter.position = p
+	add_child(pickup_counter)
+	box(Vector3(0,0.62,0),Vector3(4.15,1.24,0.78),MINT,0.10,pickup_counter)
+	box(Vector3(0,1.28,0),Vector3(4.35,0.14,0.96),CREAM,0.05,pickup_counter)
+	box(Vector3(0,1.57,0.43),Vector3(2.65,0.48,0.08),ROSE,0.04,pickup_counter)
+	label3("ORDER PICKUP",Vector3(0,1.58,0.485),27,CREAM,pickup_counter)
+	for x in [-1.35,0.0,1.35]:
+		_cupcake(Vector3(x,1.36,0.04),pickup_counter)
+
+func _register_movable(node: Node3D, id: String, display_name: String, radius: float) -> void:
+	if not is_instance_valid(node): return
+	if movable_objects.any(func(entry: Dictionary) -> bool: return str(entry.id)==id): return
+	node.set_meta("movable_id",id)
+	node.set_meta("movable_name",display_name)
+	var saved: Array = SaveSystem.get_value("cafe_layout",id,[])
+	if saved.size() == 2:
+		var migrated := Vector2(float(saved[0]),float(saved[1]))
+		if int(SaveSystem.get_value("cafe_layout","position_version",1))<2:
+			migrated += Vector2(CAFE_ORIGIN.x,CAFE_ORIGIN.z)
+			SaveSystem.set_value("cafe_layout",id,[migrated.x,migrated.y])
+		node.position.x = snappedf(clampf(migrated.x,-PLACEABLE_PLOT_LIMIT,PLACEABLE_PLOT_LIMIT),PLACEMENT_GRID_SIZE)
+		node.position.z = snappedf(clampf(migrated.y,-PLACEABLE_PLOT_LIMIT,PLACEABLE_PLOT_LIMIT),PLACEMENT_GRID_SIZE)
+	var rotation_steps := int(SaveSystem.get_value("cafe_layout",id+"_rotation",0))%4
+	node.rotation.y = rotation_steps*PI/2.0
+	node.visible = not bool(SaveSystem.get_value("cafe_item_storage",id,false))
+	var pick_area := Area3D.new()
+	pick_area.name = "MovePickArea"
+	pick_area.collision_layer = 0 if not node.visible else MOVABLE_PICK_LAYER
+	pick_area.collision_mask = 0
+	pick_area.monitoring = false
+	pick_area.set_meta("movable_id",id)
+	node.add_child(pick_area)
+	_add_precise_pick_shapes(node,pick_area)
+	var item_info := _item_information(id,display_name)
+	movable_objects.append({"node":node,"id":id,"name":display_name,"radius":radius,"bounds":_movable_visual_bounds(node),"description":item_info.description,"value":item_info.value})
+
+func _add_precise_pick_shapes(node: Node3D, pick_area: Area3D) -> void:
+	# Fit each visible mesh independently. A single combined AABB selects empty
+	# gaps between legs, shelves, and neighboring counter pieces.
+	var node_inverse := node.global_transform.affine_inverse()
+	for descendant in node.find_children("*","MeshInstance3D",true,false):
+		var mesh_instance := descendant as MeshInstance3D
+		if not is_instance_valid(mesh_instance.mesh): continue
+		var bounds := mesh_instance.get_aabb()
+		if bounds.size.length_squared()<0.0001: continue
+		var local_transform: Transform3D = node_inverse*mesh_instance.global_transform
+		var pick_shape := CollisionShape3D.new()
+		var box_shape := BoxShape3D.new()
+		box_shape.size = bounds.size.max(Vector3(0.08,0.08,0.08))
+		pick_shape.shape = box_shape
+		pick_shape.transform = local_transform*Transform3D(Basis.IDENTITY,bounds.get_center())
+		pick_area.add_child(pick_shape)
+	if pick_area.get_child_count()==0:
+		var fallback := CollisionShape3D.new()
+		var fallback_shape := BoxShape3D.new()
+		fallback_shape.size = Vector3(0.18,0.18,0.18)
+		fallback.shape = fallback_shape
+		fallback.position = Vector3(0,0.09,0)
+		pick_area.add_child(fallback)
+
+func _setup_movable_objects() -> void:
+	if visiting: return
+	for i in stations.size():
+		_register_movable(stations[i].node,"station_%d" % i,str(stations[i].name),1.45)
+	for i in 5:
+		_register_movable(get_node("ProductDisplay%d" % i),"display_%d" % i,"%s display" % ["Bakery","Coffee","Candy","Cake","Tea"][i],0.9)
+	_register_movable(pickup_counter,"pickup_counter","Order pickup counter",1.5)
+	if has_node("CafeTable"): _register_movable(get_node("CafeTable"),"cafe_table","Café table",1.1)
+	for child in get_children():
+		if child is Node3D and child.name.begins_with("CafePlant"):
+			_register_movable(child,str(child.name).to_snake_case(),"Potted plant",0.65)
+		elif child is Node3D and child.has_meta("movable_decor"):
+			_register_movable(child,str(child.name).to_snake_case(),str(child.get_meta("display_name",child.name)),float(child.get_meta("placement_radius",0.8)))
+	SaveSystem.set_value("cafe_layout","position_version",2)
+	SaveSystem.save_now()
+
+func _movable_visual_bounds(node: Node3D) -> AABB:
+	var result := AABB(Vector3(-0.1,0,-0.1),Vector3(0.2,0.2,0.2))
+	var found := false
+	var inverse := node.global_transform.affine_inverse()
+	for descendant in node.find_children("*","MeshInstance3D",true,false):
+		var mesh_instance := descendant as MeshInstance3D
+		if not is_instance_valid(mesh_instance.mesh): continue
+		var local_transform: Transform3D = inverse*mesh_instance.global_transform
+		var bounds: AABB = local_transform*mesh_instance.get_aabb()
+		result = bounds if not found else result.merge(bounds)
+		found = true
+	return result
+
+func _item_information(id: String, display_name: String) -> Dictionary:
+	if id.begins_with("station_"): return {"description":"A working café station for crafting fresh treats.","value":650}
+	if id.begins_with("display_"): return {"description":"A showcase where customers can browse finished treats.","value":420}
+	match id:
+		"pickup_counter": return {"description":"A cheerful counter where regulars collect their orders.","value":520}
+		"cupcake_counter": return {"description":"A little tiered counter filled with tiny cupcakes and buns.","value":280}
+		"cafe_table": return {"description":"A cozy café table with seating for visiting guests.","value":220}
+	return {"description":"A decorative %s for your café." % display_name.to_lower(),"value":140}
+
+func rotate_object(entry: Dictionary) -> void:
+	if entry.is_empty() or not is_instance_valid(entry.node): return
+	var steps := (int(round(entry.node.rotation.y/(PI/2.0)))+1)%4
+	entry.node.rotation.y = steps*PI/2.0
+	navigation_revision += 1
+	SaveSystem.set_value("cafe_layout",str(entry.id)+"_rotation",steps)
+	SaveSystem.save_now()
+
+func store_object(entry: Dictionary) -> void:
+	if entry.is_empty() or not is_instance_valid(entry.node): return
+	entry.node.visible = false
+	if entry.node.has_node("MovePickArea"):
+		entry.node.get_node("MovePickArea").collision_layer = 0
+	SaveSystem.set_value("cafe_item_storage",str(entry.id),true)
+	SaveSystem.save_now()
+	navigation_revision += 1
+
+func restore_object(entry: Dictionary) -> void:
+	if entry.is_empty() or not is_instance_valid(entry.node): return
+	entry.node.visible = true
+	if entry.node.has_node("MovePickArea"):
+		entry.node.get_node("MovePickArea").collision_layer = MOVABLE_PICK_LAYER
+	SaveSystem.set_value("cafe_item_storage",str(entry.id),false)
+	SaveSystem.save_now()
+	navigation_revision += 1
+
+func stored_items() -> Array:
+	return movable_objects.filter(func(entry: Dictionary) -> bool: return bool(SaveSystem.get_value("cafe_item_storage",str(entry.id),false)))
+
+func crafting_station_count(machine: int) -> int:
+	var count := 0
+	for entry: Dictionary in movable_objects:
+		if not is_instance_valid(entry.node) or not entry.node.visible: continue
+		var id := str(entry.id)
+		if id == "station_%d" % machine or id.begins_with("purchased_station_%d_" % machine): count += 1
+	return count
+
+func shop_templates() -> Array:
+	var wanted := ["cupcake_counter","cafe_table","station_0"]
+	return movable_objects.filter(func(entry: Dictionary) -> bool: return str(entry.id) in wanted or str(entry.id).begins_with("cafe_plant"))
+
+func purchase_item(template: Dictionary) -> Dictionary:
+	var cost := int(template.get("value",0))
+	var stats: Dictionary = GameDatabase.get_player_stats()
+	if int(stats.get("coins",0))<cost: return {}
+	stats.coins = int(stats.coins)-cost
+	GameDatabase.upsert_record(&"player_stats",stats)
+	var records: Array = SaveSystem.get_value("cafe_purchases","items",[])
+	var serial := int(SaveSystem.get_value("cafe_purchases","serial",0))+1
+	var id := "purchased_%s_%d" % [str(template.id),serial]
+	records.append({"id":id,"template":str(template.id)})
+	SaveSystem.set_value("cafe_purchases","serial",serial)
+	SaveSystem.set_value("cafe_purchases","items",records)
+	SaveSystem.set_value("cafe_item_storage",id,true)
+	var entry := _create_purchased_item(template,id)
+	SaveSystem.save_now()
+	return entry
+
+func _restore_purchased_items() -> void:
+	var records: Array = SaveSystem.get_value("cafe_purchases","items",[])
+	for record in records:
+		var matches := movable_objects.filter(func(entry: Dictionary) -> bool: return str(entry.id)==str(record.get("template","")))
+		if not matches.is_empty(): _create_purchased_item(matches[0],str(record.get("id","")))
+
+func _create_purchased_item(template: Dictionary, id: String) -> Dictionary:
+	if id.is_empty(): return {}
+	var existing := movable_objects.filter(func(entry: Dictionary) -> bool: return str(entry.id)==id)
+	if not existing.is_empty(): return existing[0]
+	var copy: Node3D = template.node.duplicate()
+	copy.name = id.to_pascal_case()
+	if copy.has_node("MovePickArea"):
+		var old_pick := copy.get_node("MovePickArea")
+		copy.remove_child(old_pick)
+		old_pick.free()
+	copy.position = CAFE_ORIGIN+Vector3(9,0,9)
+	copy.rotation = Vector3.ZERO
+	copy.visible = false
+	add_child(copy)
+	_register_movable(copy,id,str(template.name),float(template.radius))
+	var entry: Dictionary = movable_objects[-1]
+	entry.description = str(template.description)
+	entry.value = int(template.value)
+	return entry
+
 func _build_batch_indicators() -> void:
 	var atlas := load("res://assets/cafe/stock_atlas.png") as Texture2D
-	for i in stations.size():
+	for i in CafeProgress.RECIPES.size():
 		var texture := AtlasTexture.new()
 		texture.atlas = atlas
 		var cell := Vector2(atlas.get_width() / 6.0, atlas.get_height() / 4.0)
-		var icon_index := 19 if i == 4 else 18+i
+		var icon_index := int(CafeProgress.RECIPES[i].icon)
 		texture.region = Rect2(Vector2(icon_index%6, icon_index/6) * cell, cell)
 		var marker := Sprite3D.new()
 		marker.name = "CollectBatch%d" % i
@@ -261,7 +563,7 @@ func _build_batch_indicators() -> void:
 		marker.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		marker.pixel_size = 0.003
 		marker.no_depth_test = true
-		marker.position = stations[i].node.position + Vector3(0, 2.8, 0)
+		marker.position = stations[CafeProgress.machine_for_recipe(i)].node.position + Vector3(0, 2.8, 0)
 		add_child(marker)
 		batch_icons.append(marker)
 		var caption := Label3D.new()
@@ -278,12 +580,12 @@ func _build_room() -> void:
 	box(Vector3(0,-0.04,0), Vector3(8.85,0.15,8.45), GOLD)
 	for x in 12:
 		for z in 11:
-			box(Vector3(-4.02+x*0.73,0.06,-3.66+z*0.73), Vector3(0.718,0.10,0.718), Color("f8e9d1") if (x+z)%2 == 0 else Color("e6b6aa"), 0.02)
-	box(Vector3(0,1.8,-4.05), Vector3(8.9,3.6,0.2), Color("f7ddc6"))
+			box(Vector3(-4.02+x*0.73,0.06,-3.66+z*0.73), Vector3(0.718,0.10,0.718), Color("f8e9d1") if (x+z)%2 == 0 else Color("e6b6aa"), 0.02).set_meta("decor_surface", "floor_a" if (x+z)%2==0 else "floor_b")
+	box(Vector3(0,1.8,-4.05), Vector3(8.9,3.6,0.2), Color("f7ddc6")).set_meta("decor_surface","wall")
 	# Real opening: z 2.05..3.55, floor to lintel at y 2.7.
-	box(Vector3(-4.35,1.8,-1.05),Vector3(0.2,3.6,6.2),Color("f9e3ce"))
-	box(Vector3(-4.35,1.8,3.85),Vector3(0.2,3.6,0.6),Color("f9e3ce"))
-	box(Vector3(-4.35,3.15,2.8),Vector3(0.2,0.9,1.5),Color("f9e3ce"))
+	box(Vector3(-4.35,1.8,-1.05),Vector3(0.2,3.6,6.2),Color("f9e3ce")).set_meta("decor_surface","wall")
+	box(Vector3(-4.35,1.8,3.85),Vector3(0.2,3.6,0.6),Color("f9e3ce")).set_meta("decor_surface","wall")
+	box(Vector3(-4.35,3.15,2.8),Vector3(0.2,0.9,1.5),Color("f9e3ce")).set_meta("decor_surface","wall")
 	var doorway := Node3D.new()
 	doorway.name = "OpenDoorway"
 	add_child(doorway)
@@ -301,12 +603,15 @@ func _build_room() -> void:
 	box(Vector3(0,3.6,-4.03),Vector3(9.05,0.17,0.32),PINK)
 	box(Vector3(-4.34,3.6,0),Vector3(0.32,0.17,8.4),PINK)
 	# Framed menu and a confectionery sign share the room's palette.
-	box(Vector3(-0.9,2.75,-3.88),Vector3(3.0,0.72,0.14),ROSE)
-	label3("SUGAR & SUNSHINE",Vector3(-0.9,2.77,-3.795),48,CREAM)
-	label3("BAKED WITH A LITTLE MAGIC",Vector3(-0.9,2.51,-3.79),18,CREAM)
-	box(Vector3(2.35,2.38,-3.85),Vector3(1.4,1.7,0.15),GOLD)
-	box(Vector3(2.35,2.38,-3.75),Vector3(1.25,1.55,0.06),COCOA)
-	label3("TODAY'S TREATS\n\nBerry cloud cake\nHoney butter bun\nRose milk latte\n\nMade with love",Vector3(2.35,2.42,-3.71),24,CREAM)
+	var cafe_sign := _decor_root("CafeNameSign",Vector3(-0.9,0,-3.88),"Café name sign",1.55)
+	box(Vector3(0,2.75,0),Vector3(3.0,0.72,0.14),ROSE,0.06,cafe_sign)
+	var wall_sign := label3(_cafe_name().to_upper(),Vector3(0,2.77,0.085),36 if _cafe_name().length()>20 else 48,CREAM,cafe_sign)
+	wall_sign.name = "CafeWallSign"
+	label3("BAKED WITH A LITTLE MAGIC",Vector3(0,2.51,0.09),18,CREAM,cafe_sign)
+	var menu_board := _decor_root("TreatMenuBoard",Vector3(2.35,0,-3.85),"Treat menu board",0.9)
+	box(Vector3(0,2.38,0),Vector3(1.4,1.7,0.15),GOLD,0.06,menu_board)
+	box(Vector3(0,2.38,0.10),Vector3(1.25,1.55,0.06),COCOA,0.06,menu_board)
+	label3("TODAY'S TREATS\n\nBerry cloud cake\nHoney butter bun\nRose milk latte\n\nMade with love",Vector3(0,2.42,0.14),24,CREAM,menu_board)
 	# Left wall window, face into the room.
 	box(Vector3(-4.19,2.35,0.5),Vector3(0.12,1.8,2.65),GOLD)
 	box(Vector3(-4.10,2.35,0.5),Vector3(0.08,1.63,2.49),Color("bfe8e3"))
@@ -314,9 +619,10 @@ func _build_room() -> void:
 	box(Vector3(-4.02,2.35,0.5),Vector3(0.1,0.08,2.55),CREAM)
 	box(Vector3(-3.98,1.43,0.5),Vector3(0.47,0.13,2.9),CREAM)
 	for x in [-2.6,0.5,3.05]:
-		rod(Vector3(x,4.3,-1.75),Vector3(x,3.63,-1.75),0.025,GOLD)
-		cylinder(Vector3(x,3.5,-1.75),0.38,0.28,PINK,0.16)
-		cylinder(Vector3(x,3.37,-1.75),0.34,0.035,CREAM)
+		var pendant := _decor_root("PendantLight%d" % int((x+3)*10),Vector3(x,0,-1.75),"Pendant light",0.45)
+		rod(Vector3(0,4.3,0),Vector3(0,3.63,0),0.025,GOLD,pendant)
+		cylinder(Vector3(0,3.5,0),0.38,0.28,PINK,0.16,pendant)
+		cylinder(Vector3(0,3.37,0),0.34,0.035,CREAM,-1,pendant)
 
 func _cabinet(parent: Node3D, width: float, color: Color) -> void:
 	box(Vector3(0,0.65,0),Vector3(width,1.12,1.12),color,0.10,parent)
@@ -382,7 +688,7 @@ func _build_coffee(p: Vector3) -> void:
 	cylinder(Vector3(0.72,1.92,-0.05),0.25,0.08,GOLD,-1,station)
 	_cup(Vector3(0.8,1.4,0.38),station)
 	for i in 4:
-		var puff := ball(p+Vector3(-0.68,1.83+i*0.11,0.38),Vector3.ONE*(0.06+i*0.016),CREAM)
+		var puff := ball(Vector3(-0.68,1.83+i*0.11,0.38),Vector3.ONE*(0.06+i*0.016),CREAM,station)
 		steam.append(puff)
 
 func _cup(p: Vector3, parent: Node3D) -> void:
@@ -451,7 +757,9 @@ func _build_display(p: Vector3) -> void:
 		dial.rotation_degrees.x = 90
 	box(Vector3(0,1.77,0),Vector3(1.95,0.12,1.22),CREAM,0.05,station)
 
-func _table(p: Vector3) -> void:
+func _table(p: Vector3, chair_count := 2) -> void:
+	var previous := get_children()
+	var seat_offsets: Array[Vector3] = []
 	cylinder(p+Vector3(0,0.87,0),0.64,0.12,CREAM)
 	cylinder(p+Vector3(0,0.44,0),0.075,0.8,GOLD)
 	cylinder(p+Vector3(0,0.13,0),0.35,0.05,GOLD)
@@ -461,17 +769,33 @@ func _table(p: Vector3) -> void:
 		var end := p+Vector3(-0.2+i*0.05,1.39,-0.12)
 		rod(p+Vector3(-0.16,1.13,-0.12),end,0.013,MINT)
 		ball(end,Vector3.ONE*0.12,PINK)
-	for z in [-0.87,0.87]:
-		cylinder(p+Vector3(0,0.52,z),0.3,0.13,MINT)
+	var chair_positions: Array[Vector3] = [Vector3(0,0,-0.87),Vector3(0,0,0.87)]
+	if chair_count>=4: chair_positions.append_array([Vector3(-0.87,0,0),Vector3(0.87,0,0)])
+	for chair_position in chair_positions:
+		seat_offsets.append(chair_position+Vector3(0,0.14,0))
+		cylinder(p+chair_position+Vector3(0,0.52,0),0.3,0.13,MINT)
 		for x in [-0.19,0.19]:
-			for dz in [-0.15,0.15]: rod(p+Vector3(x,0.1,z+dz),p+Vector3(x,0.47,z+dz),0.028,GOLD)
+			for dz in [-0.15,0.15]: rod(p+chair_position+Vector3(x,0.1,dz),p+chair_position+Vector3(x,0.47,dz),0.028,GOLD)
+	var furniture := Node3D.new()
+	furniture.name = "CafeTable" if not has_node("CafeTable") else "TerraceTable"
+	furniture.set_meta("seat_count",seat_offsets.size())
+	furniture.set_meta("seat_offsets",seat_offsets)
+	add_child(furniture)
+	furniture.position = p
+	for child in get_children():
+		if child is Node3D and child not in previous and child != furniture:
+			child.reparent(furniture,true)
 
 func _plant(p: Vector3) -> void:
-	cylinder(p+Vector3(0,0.28,0),0.23,0.43,CREAM,0.32)
-	ring(p+Vector3(0,0.5,0),0.34,0.28,GOLD)
+	var plant := Node3D.new()
+	plant.name = "CafePlant%d" % get_children().filter(func(child: Node) -> bool: return child.name.begins_with("CafePlant")).size()
+	plant.position = p
+	add_child(plant)
+	cylinder(Vector3(0,0.28,0),0.23,0.43,CREAM,0.32,plant)
+	ring(Vector3(0,0.5,0),0.34,0.28,GOLD,plant)
 	for i in 8:
 		var angle := i*TAU/8
-		var leaf := ball(p+Vector3(cos(angle)*0.19,0.73+(i%3)*0.12,sin(angle)*0.19),Vector3(0.18,0.65,0.18),MINT.darkened((i%3)*0.08))
+		var leaf := ball(Vector3(cos(angle)*0.19,0.73+(i%3)*0.12,sin(angle)*0.19),Vector3(0.18,0.65,0.18),MINT.darkened((i%3)*0.08),plant)
 		leaf.rotation_degrees = Vector3(sin(angle)*25,0,cos(angle)*25)
 
 func _style(color: Color, border: Color = Color.TRANSPARENT) -> StyleBoxFlat:
@@ -492,7 +816,8 @@ func _build_ui() -> void:
 	ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(ui)
 	title = Label.new()
-	title.text = "Sugar & Sunshine"
+	title.name = "CafeTitle"
+	title.text = _cafe_name()
 	title.position = Vector2(55,35)
 	title.add_theme_font_size_override("font_size",44)
 	title.add_theme_color_override("font_color",COCOA)
@@ -543,6 +868,7 @@ func _build_ui() -> void:
 		station_buttons.append(button)
 
 func _select_station(index: int) -> void:
+	if visiting: return
 	station_selected.emit(index)
 	if not is_instance_valid(status_label): return
 	selected_station = index
@@ -578,6 +904,140 @@ func pan_screen(relative: Vector2) -> void:
 	var shift := before-after
 	set_pan(pan_offset+Vector2(shift.x,shift.z))
 
+func _nearest_movable(point: Vector2) -> Dictionary:
+	# Use a real 3D ray first. This resolves overlapping screen silhouettes by
+	# depth and selects only the object's own footprint instead of a broad radius.
+	var origin := camera.project_ray_origin(point)
+	var ray := PhysicsRayQueryParameters3D.create(origin,origin+camera.project_ray_normal(point)*200.0,MOVABLE_PICK_LAYER)
+	ray.collide_with_areas = true
+	ray.collide_with_bodies = false
+	var hit := get_world_3d().direct_space_state.intersect_ray(ray)
+	if not hit.is_empty():
+		var collider: Object = hit.collider
+		if collider.has_meta("movable_id"):
+			var id := str(collider.get_meta("movable_id"))
+			for entry: Dictionary in movable_objects:
+				if str(entry.id)==id: return entry
+	# The fallback is footprint-scaled for the first frame before physics sync.
+	var closest: Dictionary = {}
+	var best := 1.0
+	for entry: Dictionary in movable_objects:
+		var node: Node3D = entry.node
+		if not is_instance_valid(node) or not node.visible: continue
+		var screen := camera.unproject_position(node.global_position+Vector3(0,1.0,0))
+		var edge := camera.unproject_position(node.global_position+Vector3(float(entry.radius),1.0,0))
+		var screen_radius := maxf(18.0,screen.distance_to(edge))
+		var distance := point.distance_to(screen)/screen_radius
+		if distance < best:
+			best = distance
+			closest = entry
+	return closest
+
+func begin_object_placement(entry: Dictionary, pointer_screen: Variant = null) -> void:
+	if visiting or entry.is_empty() or not is_instance_valid(entry.get("node")): return
+	placement_target = entry
+	placement_origin = entry.node.position
+	placement_valid = true
+	placement_pointer_offset = Vector2.ZERO
+	if pointer_screen is Vector2:
+		var ground := Plane(Vector3.UP,0.0)
+		var hit = ground.intersects_ray(camera.project_ray_origin(pointer_screen),camera.project_ray_normal(pointer_screen))
+		if hit != null:
+			placement_pointer_offset = Vector2(entry.node.position.x-float(hit.x),entry.node.position.z-float(hit.z))
+	_show_placement_marker()
+
+func cancel_object_placement() -> void:
+	if not placement_target.is_empty() and is_instance_valid(placement_target.get("node")):
+		placement_target.node.position = placement_origin
+		navigation_revision += 1
+	placement_target = {}
+	placement_pointer_offset = Vector2.ZERO
+	if is_instance_valid(placement_marker): placement_marker.queue_free()
+
+func _show_placement_marker() -> void:
+	if is_instance_valid(placement_marker): placement_marker.queue_free()
+	placement_marker = Node3D.new()
+	placement_marker.name = "MovePositionIndicator"
+	add_child(placement_marker)
+	var radius := float(placement_target.get("radius",1.0))
+	var footprint := MeshInstance3D.new()
+	var footprint_mesh := BoxMesh.new()
+	footprint_mesh.size = Vector3(radius*2.0,0.035,radius*2.0)
+	footprint.mesh = footprint_mesh
+	placement_footprint_material = StandardMaterial3D.new()
+	placement_footprint_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	placement_footprint_material.albedo_color = Color(0.38,0.82,0.61,0.38)
+	placement_footprint_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	footprint.material_override = placement_footprint_material
+	footprint.position.y = 0.035
+	placement_marker.add_child(footprint)
+	var arrows := Label3D.new()
+	arrows.name = "FourWayArrow"
+	arrows.text = "     ^\n<  MOVE  >\n     v"
+	arrows.font_size = 42
+	arrows.pixel_size = 0.006
+	arrows.modulate = CREAM
+	arrows.outline_modulate = ROSE
+	arrows.outline_size = 10
+	arrows.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	arrows.no_depth_test = true
+	arrows.position.y = 2.5
+	placement_marker.add_child(arrows)
+	placement_marker.position = Vector3(placement_target.node.position.x,0,placement_target.node.position.z)
+
+func _position_is_open(node: Node3D, destination: Vector3) -> bool:
+	var radius := float(placement_target.get("radius",1.0))
+	if absf(destination.x)+radius>PLACEABLE_PLOT_LIMIT or absf(destination.z)+radius>PLACEABLE_PLOT_LIMIT:
+		return false
+	for entry: Dictionary in movable_objects:
+		if entry.node == node: continue
+		var other: Node3D = entry.node
+		var minimum := float(entry.radius)+float(placement_target.radius)
+		if Vector2(other.position.x-destination.x,other.position.z-destination.z).length()<minimum:
+			return false
+	return true
+
+func preview_object_at_screen(point: Vector2) -> bool:
+	if placement_target.is_empty(): return false
+	var ground := Plane(Vector3.UP,0.0)
+	var hit = ground.intersects_ray(camera.project_ray_origin(point),camera.project_ray_normal(point))
+	if hit == null: return false
+	var node: Node3D = placement_target.node
+	# Every placeable object shares the same world-space grid, independent of
+	# the direction it approaches furniture or the camera angle.
+	var destination := Vector3(snappedf(float(hit.x)+placement_pointer_offset.x,PLACEMENT_GRID_SIZE),node.position.y,snappedf(float(hit.z)+placement_pointer_offset.y,PLACEMENT_GRID_SIZE))
+	node.position = destination
+	navigation_revision += 1
+	if is_instance_valid(placement_marker): placement_marker.position = Vector3(destination.x,0,destination.z)
+	placement_valid = _position_is_open(node,destination)
+	if is_instance_valid(placement_footprint_material):
+		placement_footprint_material.albedo_color = Color(0.38,0.82,0.61,0.38) if placement_valid else Color(0.93,0.28,0.38,0.42)
+	return placement_valid
+
+func finish_object_placement() -> bool:
+	if placement_target.is_empty(): return false
+	var entry := placement_target
+	var node: Node3D = entry.node
+	if not placement_valid:
+		node.position = placement_origin
+		navigation_revision += 1
+		placement_target = {}
+		placement_pointer_offset = Vector2.ZERO
+		if is_instance_valid(placement_marker): placement_marker.queue_free()
+		return false
+	SaveSystem.set_value("cafe_layout",str(entry.id),[node.position.x,node.position.z])
+	SaveSystem.save_now()
+	navigation_revision += 1
+	placement_target = {}
+	placement_pointer_offset = Vector2.ZERO
+	if is_instance_valid(placement_marker): placement_marker.queue_free()
+	object_moved.emit(entry)
+	return true
+
+func _place_object_at_screen(point: Vector2) -> bool:
+	preview_object_at_screen(point)
+	return finish_object_placement()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMagnifyGesture:
 		set_zoom(camera.size / maxf(event.factor,0.01))
@@ -589,11 +1049,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.button_mask & (MOUSE_BUTTON_MASK_LEFT | MOUSE_BUTTON_MASK_MIDDLE) == 0:
 			mouse_down = false
 			return
+		if not placement_target.is_empty():
+			preview_object_at_screen(event.position)
+			return
 		drag_distance += event.relative.length()
-		if drag_distance > 6: pan_screen(event.relative)
+		if drag_distance > 6:
+			hold_target = {}
+			pan_screen(event.relative)
 		return
 	if event is InputEventScreenDrag and touches.has(event.index):
+		if not placement_target.is_empty():
+			preview_object_at_screen(event.position)
+			return
 		drag_distance += event.relative.length()
+		if drag_distance > 6: hold_target = {}
 		if touches.size() == 2:
 			var ids := touches.keys()
 			var before: float = touches[ids[0]].distance_to(touches[ids[1]])
@@ -609,6 +1078,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.pressed:
 			if touches.is_empty(): drag_distance = 0
 			touches[event.index] = event.position
+			if touches.size() == 1:
+				hold_point = event.position
+				hold_target = _nearest_movable(event.position)
+				hold_elapsed = 0.0
+				hold_triggered = false
 			if touches.size() > 1: pinching = true
 			return
 		touches.erase(event.index)
@@ -619,6 +1093,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		mouse_down = event.pressed
 		if event.pressed:
 			drag_distance = 0
+			if event.button_index == MOUSE_BUTTON_LEFT:
+				hold_point = event.position
+				hold_target = _nearest_movable(event.position)
+				hold_elapsed = 0.0
+				hold_triggered = false
 			return
 		if event.button_index == MOUSE_BUTTON_MIDDLE: return
 	var point := Vector2.ZERO
@@ -627,10 +1106,28 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event is InputEventScreenTouch and not event.pressed:
 		point = event.position
 	else: return
+	if hold_triggered:
+		if not placement_target.is_empty(): finish_object_placement()
+		hold_target = {}
+		return
+	hold_target = {}
 	if drag_distance > 6: return
+	if not placement_target.is_empty(): return
+	var selected_customer: Dictionary = {}
+	var customer_distance := 95.0
+	for actor: Dictionary in actors:
+		if actor.chef or not actor.node.visible or actor.state in ["away","exit"]: continue
+		var customer_screen := camera.unproject_position(actor.node.global_position + Vector3(0,1.05,0))
+		var hit_distance := point.distance_to(customer_screen)
+		if hit_distance < customer_distance:
+			customer_distance = hit_distance
+			selected_customer = actor
+	if not selected_customer.is_empty():
+		customer_selected.emit(selected_customer)
+		return
 	for i in batch_icons.size():
 		if batch_icons[i].visible and point.distance_to(camera.unproject_position(batch_icons[i].global_position)) < 65:
-			_select_station(i)
+			_select_station(CafeProgress.machine_for_recipe(i))
 			return
 	var closest := -1
 	var distance := 110.0
@@ -647,15 +1144,16 @@ func _add_finishing_details() -> void:
 		for col in 20:
 			box(Vector3(-4.05+col*0.31,1.44+row*0.19,-3.915),Vector3(0.298,0.178,0.055),CREAM if (col+row)%3 else Color("f2c9c0"),0.014)
 	# Open pastry shelf: brackets, stacked plates, jam pots and flour bags.
-	box(Vector3(-2.93,2.61,-3.59),Vector3(2.0,0.11,0.64),CREAM)
+	var pastry_shelf := _decor_root("PastryShelf",Vector3(-2.93,0,-3.59),"Pastry shelf",1.1)
+	box(Vector3(0,2.61,0),Vector3(2.0,0.11,0.64),CREAM,0.06,pastry_shelf)
 	for x in [-3.69,-2.15]:
-		rod(Vector3(x,2.6,-3.37),Vector3(x,2.27,-3.91),0.024,GOLD)
+		rod(Vector3(x+2.93,2.6,0.22),Vector3(x+2.93,2.27,-0.32),0.024,GOLD,pastry_shelf)
 	for i in 4:
-		cylinder(Vector3(-3.53,2.7+i*0.045,-3.5),0.2,0.04,MINT)
+		cylinder(Vector3(-0.60,2.7+i*0.045,0.09),0.2,0.04,MINT,-1,pastry_shelf)
 	for i in 2:
-		box(Vector3(-2.92+i*0.45,2.9,-3.55),Vector3(0.32,0.44,0.24),CREAM if i==0 else PINK,0.045)
-		box(Vector3(-2.92+i*0.45,3.12,-3.55),Vector3(0.32,0.055,0.23),GOLD,0.015)
-		label3("FLOUR" if i==0 else "SUGAR",Vector3(-2.92+i*0.45,2.92,-3.42),12,COCOA)
+		box(Vector3(0.01+i*0.45,2.9,0.04),Vector3(0.32,0.44,0.24),CREAM if i==0 else PINK,0.045,pastry_shelf)
+		box(Vector3(0.01+i*0.45,3.12,0.04),Vector3(0.32,0.055,0.23),GOLD,0.015,pastry_shelf)
+		label3("FLOUR" if i==0 else "SUGAR",Vector3(0.01+i*0.45,2.92,0.17),12,COCOA,pastry_shelf)
 	# Cabinet joinery and tiny brass feet, consistent across every station.
 	for entry in stations:
 		var station: Node3D = entry.node
@@ -668,43 +1166,40 @@ func _add_finishing_details() -> void:
 	box(Vector3(0.58,1.383,0.30),Vector3(0.87,0.05,0.42),Color("d8a465"),0.045,bakery)
 	rod(Vector3(0.22,1.49,0.51),Vector3(0.93,1.49,0.51),0.05,GOLD,bakery)
 	# Pastry stand in the open floor area, balanced against the serving counter.
-	cylinder(Vector3(-1.25,0.74,1.78),0.72,0.10,CREAM)
-	cylinder(Vector3(-1.25,0.4,1.78),0.10,0.64,GOLD)
-	cylinder(Vector3(-1.25,0.13,1.78),0.37,0.06,GOLD)
+	cupcake_counter = _decor_root("CupcakeCounter",Vector3(-1.25,0,1.78),"Little cupcake counter",0.9)
+	cylinder(Vector3(0,0.74,0),0.72,0.10,CREAM,-1,cupcake_counter)
+	cylinder(Vector3(0,0.4,0),0.10,0.64,GOLD,-1,cupcake_counter)
+	cylinder(Vector3(0,0.13,0),0.37,0.06,GOLD,-1,cupcake_counter)
 	for i in 6:
 		var angle := i*TAU/6
-		var p := Vector3(-1.25+cos(angle)*0.42,0.86,1.78+sin(angle)*0.42)
-		var bun := ball(p,Vector3(0.31,0.16,0.23),Color("d99042"))
+		var p := Vector3(cos(angle)*0.42,0.86,sin(angle)*0.42)
+		var bun := ball(p,Vector3(0.31,0.16,0.23),Color("d99042"),cupcake_counter)
 		bun.rotation.y = angle
 		for j in 3:
-			var stripe := box(p+Vector3((j-1)*0.06,0.075,0),Vector3(0.022,0.02,0.13),CREAM,0.006)
+			var stripe := box(p+Vector3((j-1)*0.06,0.075,0),Vector3(0.022,0.02,0.13),CREAM,0.006,cupcake_counter)
 			stripe.rotation.y = angle
-	cylinder(Vector3(-1.25,1.12,1.78),0.32,0.07,GOLD)
-	rod(Vector3(-1.25,0.8,1.78),Vector3(-1.25,1.12,1.78),0.035,GOLD)
-	for i in 3: _cupcake(Vector3(-1.45+i*0.20,1.16,1.78),self)
-	# Welcome rug and a handwritten shop tag.
-	box(Vector3(1.35,0.125,3.24),Vector3(2.3,0.025,0.75),ROSE,0.10)
-	for x in range(11):
-		box(Vector3(0.35+x*0.20,0.143,3.24),Vector3(0.008,0.01,0.6),PINK,0.003)
-	var welcome := label3("hello, sweet thing",Vector3(1.35,0.16,3.24),25,CREAM)
-	welcome.rotation_degrees.x = -90
+	cylinder(Vector3(0,1.12,0),0.32,0.07,GOLD,-1,cupcake_counter)
+	rod(Vector3(0,0.8,0),Vector3(0,1.12,0),0.035,GOLD,cupcake_counter)
+	for i in 3: _cupcake(Vector3(-0.20+i*0.20,1.16,0),cupcake_counter)
 	# Window curtains: repeat the same cream-and-rose stripes as the awning.
+	var curtains := _decor_root("WindowCurtains",Vector3(-3.96,0,0.45),"Window curtains",1.5)
 	for i in 10:
 		var z := -0.85+i*0.29
-		box(Vector3(-3.99,3.23,z),Vector3(0.17,0.26,0.29),PINK if i%2==0 else CREAM,0.045)
-		ball(Vector3(-3.93,3.1,z),Vector3(0.12,0.16,0.28),PINK if i%2==0 else CREAM)
+		box(Vector3(-0.03,3.23,z-0.45),Vector3(0.17,0.26,0.29),PINK if i%2==0 else CREAM,0.045,curtains)
+		ball(Vector3(0.03,3.1,z-0.45),Vector3(0.12,0.16,0.28),PINK if i%2==0 else CREAM,curtains)
 	# Medallion on the left wall, with an oversized sculpted strawberry.
-	var plate := cylinder(Vector3(-4.12,2.5,-2.83),0.48,0.08,CREAM)
+	var medallion := _decor_root("StrawberryMedallion",Vector3(-4.05,0,-2.83),"Strawberry wall medallion",0.6)
+	var plate := cylinder(Vector3(-0.07,2.5,0),0.48,0.08,CREAM,-1,medallion)
 	plate.rotation_degrees.z = 90
-	var frame := ring(Vector3(-4.06,2.5,-2.83),0.49,0.44,GOLD)
+	var frame := ring(Vector3(-0.01,2.5,0),0.49,0.44,GOLD,medallion)
 	frame.rotation_degrees.z = 90
-	ball(Vector3(-3.99,2.46,-2.83),Vector3(0.12,0.49,0.39),PINK)
+	ball(Vector3(0.06,2.46,0),Vector3(0.12,0.49,0.39),PINK,medallion)
 	for i in 3:
-		var leaf := ball(Vector3(-3.96,2.72,-2.92+i*0.09),Vector3(0.07,0.14,0.18),MINT)
+		var leaf := ball(Vector3(0.09,2.72,-0.09+i*0.09),Vector3(0.07,0.14,0.18),MINT,medallion)
 		leaf.rotation_degrees.x = (i-1)*30
 	for i in 3:
 		for j in 2:
-			ball(Vector3(-3.918,2.35+i*0.10,-2.9+j*0.13),Vector3(0.024,0.036,0.02),GOLD)
+			ball(Vector3(0.132,2.35+i*0.10,-0.07+j*0.13),Vector3(0.024,0.036,0.02),GOLD,medallion)
 	# Tidy folded towels and a recipe card add useful scale cues.
 	var coffee: Node3D = stations[1].node
 	for i in 3: box(Vector3(1.07,1.4+i*0.035,-0.08),Vector3(0.3,0.04,0.34),CREAM if i%2==0 else PINK,0.015,coffee)
@@ -713,28 +1208,49 @@ func _add_finishing_details() -> void:
 	label3("RECIPE",Vector3(-0.04,1.48,0.515),9,COCOA,bakery)
 	# Soft oven glow stays local to the baking station.
 	var oven_light := OmniLight3D.new()
-	oven_light.position = Vector3(-2.34,0.61,-1.97)
+	oven_light.position = Vector3(0.56,0.61,0.78)
 	oven_light.light_color = Color("ffb857")
 	oven_light.light_energy = 0.3
 	oven_light.omni_range = 0.9
-	add_child(oven_light)
+	bakery.add_child(oven_light)
+
+func _decor_root(node_name: String, position: Vector3, display_name: String, radius: float) -> Node3D:
+	var root := Node3D.new()
+	root.name = node_name
+	root.position = position
+	root.set_meta("movable_decor",true)
+	root.set_meta("display_name",display_name)
+	root.set_meta("placement_radius",radius)
+	add_child(root)
+	return root
 
 func _process(delta: float) -> void:
+	if visiting: return
 	time += delta
+	if not hold_target.is_empty() and not hold_triggered and drag_distance <= 6:
+		hold_elapsed += delta
+		if hold_elapsed >= 0.65:
+			hold_triggered = true
+			object_actions_requested.emit(hold_target)
 	for i in display_products.size():
 		var stock := CafeProgress.product_stock(i)
 		display_products[i].visible = stock > 0
 		display_counts[i].text = "%d left" % stock
 	for i in batch_icons.size():
 		var job := CafeProgress.craft_job(i)
-		batch_icons[i].visible = CafeProgress.batch_ready(i)
+		var station_position: Vector3 = stations[CafeProgress.machine_for_recipe(i)].node.position
+		batch_icons[i].position.x = station_position.x
+		batch_icons[i].position.z = station_position.z
+		batch_labels[i].position.x = station_position.x
+		batch_labels[i].position.z = station_position.z
+		batch_icons[i].visible = CafeProgress.batch_ready(i) and stations[CafeProgress.machine_for_recipe(i)].node.visible
 		batch_icons[i].position.y = 2.8 + sin(time * 2.5) * 0.08
 		batch_labels[i].visible = not job.is_empty()
 		batch_labels[i].text = "Tap to display ×%d" % int(job.get("quantity", 0)) if batch_icons[i].visible else "%ds" % CafeProgress.craft_seconds_left(i)
 	_animate_actors(delta)
 	for i in steam.size():
 		steam[i].position.y = 1.83+fmod(time*0.18+i*0.11,0.5)
-		steam[i].position.x = -0.33 + sin(time*1.7+i)*0.04
+		steam[i].position.x = -0.68 + sin(time*1.7+i)*0.04
 
 
 
@@ -793,13 +1309,16 @@ func _build_actors() -> void:
 	_make_actor("Chef Mallow",Color("f6e8ce"),true,[Vector3(-1.45,0.14,-1.7),Vector3(-1.45,0.14,-0.85),Vector3(0,0.14,-0.85),Vector3(0,0.14,-1.73)],0)
 	_make_actor("Berry",PINK,false,[],2)
 	_make_actor("Mint",MINT,false,[],4)
+	_make_actor("Coco",GOLD,false,[],6)
+	_make_actor("Pip",Color("b9a8e6"),false,[],8)
+	_make_actor("Lulu",Color("7fc6d9"),false,[],10)
 
 func _make_actor(actor_name: String, outfit: Color, chef: bool, route: Array, phase: float) -> void:
 	for i in route.size(): route[i] *= ROOM_SPREAD
 	var actor := Node3D.new()
 	actor.name = actor_name.replace(" ","")
 	add_child(actor)
-	actor.position = route[0] if chef else (Vector3(-6.1,-0.63,-3.5) if phase==2 else Vector3(-6.1,-0.63,-8.5))
+	actor.position = route[0] if chef else Vector3(-6.1,-0.63,-3.5-(phase-2)*2.5)
 	if not chef: actor.position *= ROOM_SPREAD
 	actor.scale = Vector3.ONE*1.12
 	var skin := Color("ffe0cb")
@@ -880,21 +1399,197 @@ func _make_actor(actor_name: String, outfit: Color, chef: bool, route: Array, ph
 	_cupcake(Vector3.ZERO,treat)
 	treat.scale = Vector3.ONE*0.65
 	treat.visible = false
-	actors.append({"node":actor,"route":route,"target":1,"direction":1,"wait":phase,"limbs":limbs,"treat":treat,"phase":phase,"chef":chef,"state":"enter","path_index":0,"cooldown":0.0,"base_y":actor.position.y,"sales":0,"walk_distance":0.0,"speed":0.0,"leg_segments":leg_segments})
+	actors.append({"node":actor,"display_name":actor_name,"route":route,"target":1,"direction":1,"wait":phase,"limbs":limbs,"treat":treat,"phase":phase,"chef":chef,"state":"enter","path_index":0,"cooldown":0.0,"base_y":actor.position.y,"sales":0,"walk_distance":0.0,"speed":0.0,"leg_segments":leg_segments,"nav_path":[],"nav_index":0,"nav_revision":-1,"seat_key":"","pending_purchase":{}})
+	if not chef and CafeLife.REGULARS.has(actor_name.to_lower()):
+		actors[-1].regular_id = actor_name.to_lower()
+		_begin_regular_visit(actors[-1])
 	_pose_legs(actors[-1])
 
+func _begin_regular_visit(actor: Dictionary) -> void:
+	if not actor.has("regular_id"): return
+	actor.regular_request = CafeLife.new_regular_request(actor.regular_id)
+	actor.product_choice = -1
+	actor.wait = 0.0
+	actor.patience = CUSTOMER_PATIENCE_SECONDS
+
+func customer_request_details(actor: Dictionary) -> Dictionary:
+	var name := str(actor.get("display_name","Customer"))
+	if actor.has("regular_id") and CafeLife.REGULARS.has(actor.regular_id):
+		name = str(CafeLife.REGULARS[actor.regular_id].name)
+	if actor.has("regular_request") and not actor.regular_request.is_empty():
+		var recipe_index := int(actor.regular_request.recipe_index)
+		return {"name":name,"recipe_index":recipe_index,"item":CafeProgress.RECIPES[recipe_index].name,"waiting":actor.state == "shop"}
+	return {"name":name,"recipe_index":-1,"item":"a treat from the display","waiting":actor.state == "shop"}
+
+func _fallback_product(actor: Dictionary) -> int:
+	for offset in CafeProgress.RECIPES.size():
+		var candidate := (int(actor.phase)+int(actor.sales)+offset) % CafeProgress.RECIPES.size()
+		var machine := CafeProgress.machine_for_recipe(candidate)
+		var display := get_node_or_null("ProductDisplay%d" % machine) as Node3D
+		if CafeProgress.product_stock(candidate) > 0 and is_instance_valid(display) and display.visible:
+			return candidate
+	return -1
+
+func _customer_shop_position(actor: Dictionary, choice: int) -> Vector3:
+	if actor.has("regular_id") and is_instance_valid(pickup_counter):
+		var slot := maxi(0,int((float(actor.phase)-2.0)/2.0))
+		# A short, separated queue faces the dedicated counter at the back of the café.
+		var offsets := [Vector3(-1.45,0,1.28),Vector3(0,0,1.55),Vector3(1.45,0,1.28)]
+		return pickup_counter.position + offsets[mini(slot,offsets.size()-1)] + Vector3(0,0.14,0)
+	var machine := maxi(0,CafeProgress.machine_for_recipe(maxi(choice,0)))
+	var display := get_node_or_null("ProductDisplay%d" % machine) as Node3D
+	return (display.position if display else Vector3.ZERO) + Vector3(0,0.14,1.15)
+
+func _customer_target_object(actor: Dictionary, choice: int) -> Node3D:
+	if actor.has("regular_id"): return pickup_counter
+	var machine := maxi(0,CafeProgress.machine_for_recipe(maxi(choice,0)))
+	return get_node_or_null("ProductDisplay%d" % machine) as Node3D
+
+func _entry_steps() -> Array:
+	return [Vector3(-6.1,-0.63,2.8)*ROOM_SPREAD+CAFE_ORIGIN,Vector3(-5.2,-0.372,2.8)*ROOM_SPREAD+CAFE_ORIGIN,Vector3(-4.85,-0.152,2.8)*ROOM_SPREAD+CAFE_ORIGIN,Vector3(-4.52,0.068,2.8)*ROOM_SPREAD+CAFE_ORIGIN,Vector3(-4.05,0.14,2.8)*ROOM_SPREAD+CAFE_ORIGIN]
+
+func _nav_cell(point: Vector3) -> Vector2i:
+	var local := Vector2(point.x-CAFE_ORIGIN.x,point.z-CAFE_ORIGIN.z)
+	return Vector2i(
+		clampi(int(round((local.x-NAV_LOCAL_MIN.x)/NAV_CELL_SIZE)),0,int(ceil((NAV_LOCAL_MAX.x-NAV_LOCAL_MIN.x)/NAV_CELL_SIZE))),
+		clampi(int(round((local.y-NAV_LOCAL_MIN.y)/NAV_CELL_SIZE)),0,int(ceil((NAV_LOCAL_MAX.y-NAV_LOCAL_MIN.y)/NAV_CELL_SIZE)))
+	)
+
+func _nav_world(cell: Vector2i, y: float) -> Vector3:
+	return CAFE_ORIGIN+Vector3(NAV_LOCAL_MIN.x+cell.x*NAV_CELL_SIZE,y,NAV_LOCAL_MIN.y+cell.y*NAV_CELL_SIZE)
+
+func _entry_blocks_characters(entry: Dictionary, point: Vector3, ignored: Node3D, extra_margin := 0.0) -> bool:
+	var node: Node3D = entry.node
+	if node==ignored or not is_instance_valid(node) or not node.visible: return false
+	var id := str(entry.id)
+	if id in ["cafe_name_sign","treat_menu_board","window_curtains","strawberry_medallion"] or id.begins_with("pendant_light"): return false
+	var bounds: AABB = entry.bounds if entry.has("bounds") else _movable_visual_bounds(node)
+	# High wall décor does not occupy walking space.
+	if bounds.position.y>1.35: return false
+	var local := node.to_local(point)
+	var margin := CUSTOMER_RADIUS+extra_margin
+	return local.x>=bounds.position.x-margin and local.x<=bounds.end.x+margin and local.z>=bounds.position.z-margin and local.z<=bounds.end.z+margin
+
+func _navigation_path(start: Vector3, destination: Vector3, ignored: Node3D = null) -> Array:
+	var dimensions := Vector2i(int(ceil((NAV_LOCAL_MAX.x-NAV_LOCAL_MIN.x)/NAV_CELL_SIZE))+1,int(ceil((NAV_LOCAL_MAX.y-NAV_LOCAL_MIN.y)/NAV_CELL_SIZE))+1)
+	var start_cell := _nav_cell(start)
+	var end_cell := _nav_cell(destination)
+	var cells: Array[Vector2i] = []
+	for grid_margin in [NAV_CELL_SIZE*0.75,NAV_CELL_SIZE*0.35,0.0]:
+		var grid := AStarGrid2D.new()
+		grid.region = Rect2i(Vector2i.ZERO,dimensions)
+		grid.cell_size = Vector2.ONE*NAV_CELL_SIZE
+		grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+		grid.update()
+		for y in dimensions.y:
+			for x in dimensions.x:
+				var cell := Vector2i(x,y)
+				var point := _nav_world(cell,0.14)
+				if movable_objects.any(func(entry: Dictionary) -> bool: return _entry_blocks_characters(entry,point,ignored,grid_margin)):
+					grid.set_point_solid(cell,true)
+		grid.set_point_solid(start_cell,false)
+		grid.set_point_solid(end_cell,false)
+		cells = grid.get_id_path(start_cell,end_cell)
+		if not cells.is_empty(): break
+	if cells.is_empty(): return []
+	var result: Array = []
+	for cell: Vector2i in cells:
+		result.append(_nav_world(cell,destination.y))
+	result[0] = Vector3(start.x,destination.y,start.z)
+	result[-1] = destination
+	return _simplify_navigation_path(result,ignored)
+
+func _simplify_navigation_path(points: Array, ignored: Node3D = null) -> Array:
+	if points.size()<3: return points
+	var simplified: Array = [points[0]]
+	var anchor := 0
+	while anchor<points.size()-1:
+		var next := anchor+1
+		for candidate in range(points.size()-1,anchor,-1):
+			if _navigation_segment_clear(points[anchor],points[candidate],ignored,NAV_CELL_SIZE*0.75):
+				next = candidate
+				break
+		simplified.append(points[next])
+		anchor = next
+	return simplified
+
 func _customer_path(actor: Dictionary) -> Array:
-	var counter := Vector3(-1.9 + int(actor.get("product_choice",0))*1.55,0.14,5.5) / ROOM_SPREAD
-	var path: Array = [Vector3(-6.1,-0.63,2.8),Vector3(-5.2,-0.372,2.8),Vector3(-4.85,-0.152,2.8),Vector3(-4.52,0.068,2.8),Vector3(-4.05,0.14,2.8),Vector3(-2.4,0.14,3.67),counter]
+	var destination := _customer_shop_position(actor,int(actor.get("product_choice",0)))
+	var steps := _entry_steps()
+	var path: Array = []
 	if actor.state == "exit":
-		path.reverse()
-		path.append(Vector3(-6.1,-0.63,12.5))
-	for i in path.size(): path[i] *= ROOM_SPREAD
-	if actor.state == "exit":
-		for i in path.size():
-			path[i].z += 0.65
-			if path[i].x < -8.5: path[i].x -= 0.65
+		path = _navigation_path(actor.node.position,steps[-1])
+		for index in range(steps.size()-2,-1,-1): path.append(steps[index])
+		path.append(Vector3(CAFE_ORIGIN.x-6.1*ROOM_SPREAD.x,-0.63,CAFE_ORIGIN.z+12.5))
+	else:
+		path = steps.duplicate()
+		var interior := _navigation_path(steps[-1],destination)
+		for index in range(1,interior.size()): path.append(interior[index])
 	return path
+
+func _reset_actor_navigation(actor: Dictionary) -> void:
+	actor.nav_path = []
+	actor.nav_index = 0
+	actor.nav_revision = -1
+	actor.nav_attempted = false
+
+func _walk_customer_to(actor: Dictionary, destination: Vector3, ignored: Node3D, delta: float) -> bool:
+	var destination_changed := not actor.has("nav_destination") or Vector3(actor.nav_destination).distance_to(destination)>0.08
+	if destination_changed or int(actor.get("nav_revision",-1))!=navigation_revision or not bool(actor.get("nav_attempted",false)):
+		actor.nav_path = _navigation_path(actor.node.position,destination,ignored)
+		actor.nav_index = 1 if actor.nav_path.size()>1 else 0
+		actor.nav_destination = destination
+		actor.nav_revision = navigation_revision
+		actor.nav_attempted = true
+	if actor.nav_path.is_empty():
+		_rest_actor(actor,delta)
+		return false
+	var index := mini(int(actor.nav_index),actor.nav_path.size()-1)
+	if _walk_actor(actor,actor.nav_path[index],delta):
+		actor.nav_index = index+1
+		if int(actor.nav_index)>=actor.nav_path.size():
+			_reset_actor_navigation(actor)
+			return true
+	return false
+
+func _available_customer_seat(actor: Dictionary) -> Dictionary:
+	for entry: Dictionary in movable_objects:
+		var table: Node3D = entry.node
+		if not table.visible or not table.has_meta("seat_offsets"): continue
+		var offsets: Array = table.get_meta("seat_offsets")
+		for index in offsets.size():
+			var key := "%s:%d" % [str(entry.id),index]
+			var occupied := actors.any(func(other: Dictionary) -> bool: return other.node!=actor.node and str(other.get("seat_key",""))==key and other.state in ["to_seat","eat"])
+			if occupied: continue
+			var seat: Vector3 = table.to_global(offsets[index])
+			return {"key":key,"position":seat,"table":table,"facing":atan2(table.global_position.x-seat.x,table.global_position.z-seat.z),"capacity":int(table.get_meta("seat_count",offsets.size()))}
+	return {}
+
+func _navigation_segment_clear(start: Vector3, destination: Vector3, ignored: Node3D = null, extra_margin := 0.0) -> bool:
+	var steps := maxi(1,int(ceil(start.distance_to(destination)/0.16)))
+	for index in range(1,steps+1):
+		var point := start.lerp(destination,float(index)/steps)
+		if movable_objects.any(func(entry: Dictionary) -> bool: return _entry_blocks_characters(entry,point,ignored,extra_margin)): return false
+	return true
+
+func _seat_departure_position(table: Node3D, seat: Vector3) -> Vector3:
+	var outward := Vector2(seat.x-table.global_position.x,seat.z-table.global_position.z).normalized()
+	var base_angle := atan2(outward.y,outward.x)
+	for offset in [0.0,PI/4.0,-PI/4.0,PI/2.0,-PI/2.0,PI]:
+		var direction := Vector3(cos(base_angle+offset),0,sin(base_angle+offset))
+		var candidate := Vector3(table.global_position.x,seat.y,table.global_position.z)+direction*1.75
+		if not _navigation_segment_clear(seat,candidate,table): continue
+		if not _navigation_path(candidate,_entry_steps()[-1]).is_empty(): return candidate
+	return seat+Vector3(outward.x,0,outward.y)*0.8
+
+func _complete_actor_purchase(actor: Dictionary) -> void:
+	var receipt: Dictionary = CafeProgress.complete_purchase(actor.get("pending_purchase",{}))
+	actor.pending_purchase = {}
+	if receipt.is_empty(): return
+	actor.sales = int(actor.sales)+1
+	if actor.has("regular_request") and CafeLife.fulfill_regular(actor.regular_request,int(receipt.index)):
+		actor.regular_request.fulfilled = true
+	customer_purchased.emit(receipt)
 
 func _animate_actors(delta: float) -> void:
 	for actor: Dictionary in actors:
@@ -928,7 +1623,13 @@ func _walk_actor(actor: Dictionary, destination: Vector3, delta: float) -> bool:
 	var desired_angle := atan2(difference.x,difference.z)
 	var turn := absf(wrapf(desired_angle-node.rotation.y,-PI,PI))
 	node.rotation.y = lerp_angle(node.rotation.y,desired_angle,1-exp(-delta*12))
-	var desired_speed := WALK_SPEED * clampf(1-turn/PI,0.25,1)
+	# Turn deliberately at a waypoint, then keep a constant heading along the
+	# straight segment. Moving while still turning caused visible zigzags.
+	if turn>0.12:
+		actor.speed = 0.0
+		_rest_actor(actor,delta)
+		return false
+	var desired_speed := WALK_SPEED
 	actor.speed = move_toward(float(actor.speed),desired_speed,delta*2.8)
 	var next := base.move_toward(destination,float(actor.speed)*delta)
 	var moved := next.distance_to(base)
@@ -962,74 +1663,138 @@ func _animate_chef(actor: Dictionary, delta: float) -> void:
 		actor.wait = maxf(0,float(actor.wait)-delta)
 		_rest_actor(actor,delta)
 		return
-	if _walk_actor(actor,actor.route[int(actor.target)],delta):
+	if _walk_customer_to(actor,actor.route[int(actor.target)],null,delta):
 		if int(actor.target)==actor.route.size()-1 or int(actor.target)==0:
 			actor.direction = -int(actor.direction)
 			actor.wait = 2.0
 		actor.target = int(actor.target)+int(actor.direction)
+		_reset_actor_navigation(actor)
 
 func _animate_customer(actor: Dictionary, delta: float) -> void:
 	if actor.state == "away":
 		actor.cooldown = float(actor.cooldown)-delta
 		if float(actor.cooldown)<=0:
-			actor.node.position = Vector3(-6.1,-0.63,-17.0) * ROOM_SPREAD
+			var arrival := CAFE_ORIGIN+Vector3(-6.1*ROOM_SPREAD.x,-0.63,-17.0)
+			for other: Dictionary in actors:
+				if other.node != actor.node and other.node.visible and other.node.position.distance_to(arrival)<0.7: return
+			actor.node.position = arrival
 			actor.base_y = -0.63
 			actor.node.visible = true
 			actor.speed = 0.0
 			actor.state = "enter"
 			actor.path_index = 0
+			actor.seat_key = ""
+			_reset_actor_navigation(actor)
+			_begin_regular_visit(actor)
 		return
 	if actor.state == "shop":
 		var choice := int(actor.get("product_choice", -1))
-		if choice < 0 or CafeProgress.product_stock(choice) == 0:
-			choice = -1
-			for offset in CafeProgress.RECIPES.size():
-				var candidate := (int(actor.phase)+int(actor.sales)+offset) % CafeProgress.RECIPES.size()
-				if CafeProgress.product_stock(candidate) > 0:
-					choice = candidate
-					break
+		if actor.has("regular_request") and not actor.regular_request.is_empty():
+			var requested := int(actor.regular_request.recipe_index)
+			choice = requested if CafeProgress.product_stock(requested)>0 else -1
+			actor.product_choice = requested
+		elif choice < 0 or CafeProgress.product_stock(choice) == 0:
+			choice = _fallback_product(actor)
 			actor.product_choice = choice
 		if choice >= 0:
-			var destination := Vector3(-1.9 + choice*1.55,0.14,5.5)
+			var destination := _customer_shop_position(actor,choice)
 			if actor.node.position.distance_to(destination) > 0.04:
 				actor.wait = 0.0
-				_walk_actor(actor,destination,delta)
+				_walk_customer_to(actor,destination,null,delta)
 				return
 		actor.wait = float(actor.wait)+delta
 		actor.node.rotation.y = lerp_angle(actor.node.rotation.y,PI,minf(1,delta*5))
 		_rest_actor(actor,delta)
+		if choice < 0 and not actor.has("regular_id"):
+			actor.patience = float(actor.get("patience",CUSTOMER_PATIENCE_SECONDS))-delta
+			if float(actor.patience)<=0.0:
+				actor.state = "exit"
+				actor.path_index = 0
+				actor.travel_path = _customer_path(actor)
+				return
 		if float(actor.wait)<1.6: return
 		for index in ([choice] if choice >= 0 else []):
-			var receipt: Dictionary = CafeProgress.purchase(index)
-			if receipt.is_empty(): continue
+			var ticket: Dictionary = CafeProgress.take_product(index)
+			if ticket.is_empty(): continue
 			_set_carried_product(actor.treat,index)
 			actor.treat.visible = true
-			actor.sales = int(actor.sales)+1
+			actor.pending_purchase = ticket
+			var seat := _available_customer_seat(actor) if not actor.has("regular_id") and (int(actor.phase/2.0)+int(actor.sales)+1)%2==1 else {}
+			if seat.is_empty():
+				actor.state = "pickup"
+			else:
+				actor.state = "to_seat"
+				actor.seat_key = seat.key
+				actor.seat_position = seat.position
+				actor.seat_table = seat.table
+				actor.seat_facing = seat.facing
+				actor.seat_exit_position = _seat_departure_position(seat.table,seat.position)
+				_reset_actor_navigation(actor)
+			actor.wait = 0.0
+			return
+		# Regulars wait for their exact favorite without losing patience. Only ordinary
+		# customers leave when every display remains empty for their full visit timer.
+		return
+	if actor.state == "to_seat":
+		var table: Node3D = actor.get("seat_table")
+		if not is_instance_valid(table) or not table.visible:
+			actor.seat_key = ""
 			actor.state = "pickup"
 			actor.wait = 0.0
-			customer_purchased.emit(receipt)
 			return
-		if float(actor.wait)>12.0:
+		var seat_position: Vector3 = actor.seat_position
+		if _walk_customer_to(actor,seat_position,table,delta):
+			actor.state = "eat"
+			actor.wait = 0.0
+			actor.node.rotation.y = float(actor.seat_facing)
+		return
+	if actor.state == "eat":
+		actor.wait = float(actor.wait)+delta
+		actor.node.rotation.y = lerp_angle(actor.node.rotation.y,float(actor.seat_facing),minf(1,delta*8))
+		_rest_actor(actor,delta)
+		if float(actor.wait)>=CUSTOMER_EAT_SECONDS:
+			_complete_actor_purchase(actor)
+			actor.seat_key = ""
+			actor.state = "leave_seat"
+			_reset_actor_navigation(actor)
+		return
+	if actor.state == "leave_seat":
+		var seat_table: Node3D = actor.get("seat_table")
+		if _walk_customer_to(actor,actor.seat_exit_position,seat_table,delta):
 			actor.state = "exit"
 			actor.path_index = 0
+			actor.travel_path = _customer_path(actor)
 		return
 	if actor.state == "pickup":
 		actor.wait = float(actor.wait)+delta
 		actor.limbs[3].rotation.x = lerpf(actor.limbs[3].rotation.x,-1.1,minf(1,delta*5))
 		if float(actor.wait)>1.2:
+			_complete_actor_purchase(actor)
 			actor.state = "exit"
 			actor.path_index = 0
+			actor.travel_path = _customer_path(actor)
 		return
-	var path := _customer_path(actor)
+	if not actor.has("travel_path") or actor.get("travel_state","")!=actor.state or actor.travel_path.is_empty():
+		actor.travel_path = _customer_path(actor)
+		actor.travel_state = actor.state
+		actor.path_index = 0
+	var path: Array = actor.travel_path
+	if path.is_empty():
+		_rest_actor(actor,delta)
+		return
 	if _walk_actor(actor,path[int(actor.path_index)],delta):
 		actor.path_index = int(actor.path_index)+1
 		if int(actor.path_index)>=path.size():
 			if actor.state == "enter":
 				actor.state = "shop"
+				actor.travel_path = []
 				actor.wait = 0.0
+				actor.patience = CUSTOMER_PATIENCE_SECONDS
 			else:
 				actor.node.visible = false
 				actor.treat.visible = false
+				actor.seat_key = ""
+				actor.travel_path = []
 				actor.state = "away"
 				actor.cooldown = 5.0+float(actor.phase)
 
@@ -1037,47 +1802,49 @@ func _build_neighborhood() -> void:
 	var neighborhood := Node3D.new()
 	neighborhood.name = "Neighborhood"
 	add_child(neighborhood)
-	var ground := box(Vector3(0,-0.85,0),Vector3(100,0.25,100),Color("bfd4b0"),0.1,neighborhood)
+	var ground := box(Vector3(0,-0.85,0),Vector3(100,0.25,100),Color("789a70"),0.1,neighborhood)
 	ground.name = "Ground"
-	# A continuous street/sidewalk grid covers the whole visible camera envelope.
-	for x in [-8.0,12.0]:
+	var ground_material := StandardMaterial3D.new()
+	ground_material.albedo_color = Color("789a70")
+	ground_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	ground.material_override = ground_material
+	# The café sits on a broad open expansion plot. Streets and scenery stay at
+	# the perimeter so future reward buildings can fill the land over time.
+	for x in [-20.0,20.0]:
 		box(Vector3(x,-0.71,0),Vector3(5.2,0.08,100),Color("e6d2bb"),0.02,neighborhood)
 		box(Vector3(x,-0.66,0),Vector3(3,0.04,100),Color("b5aeb7"),0.01,neighborhood)
-	for z in [-12.0,8.0,28.0]:
+	for z in [-20.0,20.0]:
 		box(Vector3(0,-0.71,z),Vector3(100,0.08,5.2),Color("e6d2bb"),0.02,neighborhood)
 		box(Vector3(0,-0.655,z),Vector3(100,0.04,3),Color("b5aeb7"),0.01,neighborhood)
 	for i in range(-16,17):
-		for x in [-8.0,12.0]:
-			if absf(i*3+12)<2 or absf(i*3-8)<2 or absf(i*3-28)<2: continue
+		for x in [-20.0,20.0]:
+			if absf(absf(i*3)-20)<2: continue
 			box(Vector3(x,-0.62,i*3),Vector3(0.07,0.01,1.1),CREAM,0.005,neighborhood)
-		for z in [-12.0,8.0,28.0]:
-			if absf(i*3+8)<2 or absf(i*3-12)<2: continue
+		for z in [-20.0,20.0]:
+			if absf(absf(i*3)-20)<2: continue
 			box(Vector3(i*3,-0.615,z),Vector3(1.1,0.01,0.07),CREAM,0.005,neighborhood)
-	box(Vector3(0,-0.69,0),Vector3(11.5,0.1,11.5),Color("e3cdb6"),0.1,neighborhood)
+	var expansion_plot := box(Vector3(0,-0.69,0),Vector3(34.0,0.1,34.0),Color("91ad78"),0.35,neighborhood)
+	expansion_plot.name = "ExpansionPlot"
+	var plot_material := StandardMaterial3D.new()
+	plot_material.albedo_color = Color("a9c58d")
+	plot_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	expansion_plot.material_override = plot_material
+	# A subtle inner pad keeps the original café readable inside the larger yard.
+	box(Vector3(0,-0.675,0),Vector3(12.5,0.04,12.5),Color("e3cdb6"),0.18,neighborhood)
 	var serial := 0
-	# Different lot sizes and roof profiles avoid a repeated miniature-house grid.
-	for z in [-35.0,-26.0,-19.0,-5.0,1.0,17.0,23.0,35.0]:
-		for x in [-35.0,-26.0,-18.0,-13.0,-2.0,5.0,18.0,25.0,34.0]:
-			if absf(x)<6 and z>-7 and z<6: continue
-			# Two park lots remain building-free but are populated below.
-			if (x==5 and z==17) or (x==-18 and z==1): continue
+	# Keep the existing neighborhood language at the far edges of the property.
+	for z in [-31.0,-25.0,25.0,31.0]:
+		for x in [-31.0,-23.0,-12.0,0.0,12.0,23.0,31.0]:
 			_build_house(Vector3(x,-0.68,z),serial,neighborhood)
 			serial += 1
-	_build_house(Vector3(-2,-0.68,-7.8),serial,neighborhood)
-	_build_house(Vector3(7,-0.68,-3),serial+1,neighborhood)
 	var tree_index := 0
-	for z in range(-34,38,6):
-		for x in range(-33,39,7):
-			if absf(x+8)<3 or absf(x-12)<3 or absf(z+12)<3 or absf(z-8)<3 or absf(z-28)<3: continue
-			if absf(x)<6 and absf(z)<6: continue
-			_tree(Vector3(x+0.6,-0.66,z+1.2),tree_index,neighborhood)
+	for edge in range(-28,29,4):
+		for p in [Vector3(edge,-0.66,-22.8),Vector3(edge,-0.66,22.8),Vector3(-22.8,-0.66,edge),Vector3(22.8,-0.66,edge)]:
+			_tree(p,tree_index,neighborhood)
 			tree_index += 1
-	for p in [Vector3(7,-0.66,2),Vector3(3,-0.66,12),Vector3(-12,-0.66,3),Vector3(18,-0.66,11),Vector3(-2,-0.66,-7),Vector3(7,-0.66,20)]:
-		_tree(p,tree_index,neighborhood)
-		tree_index += 1
-	# Populated little gardens: paths, benches, flower beds and small animals.
-	for index in 6:
-		var p: Vector3 = [Vector3(5,-0.66,17),Vector3(-18,-0.66,1),Vector3(6,-0.66,-7),Vector3(-12,-0.66,4),Vector3(20,-0.66,-8),Vector3(-3,-0.66,13)][index]
+	# Small garden pockets preserve the benches, flowers, and animals at the edges.
+	for index in 4:
+		var p: Vector3 = [Vector3(-15,-0.66,-15),Vector3(15,-0.66,-15),Vector3(-15,-0.66,15),Vector3(15,-0.66,15)][index]
 		box(p+Vector3(0,0.01,0),Vector3(3.3,0.08,2.4),Color("d4ddbc"),0.15,neighborhood)
 		box(p+Vector3(0,0.48,-0.8),Vector3(1.5,0.12,0.45),Color("bc936e"),0.04,neighborhood)
 		box(p+Vector3(0,0.80,-1),Vector3(1.5,0.48,0.1),Color("bc936e"),0.03,neighborhood)
@@ -1095,11 +1862,11 @@ func _build_house(p: Vector3, index: int, parent: Node3D) -> void:
 	parent.add_child(home)
 	var direction := Vector3.ZERO
 	var distance := INF
-	for road_x in [-8.0,12.0]:
+	for road_x in [-20.0,20.0]:
 		if absf(road_x-p.x)<distance:
 			distance = absf(road_x-p.x)
 			direction = Vector3(signf(road_x-p.x),0,0)
-	for road_z in [-12.0,8.0,28.0]:
+	for road_z in [-20.0,20.0]:
 		if absf(road_z-p.z)<distance:
 			distance = absf(road_z-p.z)
 			direction = Vector3(0,0,signf(road_z-p.z))
@@ -1171,7 +1938,44 @@ func _set_carried_product(treat: Node3D, index: int) -> void:
 	for child in treat.get_children():
 		treat.remove_child(child)
 		child.queue_free()
+	# Variant silhouettes and toppings remain readable at display scale.
 	match index:
+		5:
+			ball(Vector3.ZERO,Vector3(0.26,0.16,0.2),GOLD,treat)
+			for stripe in 4:
+				box(Vector3(-0.09+stripe*0.06,0.076,0),Vector3(0.026,0.018,0.13),Color("a85e2d"),0.008,treat)
+			return
+		6:
+			cylinder(Vector3.ZERO,0.1,0.2,COCOA,0.12,treat)
+			var handle := ring(Vector3(0.11,0,0),0.07,0.045,COCOA,treat)
+			handle.rotation_degrees.x = 90
+			for tier in 3:
+				ball(Vector3(0,0.1+tier*0.035,0),Vector3(0.19-tier*0.055,0.065,0.19-tier*0.055),CREAM,treat)
+			ball(Vector3(0,0.19,0),Vector3.ONE*0.035,COCOA,treat)
+			return
+		7:
+			for candy in 3:
+				var point := Vector3(-0.085+candy*0.085,0,0)
+				ball(point,Vector3.ONE*0.095,COCOA,treat)
+				box(point+Vector3(0,0.045,0),Vector3(0.055,0.012,0.024),GOLD,0.005,treat)
+			return
+		8:
+			cylinder(Vector3.ZERO,0.13,0.19,COCOA,-1,treat)
+			cylinder(Vector3(0,0.095,0),0.135,0.025,Color("422c37"),-1,treat)
+			for star in 5:
+				var angle := star*TAU/5
+				ball(Vector3(cos(angle)*0.085,0.12,sin(angle)*0.085),Vector3.ONE*0.03,GOLD,treat)
+			return
+		9:
+			cylinder(Vector3.ZERO,0.11,0.15,Color("e5bbda"),0.13,treat)
+			cylinder(Vector3(0,0.08,0),0.105,0.015,Color("a56832"),-1,treat)
+			var handle := ring(Vector3(0.12,0,0),0.065,0.04,Color("e5bbda"),treat)
+			handle.rotation_degrees.x = 90
+			for petal in 5:
+				var angle := petal*TAU/5
+				ball(Vector3(cos(angle)*0.022,0.093,sin(angle)*0.022),Vector3(0.036,0.012,0.036),PINK,treat)
+			return
+	match CafeProgress.machine_for_recipe(index):
 		0:
 			ball(Vector3.ZERO,Vector3(0.24,0.16,0.2),GOLD,treat)
 			for i in 3: box(Vector3(-0.06+i*0.06,0.07,0),Vector3(0.014,0.014,0.1),CREAM,0.005,treat)

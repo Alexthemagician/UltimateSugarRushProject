@@ -1,0 +1,80 @@
+{
+	"cake_merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "chocolate_bar",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "chocolate_bar",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "strawberry",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "strawberry",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "blueberries",
+				"row": 4
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "blueberries",
+				"row": 4
+			}
+		]
+	},
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789754655,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789754655
+			}
+		]
+	},
+	"save_version": 1
+}

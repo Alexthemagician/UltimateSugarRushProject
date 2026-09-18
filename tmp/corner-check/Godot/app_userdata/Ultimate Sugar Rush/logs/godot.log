@@ -1,0 +1,25 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Customer visits: 0 failures; closest separation 0.560; case intersections 0
+e/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:25)
+ERROR: Regular waiting place stays inside café floor
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:25)
+ERROR: Regular waiting place stays inside café floor
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:25)
+ERROR: Moved object snaps to shared 3D floor grid
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:65)
+Cafe layout movement: 4 failures

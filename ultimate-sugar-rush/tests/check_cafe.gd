@@ -55,20 +55,23 @@ func run() -> void:
 			root.add_child(board)
 			await process_frame
 			await create_timer(0.08).timeout
-			check(board.target == 24+stage*5+(region-1)*4,"Stage objective configuration")
+			check(board.objective_requirements.size()==4 and board.target==board.objective_requirements.max(),"Stage objective configuration")
 			check(board.board.cells.size()==8,"Challenge board initialized")
 			board.queue_free()
 			await process_frame
 	var hub = load("res://scenes/cafe/cafe_hub.tscn").instantiate()
 	root.add_child(hub)
 	await process_frame
-	check(hub.world.actors.size()==3,"Chef and two customer NPCs")
+	check(hub.world.actors.size()>=3,"Chef and customer NPCs")
 	var actor_position: Vector3 = hub.world.actors[0].node.position
 	await create_timer(0.3).timeout
 	check(hub.world.actors[0].node.position != actor_position,"Chef walk animation advances")
-	check(hub.icon_buttons.size()==9,"Nine illustrated menu controls")
+	check(hub.icon_buttons.size()==7,"Seven illustrated menu controls include Items and consolidated Recipes")
 	for item in hub.icon_buttons:
-		var image: TextureRect = item.get_child(0)
+		var images := item.find_children("*","TextureRect",true,false)
+		var image: TextureRect = images[0] as TextureRect if not images.is_empty() else null
+		check(is_instance_valid(image),"Illustrated menu control contains an image")
+		if not is_instance_valid(image): continue
 		check(image.position.x+image.size.x<=item.size.x and image.position.y+image.size.y<=item.size.y,"Icon stays within its control")
 	var zoom_before: float = hub.world.camera.size
 	for child in hub.get_children():
@@ -115,8 +118,9 @@ func run() -> void:
 	check(hub.world.camera.size==hub.world.MIN_ZOOM,"Two finger pinch zoom works")
 	hub.world.set_zoom(16)
 	hub._quests()
-	check(hub.recipe_buttons.size()==4,"Quest modal includes four recipes")
-	for i in 4: check(hub.recipe_buttons[i].disabled==not progress.can_serve(i),"Recipe ingredient gating")
+	check(hub.recipe_buttons.is_empty(),"Main recipe book browses recipes without crafting away from a machine")
+	check(hub.modal.find_child("RecipeTabs",true,false).get_child_count()==5,"Recipe book includes five horizontal category tabs")
+	check(hub.modal.find_child("RecipeCardRow",true,false).get_child_count()==2,"Recipe book shows the selected category as recipe cards")
 	var camera_transform: Transform3D = hub.world.camera.transform
 	for station in 4:
 		hub._select_station(station)
@@ -144,7 +148,7 @@ func run() -> void:
 	await process_frame
 	await final_board._complete_level()
 	await create_timer(0.6).timeout
-	check(current_scene.scene_file_path==progress.HUB,"Completed board returns to main cafe")
+	check(current_scene.scene_file_path=="res://scenes/map/cafe_region.tscn","Completed board returns to its regional map")
 	check(bool(save.get_value("cafe_completed","region_1_stage_2",false)),"Completion path awards and unlocks")
 	progress.open_region(0)
 	await create_timer(0.65).timeout
@@ -159,7 +163,7 @@ func run() -> void:
 		check(current_scene.get_child_count()>=17,"Illustrated regional map initializes fully")
 		progress.open_stage(0)
 		await create_timer(0.65).timeout
-		check(current_scene.scene_file_path=="res://scenes/match3/challenge_match.tscn","Regional map opens playable board")
+		check(current_scene.scene_file_path=="res://scenes/merge/regional_merge_game.tscn","Regional map opens its first merge board")
 		current_scene.get_node("%BackButton").pressed.emit()
 		await create_timer(0.65).timeout
 		check(current_scene.scene_file_path=="res://scenes/map/cafe_region.tscn","Challenge returns to correct region")

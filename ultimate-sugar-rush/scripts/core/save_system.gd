@@ -52,7 +52,8 @@ func get_value(section: String, key: String, default_value: Variant = null) -> V
 
 func set_value(section: String, key: String, value: Variant) -> void:
 	var section_data: Dictionary = _data.get(section, {})
-	if section_data.get(key) == value:
+	var previous: Variant = section_data.get(key)
+	if typeof(previous) == typeof(value) and previous == value:
 		return
 	section_data[key] = value
 	_data[section] = section_data

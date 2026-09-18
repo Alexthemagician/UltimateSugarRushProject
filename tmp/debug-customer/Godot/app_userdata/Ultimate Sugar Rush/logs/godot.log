@@ -1,0 +1,22 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+0 Berry enter (-9.15, -0.63, -5.249222) target 0 choice -1 sales 0
+0 Mint enter (-9.15, -0.63, -12.74922) target 0 choice -1 sales 0
+0 Coco enter (-9.15, -0.63, -20.24922) target 0 choice -1 sales 0
+600 Berry enter (-9.15, -0.63, 1.875352) target 0 choice -1 sales 0
+600 Mint enter (-9.15, -0.63, -5.624618) target 0 choice -1 sales 0
+600 Coco enter (-9.15, -0.63, -13.12495) target 0 choice -1 sales 0
+1200 Berry enter (-4.650824, 0.14, 4.950933) target 5 choice -1 sales 0
+1200 Mint enter (-9.15, -0.63, 1.575405) target 0 choice -1 sales 0
+1200 Coco enter (-9.15, -0.63, -5.924896) target 0 choice -1 sales 0
+1800 Berry shop (2.395894, 0.14, 5.5) target 7 choice 3 sales 0
+1800 Mint enter (-5.117878, 0.14, 5.52467) target 5 choice -1 sales 0
+1800 Coco enter (-9.15, -0.63, 1.275129) target 0 choice -1 sales 0
+2400 Berry exit (0.531863, 0.14, 6.151762) target 1 choice 3 sales 1
+2400 Mint shop (-0.004107, 0.14, 6.32) target 7 choice 4 sales 0
+2400 Coco enter (-5.860783, 0.14, 5.952951) target 5 choice -1 sales 0
+3000 Berry exit (0.531863, 0.14, 6.151762) target 1 choice 3 sales 1
+3000 Mint shop (-0.002273, 0.14, 6.32) target 7 choice 4 sales 0
+3000 Coco shop (1.027894, 0.14, 7.14) target 7 choice 2 sales 0

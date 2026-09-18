@@ -1,0 +1,25 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+SCRIPT ERROR: Parse Error: Identifier "_resolving_action" not declared in the current scope.
+   at: GDScript::reload (res://scripts/merge/merge_board.gd:148)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_landscape_boards.gd:10)
+SCRIPT ERROR: Parse Error: Identifier "_resolving_action" not declared in the current scope.
+   at: GDScript::reload (res://scripts/merge/merge_board.gd:163)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_landscape_boards.gd:10)
+ERROR: Failed to load script "res://scripts/merge/merge_board.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_landscape_boards.gd:10)
+SCRIPT ERROR: Invalid access to property or key 'board_changed' on a base object of type 'Control'.
+   at: _ready (res://scripts/ui/merge_game.gd:30)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/ui/merge_game.gd:30)
+       [1] run (res://tests/check_landscape_boards.gd:11)
+SCRIPT ERROR: Invalid access to property or key '_cells' on a base object of type 'Control'.
+   at: run (res://tests/check_landscape_boards.gd:16)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_landscape_boards.gd:16)

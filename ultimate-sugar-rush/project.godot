@@ -23,6 +23,11 @@ GameSettings="*res://scripts/core/game_settings.gd"
 SceneRouter="*res://scripts/core/scene_router.gd"
 CollectibleRewards="*res://scripts/core/collectible_rewards.gd"
 CafeProgress="*res://scripts/core/cafe_progress.gd"
+CafeLife="*res://scripts/core/cafe_life.gd"
+CafeRetention="*res://scripts/core/cafe_retention.gd"
+CafeOnline="*res://scripts/core/cafe_online.gd"
+AdmobClient="*res://scenes/app/admob_client.tscn"
+RewardedAds="*res://scripts/core/rewarded_ads.gd"
 
 [display]
 
@@ -32,6 +37,10 @@ window/size/window_width_override=960
 window/size/window_height_override=540
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/AdmobPlugin/plugin.cfg")
 
 [physics]
 

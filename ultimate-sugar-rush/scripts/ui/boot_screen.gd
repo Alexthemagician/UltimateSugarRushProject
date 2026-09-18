@@ -78,6 +78,75 @@ func _finish_boot() -> void:
 
 
 func _on_continue_pressed() -> void:
+	if not _has_cafe_name():
+		_show_cafe_name_prompt()
+		return
+	_enter_cafe()
+
+
+func _has_cafe_name() -> bool:
+	return not str(SaveSystem.get_value("cafe_profile", "name", "")).strip_edges().is_empty()
+
+
+func _show_cafe_name_prompt() -> void:
+	continue_button.disabled = true
+	var shade := ColorRect.new()
+	shade.name = "CafeNamePrompt"
+	shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	shade.color = Color(0.18, 0.07, 0.11, 0.72)
+	add_child(shade)
+	var card := PanelContainer.new()
+	card.custom_minimum_size = Vector2(760, 360)
+	card.set_anchors_preset(Control.PRESET_CENTER)
+	card.position = Vector2(-380, -180)
+	shade.add_child(card)
+	var margin := MarginContainer.new()
+	for side in ["margin_left", "margin_top", "margin_right", "margin_bottom"]:
+		margin.add_theme_constant_override(side, 38)
+	card.add_child(margin)
+	var column := VBoxContainer.new()
+	column.add_theme_constant_override("separation", 22)
+	margin.add_child(column)
+	var title := Label.new()
+	title.text = "Name your café"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 42)
+	column.add_child(title)
+	var hint := Label.new()
+	hint.text = "This is the name other chefs will see when they visit."
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.add_theme_font_size_override("font_size", 25)
+	column.add_child(hint)
+	var input := LineEdit.new()
+	input.name = "CafeNameInput"
+	input.placeholder_text = "Your café name"
+	input.max_length = 32
+	input.custom_minimum_size = Vector2(0, 72)
+	input.add_theme_font_size_override("font_size", 28)
+	column.add_child(input)
+	var start := Button.new()
+	start.name = "StartCafeButton"
+	start.text = "Open my café"
+	start.custom_minimum_size = Vector2(0, 78)
+	start.add_theme_font_size_override("font_size", 29)
+	column.add_child(start)
+	var submit := func() -> void:
+		var cafe_name := input.text.strip_edges()
+		if cafe_name.length() < 1:
+			input.placeholder_text = "Please enter a café name"
+			input.grab_focus()
+			return
+		SaveSystem.set_value("cafe_profile", "name", cafe_name)
+		SaveSystem.save_now()
+		shade.queue_free()
+		_enter_cafe()
+	start.pressed.connect(submit)
+	input.text_submitted.connect(func(_value: String) -> void: submit.call())
+	input.grab_focus()
+
+
+func _enter_cafe() -> void:
 	status_label.text = "Your Sugar Blossom journey is ready!"
 	continue_button.disabled = true
 	SceneRouter.go_to_scene(CafeProgress.HUB)

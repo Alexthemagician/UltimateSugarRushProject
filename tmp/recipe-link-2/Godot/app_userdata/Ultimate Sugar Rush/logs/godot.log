@@ -1,0 +1,180 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1146)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:29)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+ERROR: Hover icon collects correct batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_input.gd:6)
+       [1] run (res://tests/check_machine_input.gd:37)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1146)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:29)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+ERROR: Hover icon collects correct batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_input.gd:6)
+       [1] run (res://tests/check_machine_input.gd:37)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1146)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:29)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+ERROR: Hover icon collects correct batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_input.gd:6)
+       [1] run (res://tests/check_machine_input.gd:37)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1146)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:29)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+ERROR: Hover icon collects correct batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_input.gd:6)
+       [1] run (res://tests/check_machine_input.gd:37)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1146)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:29)
+SCRIPT ERROR: Invalid operands 'Dictionary' and 'Array' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] collect_batch (res://scripts/core/cafe_progress.gd:278)
+       [2] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [3] _select_station (res://scripts/cafe/cafe_scene.gd:879)
+       [4] _unhandled_input (res://scripts/cafe/cafe_scene.gd:1137)
+       [5] tap (res://tests/check_machine_input.gd:15)
+       [6] run (res://tests/check_machine_input.gd:36)
+ERROR: Hover icon collects correct batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_input.gd:6)
+       [1] run (res://tests/check_machine_input.gd:37)
+Machine input: 5 failures

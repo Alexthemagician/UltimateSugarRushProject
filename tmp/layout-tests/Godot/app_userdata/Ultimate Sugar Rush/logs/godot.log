@@ -1,0 +1,30 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Customer visits: 0 failures; closest separation 0.560; case intersections 0
+t/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:45)
+ERROR: Purchase happens at correct display
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:46)
+ERROR: Purchase consumes one item
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/checNEIGHBORHOOD CHECKS: 3 failures
+: Purchase pays listed price
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:48)
+ERROR: Customer carries purchased item
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:49)
+Cafe machine flow: 5 failures

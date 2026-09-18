@@ -17,6 +17,7 @@ const SPAWNABLE_ICE_CREAM_BASES := ["milk_pitcher", "chocolate_milk", "pistachio
 const SPAWNABLE_MIXED_BASES := ["chocolate_milk", "pink_sugar_cookie", "vanilla_flowers", "apple"]
 
 @export_enum("drinks", "cakes", "cookies", "ice_cream", "mixed") var board_kind := "drinks"
+@export var regional_mode := false
 
 const ITEM_DEFINITIONS := {
 	"lemon": {"id":"lemon", "name":"Sunny Lemon", "level":1, "next_id":"lemonade", "texture":"res://assets/merge/lemon.png"},
@@ -84,15 +85,24 @@ var _dragged_item: TextureRect
 var _discard_target: Control
 var last_spawn_was_frozen := false
 var persistence_enabled := true
-var _resolving_action := false
+var regional_definitions := {}
+var regional_pool: Array = []
+var selected_ingredients: Array[String] = []
+var regional_objective_ids: Array[String] = []
+var regional_objective_names := {}
 
 
 func _ready() -> void:
+	if regional_mode:
+		_build_regional_items()
 	custom_minimum_size = Vector2(COLUMNS * CELL_SIZE.x, ROWS * CELL_SIZE.y)
 	_create_cells()
 	_load_board()
 	if _items.is_empty():
 		_seed_board()
+	elif regional_mode:
+		queue_redraw()
+		return
 	elif board_kind == "drinks":
 		_ensure_fruit_intro("orange", ["orange", "orange_juice", "exotic_orange_juice", "orange_pitcher"])
 		_ensure_fruit_intro("apple", ["apple", "apple_juice", "exotic_apple_juice", "apple_pitcher"])
@@ -134,14 +144,16 @@ func add_random_fruit() -> String:
 	return add_random_base_item()
 
 
+func add_random_fruit_burst(origin_global: Vector2, requested_count := 5) -> Array[String]:
+	return add_random_base_items_burst(origin_global, requested_count)
+
+
 func add_random_base_item() -> String:
-	if _resolving_action:
-		return ""
 	var empty := _empty_cells()
 	if empty.is_empty():
 		return ""
 	var cell: Vector2i = empty.pick_random()
-	var pool := SPAWNABLE_MIXED_BASES if board_kind == "mixed" else (SPAWNABLE_ICE_CREAM_BASES if board_kind == "ice_cream" else (SPAWNABLE_CAKE_INGREDIENTS if board_kind == "cakes" else (SPAWNABLE_COOKIES if board_kind == "cookies" else SPAWNABLE_FRUITS)))
+	var pool := _spawn_pool()
 	var item_id := str(pool.pick_random())
 	last_spawn_was_frozen = board_kind == "mixed" and randf() < 0.24
 	_spawn_item(item_id, cell, true, last_spawn_was_frozen)
@@ -149,9 +161,31 @@ func add_random_base_item() -> String:
 	return item_id
 
 
+func add_random_base_items_burst(origin_global: Vector2, requested_count := 5) -> Array[String]:
+	var spawned: Array[String] = []
+	var available := _empty_cells().size()
+	var count := mini(requested_count, available)
+	if count <= 0:
+		return spawned
+	var local_origin := get_global_transform_with_canvas().affine_inverse() * origin_global
+	_spawn_party_cannon(local_origin)
+	for index in count:
+		var empty := _empty_cells()
+		if empty.is_empty():
+			break
+		var cell: Vector2i = empty.pick_random()
+		var item_id := str(_spawn_pool().pick_random())
+		last_spawn_was_frozen = board_kind == "mixed" and randf() < 0.24
+		var item := _spawn_item(item_id, cell, false, last_spawn_was_frozen)
+		if item == null:
+			continue
+		_play_party_cannon_item(item, local_origin, index, count)
+		spawned.append(item_id)
+	_save_board()
+	return spawned
+
+
 func reset_board() -> void:
-	if _resolving_action:
-		return
 	for item: TextureRect in _items.values():
 		item.queue_free()
 	_items.clear()
@@ -191,6 +225,13 @@ func _create_cells() -> void:
 
 
 func _seed_board() -> void:
+	if regional_mode:
+		var cells := [Vector2i(0,1),Vector2i(1,1),Vector2i(3,1),Vector2i(4,1),Vector2i(1,4),Vector2i(2,4),Vector2i(7,4),Vector2i(8,4)]
+		for index in cells.size():
+			var frozen := CafeProgress.stage >= 3 and index%3 == 0
+			_spawn_item(regional_pool[(index/2)%regional_pool.size()],cells[index],true,frozen)
+		_save_board()
+		return
 	if board_kind == "cakes":
 		var cake_seeds := {
 			"chocolate_bar": [Vector2i(0, 1), Vector2i(1, 1)],
@@ -257,11 +298,14 @@ func _ensure_cake_intro(base_item_id: String, chain_ids: Array) -> void:
 
 
 func _spawn_item(item_id: String, cell: Vector2i, animate := false, frozen := false) -> TextureRect:
-	if not ITEM_DEFINITIONS.has(item_id) or _items.has(cell):
+	var definitions := _item_definitions()
+	if not definitions.has(item_id) or _items.has(cell):
 		return null
 	var item: TextureRect = ITEM_SCENE.instantiate()
-	var definition: Dictionary = ITEM_DEFINITIONS[item_id]
-	item.setup(definition, cell, load(definition.texture))
+	var definition: Dictionary = definitions[item_id]
+	var texture_value: Variant = definition.texture
+	var texture: Texture2D = load(texture_value) if texture_value is String else texture_value
+	item.setup(definition, cell, texture)
 	item.set_frozen(frozen)
 	item.custom_minimum_size = CELL_SIZE - Vector2.ONE * ITEM_INSET * 2.0
 	item.size = item.custom_minimum_size
@@ -273,18 +317,16 @@ func _spawn_item(item_id: String, cell: Vector2i, animate := false, frozen := fa
 	item.drag_moved.connect(_on_drag_moved)
 	item.drag_ended.connect(_on_drag_ended)
 	add_child(item)
+	_decorate_item(item, definition)
 	_items[cell] = item
 	item.set_home_position(Vector2(cell) * CELL_SIZE + Vector2.ONE * ITEM_INSET)
 	if animate:
 		item.play_spawn()
+		_spawn_item_burst(cell)
 	return item
 
 
 func _on_drag_started(item: TextureRect) -> void:
-	if _resolving_action:
-		item.dragging = false
-		item.return_home()
-		return
 	_dragged_item = item
 	move_child(item, get_child_count() - 1)
 
@@ -299,9 +341,6 @@ func _on_drag_moved(item: TextureRect, screen_position: Vector2) -> void:
 
 
 func _on_drag_ended(item: TextureRect, screen_position: Vector2) -> void:
-	if _resolving_action:
-		item.return_home()
-		return
 	if _discard_target:
 		_discard_target.modulate = Color.WHITE
 	var target := _screen_to_cell(screen_position)
@@ -318,8 +357,8 @@ func _on_drag_ended(item: TextureRect, screen_position: Vector2) -> void:
 		_move_item(item, target)
 		return
 	var target_item: TextureRect = _items[target]
-	if target_item.item_id == item.item_id and not str(ITEM_DEFINITIONS[item.item_id].next_id).is_empty():
-		await _merge_items(item, target_item)
+	if target_item.item_id == item.item_id and not str(_item_definitions()[item.item_id].next_id).is_empty():
+		_merge_items(item, target_item)
 	elif target_item.frozen:
 		item.return_home()
 	else:
@@ -365,38 +404,115 @@ func _swap_items(item: TextureRect, target_item: TextureRect) -> void:
 
 
 func _merge_items(source: TextureRect, target: TextureRect) -> void:
-	if _resolving_action or not is_instance_valid(source) or not is_instance_valid(target):
+	if not is_instance_valid(source) or not is_instance_valid(target):
 		return
-	_resolving_action = true
 	var target_cell: Vector2i = target.cell
-	var next_id := str(ITEM_DEFINITIONS[source.item_id].next_id)
+	var next_id := str(_item_definitions()[source.item_id].next_id)
 	_items.erase(source.cell)
 	_items.erase(target.cell)
+	# Commit the merge result before playing its decoration. This keeps the board
+	# interactive so another item can be moved as soon as the drop is accepted.
+	source.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	target.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var merged: TextureRect = _spawn_item(next_id, target_cell, false)
+	if merged == null:
+		push_error("Merge result could not spawn in cell %s." % target_cell)
+		return
+	merged.scale = Vector2(0.55, 0.55)
+	merged.modulate.a = 0.0
 	var converge := create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	converge.tween_property(source, "position", target.position, 0.15)
 	converge.tween_property(source, "scale", Vector2(0.58, 0.58), 0.15)
 	converge.tween_property(target, "scale", Vector2(0.72, 0.72), 0.15)
 	converge.tween_property(source, "modulate:a", 0.35, 0.15)
 	converge.tween_property(target, "modulate:a", 0.35, 0.15)
-	await converge.finished
-	_spawn_merge_sparkles(target.position + target.size * 0.5)
-	source.queue_free()
-	target.queue_free()
-	var merged: TextureRect = _spawn_item(next_id, target_cell, false)
-	if merged == null:
-		_resolving_action = false
-		push_error("Merge result could not spawn in cell %s." % target_cell)
-		return
-	merged.scale = Vector2(0.55, 0.55)
-	merged.modulate.a = 0.0
+	converge.finished.connect(func() -> void:
+		if is_instance_valid(target): _spawn_merge_sparkles(target.position + target.size * 0.5)
+		if is_instance_valid(source): source.queue_free()
+		if is_instance_valid(target): target.queue_free()
+	)
 	var reveal := create_tween().set_parallel(true).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	reveal.tween_property(merged, "scale", Vector2.ONE, 0.22)
 	reveal.tween_property(merged, "modulate:a", 1.0, 0.12)
-	await reveal.finished
-	merged.play_merge()
+	reveal.finished.connect(func() -> void:
+		if is_instance_valid(merged): merged.play_merge()
+	)
 	_save_board()
 	item_merged.emit(next_id)
-	_resolving_action = false
+
+
+func _spawn_item_burst(cell: Vector2i) -> void:
+	var particles := CPUParticles2D.new()
+	particles.position = Vector2(cell) * CELL_SIZE + CELL_SIZE * 0.5
+	particles.amount = 12
+	particles.lifetime = 0.30
+	particles.one_shot = true
+	particles.explosiveness = 1.0
+	particles.direction = Vector2.UP
+	particles.spread = 180.0
+	particles.initial_velocity_min = 45.0
+	particles.initial_velocity_max = 105.0
+	particles.gravity = Vector2(0, 135)
+	particles.scale_amount_min = 1.5
+	particles.scale_amount_max = 3.5
+	particles.color = Color("fff2a6")
+	particles.z_index = 110
+	add_child(particles)
+	particles.emitting = true
+	get_tree().create_timer(0.45).timeout.connect(particles.queue_free)
+
+
+func _spawn_party_cannon(origin: Vector2) -> void:
+	_spawn_impact_flash(origin)
+
+
+func _spawn_impact_flash(origin: Vector2) -> void:
+	var flash := Polygon2D.new()
+	var points := PackedVector2Array()
+	for index in 20:
+		var radius := 54.0 if index % 2 == 0 else 19.0
+		points.append(Vector2.RIGHT.rotated(float(index) * TAU / 20.0) * radius)
+	flash.polygon = points
+	flash.position = origin
+	flash.color = Color("fff3a8")
+	flash.z_index = 175
+	add_child(flash)
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(flash, "scale", Vector2(1.65, 1.65), 0.20).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(flash, "modulate:a", 0.0, 0.20)
+	tween.chain().tween_callback(flash.queue_free)
+
+
+func _play_party_cannon_item(item: TextureRect, origin: Vector2, index: int, count: int) -> void:
+	var destination := item.position
+	var target_center := destination + item.size * 0.5
+	var fan := (float(index) - float(count - 1) * 0.5) * 52.0
+	var control := origin.lerp(target_center, 0.46) + Vector2(fan, -190.0 - absf(fan) * 0.28)
+	item.position = origin - item.size * 0.5
+	item.scale = Vector2(0.22, 0.22)
+	item.modulate.a = 1.0
+	item.rotation = randf_range(-0.55, 0.55)
+	item.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	item.z_index = 150 + index
+	var tween := create_tween().set_parallel(true)
+	tween.tween_method(_set_party_item_progress.bind(item, origin, control, target_center), 0.0, 1.0, 0.46).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(item, "scale", Vector2.ONE, 0.34).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(item, "rotation", 0.0, 0.42).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.finished.connect(func() -> void:
+		if not is_instance_valid(item): return
+		item.position = destination
+		item.z_index = 2
+		item.mouse_filter = Control.MOUSE_FILTER_STOP
+		_spawn_item_burst(item.cell)
+	)
+
+
+func _set_party_item_progress(progress: float, item: TextureRect, origin: Vector2, control: Vector2, destination: Vector2) -> void:
+	if not is_instance_valid(item):
+		return
+	var inverse := 1.0 - progress
+	var center := inverse * inverse * origin + 2.0 * inverse * progress * control + progress * progress * destination
+	item.position = center - item.size * 0.5
 
 
 func _spawn_merge_sparkles(at: Vector2) -> void:
@@ -438,6 +554,9 @@ func _highlight_color(cell: Vector2i) -> Color:
 
 
 func _cell_color(column: int, row: int) -> Color:
+	if regional_mode:
+		var colors := [Color("eff9e8"),Color("d8efd2")] if CafeProgress.region==1 else [Color("f3eafa"),Color("dfd1ef")]
+		return colors[(column+row)%2]
 	if board_kind == "cakes":
 		return Color("eee5ff") if (column + row) % 2 == 0 else Color("d9c8f2")
 	if board_kind == "cookies":
@@ -450,7 +569,159 @@ func _cell_color(column: int, row: int) -> Color:
 
 
 func _save_section() -> String:
+	if regional_mode:
+		return "regional_merge_board_%d_%d" % [CafeProgress.region,CafeProgress.stage]
 	return "mixed_merge_board" if board_kind == "mixed" else ("ice_cream_merge_board" if board_kind == "ice_cream" else ("cookie_merge_board" if board_kind == "cookies" else ("cake_merge_board" if board_kind == "cakes" else "merge_board")))
+
+
+func _item_definitions() -> Dictionary:
+	if regional_mode:
+		return regional_definitions
+	return ITEM_DEFINITIONS
+
+
+func _spawn_pool() -> Array:
+	if regional_mode:
+		return regional_pool
+	return SPAWNABLE_MIXED_BASES if board_kind == "mixed" else (SPAWNABLE_ICE_CREAM_BASES if board_kind == "ice_cream" else (SPAWNABLE_CAKE_INGREDIENTS if board_kind == "cakes" else (SPAWNABLE_COOKIES if board_kind == "cookies" else SPAWNABLE_FRUITS)))
+
+
+func _decorate_item(item: TextureRect, definition: Dictionary) -> void:
+	if not regional_mode:
+		return
+	var badge := Label.new()
+	badge.text = ["I","II","III","IV"][int(definition.level)-1]
+	badge.position = Vector2(10,8)
+	badge.size = Vector2(48,36)
+	badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	badge.add_theme_font_size_override("font_size",20)
+	badge.add_theme_color_override("font_color",Color.WHITE)
+	badge.add_theme_color_override("font_shadow_color",Color("4b2940"))
+	badge.add_theme_constant_override("shadow_offset_x",2)
+	badge.add_theme_constant_override("shadow_offset_y",2)
+	badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	item.add_child(badge)
+
+
+func _build_regional_items() -> void:
+	if CafeProgress.region == 1 and CafeProgress.stage < 4:
+		_build_honeydew_items()
+		return
+	if CafeProgress.region == 2 and CafeProgress.stage < 4:
+		_build_cocoa_items()
+		return
+	var pool: Array = CafeProgress.POOLS[CafeProgress.region]
+	for offset in 4:
+		var ingredient_id: String = pool[(CafeProgress.stage + offset) % pool.size()]
+		selected_ingredients.append(ingredient_id)
+		regional_pool.append(regional_chain_id(ingredient_id,1))
+		for level in range(1,5):
+			var item_id := regional_chain_id(ingredient_id,level)
+			regional_definitions[item_id] = {"id":item_id,"name":"%s %s" % [CafeProgress.INGREDIENTS[ingredient_id],["Sprig","Bundle","Basket","Crate"][level-1]],"level":level,"next_id":regional_chain_id(ingredient_id,level+1) if level<4 else "","texture":regional_ingredient_texture(ingredient_id)}
+		regional_objective_ids.append(regional_chain_id(ingredient_id,4))
+		regional_objective_names[regional_chain_id(ingredient_id,4)] = CafeProgress.INGREDIENTS[ingredient_id]
+
+
+func _build_honeydew_items() -> void:
+	var boards := [
+		[
+			{"id":"cherry","name":"Cherry","levels":["fruit","crushed_bowl","pie","grand_dessert"],"names":["Cherries","Crushed Cherries","Crosshatch Cherry Pie","Ribbon Cherry Roll"]},
+			{"id":"raspberry","name":"Raspberry","levels":["fruit","crushed_bowl","pie","grand_dessert"],"names":["Raspberries","Crushed Raspberries","Raspberry Pie","Frosted Raspberry Tarte"]},
+			{"id":"blueberry","name":"Blueberry","levels":["fruit","crushed_bowl","pie","grand_dessert"],"names":["Blueberries","Crushed Blueberries","Blueberry Pie","Ribbon Blueberry Roll"]},
+		],
+		[
+			{"id":"neapolitan","name":"Neapolitan","levels":["scoop","sandwich","sundae","grand_sundae"]},
+			{"id":"cookies_cream","name":"Cookies & Cream","levels":["scoop","sandwich","sundae","grand_sundae"]},
+			{"id":"mint_chip","name":"Mint Chip","levels":["scoop","sandwich","sundae","grand_sundae"]},
+			{"id":"raspberry_swirl","name":"Raspberry Swirl","levels":["scoop","sandwich","sundae","grand_sundae"]},
+		],
+		[
+			{"id":"matcha","name":"Matcha","levels":["flour_cup","mixing_bowl","cupcake","layer_cake"]},
+			{"id":"tiramisu","name":"Tiramisu","levels":["flour_cup","mixing_bowl","cupcake","layer_cake"]},
+			{"id":"coconut","name":"Coconut","levels":["flour_cup","mixing_bowl","cupcake","layer_cake"]},
+			{"id":"oat","name":"Oat","levels":["flour_cup","mixing_bowl","cupcake","layer_cake"]},
+		],
+		[
+			{"id":"peach","name":"Peach Boba","levels":["fruit","drink","boba","grand_boba"]},
+			{"id":"mango","name":"Mango Boba","levels":["fruit","drink","boba","grand_boba"]},
+			{"id":"honeydew","name":"Honeydew Boba","levels":["fruit","drink","boba","grand_boba"]},
+			{"id":"taro","name":"Taro Boba","levels":["fruit","drink","boba","grand_boba"]},
+			{"id":"pumpkin","name":"Pumpkin Coffee","levels":["small_syrup","syrup_jug","accent_coffee"]},
+			{"id":"honey","name":"Honey Coffee","levels":["small_syrup","syrup_jug","accent_coffee"]},
+			{"id":"coffee","name":"Coffee","levels":["small_syrup","syrup_jug","accent_coffee"]},
+			{"id":"caramel","name":"Caramel Coffee","levels":["small_syrup","syrup_jug","accent_coffee"]},
+		],
+	]
+	var chains: Array = boards[CafeProgress.stage]
+	for chain: Dictionary in chains:
+		var chain_id: String = chain.id
+		selected_ingredients.append(chain_id)
+		regional_pool.append(regional_chain_id(chain_id,1))
+		var levels: Array = chain.levels
+		for level_index in levels.size():
+			var level := level_index+1
+			var item_id := regional_chain_id(chain_id,level)
+			var display_names: Array = chain.get("names",[])
+			var item_name := str(display_names[level_index]) if level_index<display_names.size() else "%s %s" % [chain.name,str(levels[level_index]).replace("_"," ").capitalize()]
+			regional_definitions[item_id] = {"id":item_id,"name":item_name,"level":level,"next_id":regional_chain_id(chain_id,level+1) if level<levels.size() else "","texture":load("res://assets/honeydew/items/board%d_%s_%s.png" % [CafeProgress.stage+1,chain_id,levels[level_index]])}
+		var objective_id := regional_chain_id(chain_id,levels.size())
+		regional_objective_ids.append(objective_id)
+		regional_objective_names[objective_id] = chain.name
+
+
+func _build_cocoa_items() -> void:
+	var boards := [
+		[
+			{"id":"watermelon","name":"Watermelon Pitcher","levels":["fruit","juice","fancy_juice","pitcher"]},
+			{"id":"pineapple","name":"Pineapple Pitcher","levels":["fruit","juice","fancy_juice","pitcher"]},
+			{"id":"grape","name":"Grape Pitcher","levels":["fruit","juice","fancy_juice","pitcher"]},
+		],
+		[
+			{"id":"rose","name":"Rose Ice-cream Macaron","levels":["cream_swirl","cream_bowl","macaron","ice_cream_macaron"]},
+			{"id":"passion_fruit","name":"Passion Fruit Ice-cream Macaron","levels":["cream_swirl","cream_bowl","macaron","ice_cream_macaron"]},
+			{"id":"kiwi","name":"Kiwi Ice-cream Macaron","levels":["cream_swirl","cream_bowl","macaron","ice_cream_macaron"]},
+			{"id":"lychee","name":"Lychee Ice-cream Macaron","levels":["cream_swirl","cream_bowl","macaron","ice_cream_macaron"]},
+		],
+		[
+			{"id":"strawberry_star","name":"Strawberry Star Chocolate Box","levels":["single","trio","small_box","large_box"]},
+			{"id":"almond_square","name":"Almond Dark Chocolate Box","levels":["single","trio","small_box","large_box"]},
+			{"id":"raspberry_heart","name":"Raspberry White Chocolate Box","levels":["single","trio","small_box","large_box"]},
+			{"id":"caramel_flower","name":"Caramel Flower Chocolate Box","levels":["single","trio","small_box","large_box"]},
+		],
+		[
+			{"id":"blueberry_lavender","name":"Blueberry Lavender Cotton Candy","levels":["sugar_cube","spun_sugar","small_cotton_candy","grand_cotton_candy"]},
+			{"id":"strawberry_cream","name":"Strawberry Cream Cotton Candy","levels":["sugar_cube","spun_sugar","small_cotton_candy","grand_cotton_candy"]},
+			{"id":"apple_cinnamon","name":"Apple Cinnamon Cotton Candy","levels":["sugar_cube","spun_sugar","small_cotton_candy","grand_cotton_candy"]},
+			{"id":"honey_lemon","name":"Honey Lemon Cotton Candy","levels":["sugar_cube","spun_sugar","small_cotton_candy","grand_cotton_candy"]},
+		],
+	]
+	var chains: Array = boards[CafeProgress.stage]
+	for chain: Dictionary in chains:
+		var chain_id: String = chain.id
+		selected_ingredients.append(chain_id)
+		regional_pool.append(regional_chain_id(chain_id,1))
+		var levels: Array = chain.levels
+		for level_index in levels.size():
+			var level := level_index+1
+			var item_id := regional_chain_id(chain_id,level)
+			regional_definitions[item_id] = {"id":item_id,"name":"%s %s" % [chain.name,str(levels[level_index]).replace("_"," ").capitalize()],"level":level,"next_id":regional_chain_id(chain_id,level+1) if level<levels.size() else "","texture":load("res://assets/cocoa/items/board%d_%s_%s.png" % [CafeProgress.stage+1,chain_id,levels[level_index]])}
+		var objective_id := regional_chain_id(chain_id,levels.size())
+		regional_objective_ids.append(objective_id)
+		regional_objective_names[objective_id] = chain.name
+
+
+func regional_chain_id(ingredient_id: String, level: int) -> String:
+	return "regional_%s_%d" % [ingredient_id,level]
+
+
+func regional_ingredient_texture(ingredient_id: String) -> AtlasTexture:
+	var texture := AtlasTexture.new()
+	texture.atlas = load("res://assets/cafe/stock_atlas.png")
+	var index := CafeProgress.INGREDIENTS.keys().find(ingredient_id)
+	var tile := Vector2(texture.atlas.get_width()/6.0,texture.atlas.get_height()/4.0)
+	texture.region = Rect2(Vector2(index%6,index/6)*tile,tile)
+	texture.filter_clip = true
+	return texture
 
 
 func _cell_style(color: Color) -> StyleBoxFlat:

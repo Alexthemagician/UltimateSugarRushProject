@@ -1,0 +1,292 @@
+{
+	"cafe": {
+		"attempt_serial": 16
+	},
+	"cake_merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "chocolate_bar",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "chocolate_bar",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "strawberry",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "strawberry",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "blueberries",
+				"row": 4
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "blueberries",
+				"row": 4
+			}
+		]
+	},
+	"cookie_merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "chocolate_chip_cookie",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "chocolate_chip_cookie",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "pink_sugar_cookie",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "pink_sugar_cookie",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "sandwich_cookie",
+				"row": 5
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "sandwich_cookie",
+				"row": 5
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "lucky_cookie",
+				"row": 4
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "lucky_cookie",
+				"row": 4
+			}
+		]
+	},
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789535294,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789535294
+			}
+		]
+	},
+	"ice_cream_merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "milk_pitcher",
+				"row": 2
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "milk_pitcher",
+				"row": 1
+			},
+			{
+				"column": 5,
+				"frozen": true,
+				"item_id": "chocolate_milk",
+				"row": 3
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "chocolate_milk",
+				"row": 1
+			},
+			{
+				"column": 7,
+				"frozen": true,
+				"item_id": "pistachios",
+				"row": 4
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "pistachios",
+				"row": 5
+			}
+		]
+	},
+	"merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 6,
+				"frozen": false,
+				"item_id": "orange",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "orange",
+				"row": 4
+			},
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 4
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 4
+			}
+		]
+	},
+	"mixed_merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "chocolate_milk",
+				"row": 2
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "chocolate_milk",
+				"row": 1
+			},
+			{
+				"column": 5,
+				"frozen": true,
+				"item_id": "pink_sugar_cookie",
+				"row": 2
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "pink_sugar_cookie",
+				"row": 1
+			},
+			{
+				"column": 6,
+				"frozen": true,
+				"item_id": "vanilla_flowers",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 8,
+				"frozen": true,
+				"item_id": "apple",
+				"row": 4
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 5
+			}
+		]
+	},
+	"progression": {
+		"level_1_complete": true,
+		"level_2_complete": true,
+		"level_3_complete": true,
+		"level_4_complete": true,
+		"level_5_complete": true,
+		"level_6_complete": true,
+		"level_7_complete": true
+	},
+	"save_version": 1
+}

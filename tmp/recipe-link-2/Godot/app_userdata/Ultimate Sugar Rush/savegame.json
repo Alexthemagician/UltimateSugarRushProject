@@ -1,0 +1,110 @@
+{
+	"cafe": {
+		"boards_won": 10
+	},
+	"cafe_jobs": {
+		"blossom_oolong": {
+			"quantity": 20,
+			"ready_at": 0
+		},
+		"butter_cloud_buns": {
+			"quantity": 50,
+			"ready_at": 0
+		},
+		"caramel_cloud_buns": {
+			"quantity": 40,
+			"ready_at": 0
+		},
+		"cocoa_cake": {
+			"quantity": 12,
+			"ready_at": 0
+		},
+		"honey_mint_tea": {
+			"quantity": 20,
+			"ready_at": 0
+		},
+		"honey_truffles": {
+			"quantity": 24,
+			"ready_at": 0
+		},
+		"mocha_latte": {
+			"quantity": 20,
+			"ready_at": 0
+		},
+		"petal_bonbons": {
+			"quantity": 30,
+			"ready_at": 0
+		},
+		"strawberry_cake": {
+			"quantity": 12,
+			"ready_at": 0
+		},
+		"vanilla_latte": {
+			"quantity": 20,
+			"ready_at": 0
+		}
+	},
+	"cafe_layout": {
+		"position_version": 2
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 150
+			},
+			{
+				"id": "product_vanilla_latte",
+				"quantity": 60
+			},
+			{
+				"id": "product_petal_bonbons",
+				"quantity": 90
+			},
+			{
+				"id": "product_strawberry_cake",
+				"quantity": 36
+			},
+			{
+				"id": "product_honey_mint_tea",
+				"quantity": 60
+			}
+		],
+		"player_stats": [
+			{
+				"batches_made": 15,
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 2,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 300
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789757573,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789757573
+			}
+		]
+	},
+	"quest_progress": {
+		"butter_cloud_buns": 150,
+		"honey_mint_tea": 60,
+		"petal_bonbons": 90,
+		"strawberry_cake": 36,
+		"vanilla_latte": 60,
+		"xp": 300
+	},
+	"regular_friendship": {
+		"berry": 3,
+		"coco": 3,
+		"mint": 3
+	},
+	"save_version": 1
+}

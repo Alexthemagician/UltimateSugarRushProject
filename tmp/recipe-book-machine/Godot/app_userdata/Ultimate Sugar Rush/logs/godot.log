@@ -1,0 +1,60 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "tab" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:24)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "title" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:40)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "picture" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:41)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "hint" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:44)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "info" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:47)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "make" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:59)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "instruction" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/cafe/recipe_book.gd:61)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+   at: GDScript::reload (res://scripts/cafe/cafe_hub.gd:0)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+ERROR: Failed to load script "res://scripts/cafe/cafe_hub.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:14)
+SCRIPT ERROR: Invalid call. Nonexistent function 'show' in base 'GDScript'.
+   at: _quests (res://scripts/cafe/cafe_hub.gd:296)
+   GDScript backtrace (most recent call first):
+       [0] _quests (res://scripts/cafe/cafe_hub.gd:296)
+       [1] run (res://tests/check_cafe_machine_flow.gd:18)
+SCRIPT ERROR: Invalid call. Nonexistent function 'show' in base 'GDScript'.
+   at: _quests (res://scripts/cafe/cafe_hub.gd:296)
+   GDScript backtrace (most recent call first):
+       [0] _quests (res://scripts/cafe/cafe_hub.gd:296)
+       [1] _select_station (res://scripts/cafe/cafe_hub.gd:287)
+       [2] run (res://tests/check_cafe_machine_flow.gd:20)
+ERROR: Physical station opens craft action
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:21)
+SCRIPT ERROR: Invalid access of index '0' on a base object of type: 'Array[Button]'.
+   at: run (res://tests/check_cafe_machine_flow.gd:22)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe_machine_flow.gd:22)

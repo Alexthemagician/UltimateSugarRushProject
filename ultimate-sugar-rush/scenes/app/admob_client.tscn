@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/core/admob_client.gd" id="1_admob"]
+
+[node name="AdmobClient" type="Node"]
+script = ExtResource("1_admob")
+is_real = true
+android_debug_application_id = "ca-app-pub-3940256099942544~3347511713"
+android_real_application_id = "ca-app-pub-2060763992754800~5556669268"
+android_real_rewarded_id = "ca-app-pub-2060763992754800/7879580272"

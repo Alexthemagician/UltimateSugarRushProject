@@ -1,0 +1,149 @@
+{
+	"cafe": {
+		"attempt_serial": 4
+	},
+	"cafe_daily_entries": {
+		"region_0_stage_0": "2026-09-15",
+		"region_0_stage_1": "2026-09-15"
+	},
+	"cake_merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "chocolate_bar",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "chocolate_bar",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "strawberry",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "strawberry",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "vanilla_flowers",
+				"row": 5
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "blueberries",
+				"row": 4
+			},
+			{
+				"column": 9,
+				"frozen": false,
+				"item_id": "blueberries",
+				"row": 4
+			}
+		]
+	},
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789453198,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789453198
+			}
+		]
+	},
+	"merge_board": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 1
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 3
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "lemon",
+				"row": 4
+			},
+			{
+				"column": 6,
+				"frozen": false,
+				"item_id": "orange",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "orange",
+				"row": 4
+			},
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 4
+			},
+			{
+				"column": 5,
+				"frozen": false,
+				"item_id": "apple",
+				"row": 4
+			}
+		]
+	},
+	"progression": {
+		"level_2_unlocked": true,
+		"level_3_unlocked": true,
+		"level_4_unlocked": true,
+		"level_5_unlocked": true,
+		"level_6_unlocked": true,
+		"level_7_unlocked": true,
+		"level_8_unlocked": true
+	},
+	"save_version": 1
+}

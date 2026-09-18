@@ -1,0 +1,25 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Move mode places object on open plot
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:69)
+ERROR: Moved object snaps to shared 3D floor grid
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:70)
+ERROR: Moved location persists
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:72)
+ERROR: Saved object position restores in a new café scene
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_layout_movement.gd:6)
+       [1] run (res://tests/check_cafe_layout_movement.gd:82)
+Cafe layout movement: 4 failures

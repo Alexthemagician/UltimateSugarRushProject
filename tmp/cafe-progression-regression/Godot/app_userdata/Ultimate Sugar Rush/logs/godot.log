@@ -1,0 +1,18 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Chef and two customer NPCs
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe.gd:6)
+       [1] run (res://tests/check_cafe.gd:65)
+ERROR: Quest modal includes four recipes
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe.gd:6)
+       [1] run (res://tests/check_cafe.gd:118)
+SCRIPT ERROR: Invalid access of index '0' on a base object of type: 'Array[Button]'.
+   at: run (res://tests/check_cafe.gd:119)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_cafe.gd:119)

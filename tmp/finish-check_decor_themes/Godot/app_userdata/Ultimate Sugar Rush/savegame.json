@@ -1,0 +1,31 @@
+{
+	"cafe_design": {
+		"display_style": "walnut",
+		"theme": "cocoa"
+	},
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 1250.0,
+				"gems": 0.0,
+				"id": "local_player",
+				"level": 1.0,
+				"orders_completed": 0.0,
+				"quests_completed": 0.0,
+				"total_play_seconds": 0.0,
+				"xp": 0.0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789272255.0,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789272255.0
+			}
+		]
+	},
+	"save_version": 1
+}

@@ -1,0 +1,280 @@
+{
+	"cafe": {
+		"attempt_serial": 9,
+		"boards_won": 7,
+		"claimed": {
+			"region_0_stage_0:1": true,
+			"region_0_stage_1:4": true,
+			"region_1_stage_0:2": true,
+			"region_1_stage_1:5": true,
+			"region_1_stage_2:7": true,
+			"region_2_stage_0:3": true,
+			"region_2_stage_1:6": true
+		},
+		"last_reward": {
+			"coins": 140,
+			"ingredients": {
+				"edible_flowers": 4,
+				"honey_glob": 4,
+				"spring_water": 4
+			},
+			"source": "region_1_stage_2",
+			"xp": 55
+		},
+		"region_wins_0": 2.0,
+		"region_wins_1": 3,
+		"region_wins_2": 2.0
+	},
+	"cafe_completed": {
+		"region_0_stage_0": true,
+		"region_0_stage_1": true,
+		"region_1_stage_0": true,
+		"region_1_stage_1": true,
+		"region_1_stage_2": true,
+		"region_2_stage_0": true,
+		"region_2_stage_1": true
+	},
+	"cafe_daily_clears": {
+		"region_1_stage_2": "2026-09-16"
+	},
+	"cafe_jobs": {
+		"butter_cloud_buns": {
+			"quantity": 50.0,
+			"ready_at": 1789617278.101
+		}
+	},
+	"collections": {
+		"items": {
+			"waffle_jacks": 1
+		}
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"item_id": "sugar_cubes",
+				"quantity": 1.0
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"item_id": "ultra_fine_flour",
+				"quantity": 0.0
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"item_id": "creamy_butter",
+				"quantity": 1.0
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"item_id": "edible_flowers",
+				"quantity": 6
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"item_id": "honey_glob",
+				"quantity": 6
+			},
+			{
+				"id": "ingredient_spring_water",
+				"item_id": "spring_water",
+				"quantity": 6
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"item_id": "coffee_beans",
+				"quantity": 2.0
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"item_id": "caramel_syrup",
+				"quantity": 2.0
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"item_id": "chocolate_syrup",
+				"quantity": 2.0
+			},
+			{
+				"id": "ingredient_eggs",
+				"item_id": "eggs",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_fondant",
+				"item_id": "fondant",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"item_id": "sugar_syrup",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"item_id": "oolong_leaves",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"item_id": "peppermint_leaves",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"item_id": "strawberry_syrup",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"item_id": "vanilla_frosting",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"item_id": "strawberry_frosting",
+				"quantity": 3.0
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"item_id": "chocolate_frosting",
+				"quantity": 3.0
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 2140,
+				"gems": 0.0,
+				"id": "local_player",
+				"level": 2,
+				"orders_completed": 0.0,
+				"quests_completed": 0.0,
+				"total_play_seconds": 0.0,
+				"xp": 340
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789617262.0,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789617262.0
+			}
+		]
+	},
+	"progression": {
+		"cafe_region_1_stage_2_complete": true,
+		"cafe_region_1_stage_3_unlocked": true
+	},
+	"quest_progress": {
+		"xp": 340
+	},
+	"regional_merge_board_1_0": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "regional_raspberry_1",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "regional_raspberry_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_blueberry_1",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "regional_blueberry_1",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 4
+			}
+		]
+	},
+	"regional_merge_board_2_0": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "regional_pineapple_1",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "regional_pineapple_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_grape_1",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "regional_grape_1",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 4
+			}
+		]
+	},
+	"save_version": 1
+}

@@ -1,0 +1,9 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Friends menu offers Remove friend for starter friends
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_hosted_gui.gd:52)
+       [2] wait_for_button (res://tests/check_hosted_gui.gd:20)
+Hosted GUI: 1 failures

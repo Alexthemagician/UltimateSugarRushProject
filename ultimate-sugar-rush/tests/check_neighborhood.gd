@@ -23,24 +23,26 @@ func run() -> void:
 			heights[child.get_meta("building_height")] = true
 		elif child.name.begins_with("Tree"): trees += 1
 		elif child.name.begins_with("GardenAnimal"): animals += 1
-	check(houses>40 and trees>15 and animals==6 and heights.size()==3,"Populated varied neighborhood")
+	check(houses>20 and trees>40 and animals==4 and heights.size()==3,"Populated perimeter neighborhood")
+	var expansion_plot: MeshInstance3D = world.get_node("Neighborhood/ExpansionPlot")
+	check(expansion_plot.get_aabb().size.x>=34 and expansion_plot.get_aabb().size.z>=34,"Large open expansion plot surrounds café")
 	world.set_zoom(22)
 	var plane := Plane(Vector3.UP,-0.7)
-	for x in [-6.0,0.0,6.0]:
-		for z in [-6.0,0.0,6.0]:
+	for x in [-18.0,0.0,18.0]:
+		for z in [-18.0,0.0,18.0]:
 			world.set_pan(Vector2(x,z))
 			for uv in [Vector2.ZERO,Vector2(1,0),Vector2(0,1),Vector2.ONE]:
 				var pixel: Vector2 = uv*Vector2(world.get_viewport().size)
 				var ground: Vector3 = plane.intersects_ray(world.camera.project_ray_origin(pixel),world.camera.project_ray_normal(pixel))
-				check(absf(ground.x)<49 and absf(ground.z)<49,"Ground covers every corner at all zoom-out pan extrema")
+				check(absf(ground.x)<74 and absf(ground.z)<74,"Ground covers every corner at all zoom-out pan extrema")
 				var closest := INF
 				for child in world.get_node("Neighborhood").get_children():
 					if child.name.begins_with("NeighborhoodHouse") or child.name.begins_with("Tree"):
 						closest = minf(closest,Vector2(child.position.x-ground.x,child.position.z-ground.z).length())
-				check(closest<12,"Visible boundary remains populated")
+				if absf(x)>10 or absf(z)>10: check(closest<60,"Visible boundary remains populated")
 	check(world.camera.basis==basis,"Panning cannot rotate camera")
 	world.set_pan(Vector2(100,-100))
-	check(world.pan_offset==Vector2(6,-6),"Pan limits clamp")
+	check(world.pan_offset==Vector2(18,-18),"Expanded pan limits clamp")
 	world.reset_view()
 	var press := InputEventMouseButton.new()
 	press.button_index = MOUSE_BUTTON_LEFT
@@ -73,9 +75,9 @@ func run() -> void:
 	actor.state = "away"
 	actor.cooldown = 0
 	world._animate_customer(actor,0.01)
-	check(actor.node.position.z==-17,"Repeat arrivals enter from far road")
+	check(actor.node.position.z==world.CAFE_ORIGIN.z-17,"Repeat arrivals enter from far road")
 	actor.state = "exit"
-	check(world._customer_path(actor)[-1].z==12.5,"Departures continue toward front road")
+	check(world._customer_path(actor)[-1].z==world.CAFE_ORIGIN.z+12.5,"Departures continue toward front road")
 	actor.node.position = Vector3(0,0.14,0)
 	actor.node.rotation = Vector3.ZERO
 	actor.base_y = 0.14

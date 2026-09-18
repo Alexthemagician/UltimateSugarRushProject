@@ -1,0 +1,54 @@
+{
+	"cafe": {
+		"boards_won": 9
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 0
+			},
+			{
+				"id": "product_vanilla_latte",
+				"quantity": 0
+			},
+			{
+				"id": "product_petal_bonbons",
+				"quantity": 0
+			},
+			{
+				"id": "product_strawberry_cake",
+				"quantity": 0
+			},
+			{
+				"id": "product_honey_mint_tea",
+				"quantity": 0
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1581,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 35,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789247505,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789247505
+			}
+		]
+	},
+	"quest_progress": {
+		"coins": 331
+	},
+	"save_version": 1
+}

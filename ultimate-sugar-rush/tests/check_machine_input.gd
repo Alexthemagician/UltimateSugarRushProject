@@ -20,12 +20,15 @@ func run() -> void:
 	root.add_child(hub)
 	await process_frame
 	hub.world.set_process(false)
+	save.set_value("cafe","boards_won",10)
+	for id in ["mint","berry","coco"]: save.set_value("regular_friendship",id,3)
 	for i in progress.RECIPES.size():
+		var machine: int = progress.machine_for_recipe(i)
 		hub.world._process(0)
-		var position: Vector3 = hub.world.stations[i].node.position + Vector3(0,1.1,0)
+		var position: Vector3 = hub.world.stations[machine].node.position + Vector3(0,1.1,0)
 		tap(hub.world,hub.world.camera.unproject_position(position))
-		check(hub.selected == i,"Machine tap selects recipe %d" % i)
-		check(hub.recipe_buttons.size() == 1,"Machine has crafting control")
+		check(hub.selected == machine,"Machine tap selects recipe %d" % i)
+		check(hub.recipe_buttons.size() == progress.recipes_for_machine(machine).size(),"Machine has crafting control")
 		if is_instance_valid(hub.modal): hub.modal.queue_free()
 		await process_frame
 		save.set_value("cafe_jobs",progress.RECIPES[i].id,{"ready_at":0,"quantity":progress.RECIPES[i].batch})

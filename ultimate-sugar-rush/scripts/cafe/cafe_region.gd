@@ -9,8 +9,8 @@ func _ready() -> void:
 	# Coordinates follow each painted route, normalized to the landscape canvas.
 	var routes := [
 		[Vector2(170,630),Vector2(280,450),Vector2(500,455),Vector2(710,531),Vector2(920,514),Vector2(1140,584),Vector2(1370,520),Vector2(1530,370)],
-		[Vector2(1290,750),Vector2(1030,733),Vector2(600,698),Vector2(245,500),Vector2(695,424),Vector2(1000,276)],
-		[Vector2(1280,775),Vector2(800,690),Vector2(300,550),Vector2(320,370),Vector2(790,280),Vector2(1250,300)]
+		[Vector2(1290,750),Vector2(1030,733),Vector2(600,698),Vector2(245,500),Vector2(695,424),Vector2(1000,276),Vector2(1310,235),Vector2(1500,390)],
+		[Vector2(1280,775),Vector2(800,690),Vector2(300,550),Vector2(320,370),Vector2(790,280),Vector2(1250,300),Vector2(1460,470),Vector2(1510,690)]
 	]
 	positions.clear()
 	for point: Vector2 in routes[region]: positions.append(point * Vector2(1920.0/1672.0,1080.0/941.0))
@@ -32,16 +32,23 @@ func _ready() -> void:
 	label(CafeProgress.REGIONS[region].subtitle,Vector2(45,87),Vector2(620,45),22)
 	button("← Café",Vector2(1680,25),Vector2(210,80),func() -> void: SceneRouter.replace_scene(CafeProgress.HUB)).name = "CafeBackButton"
 	for i in positions.size():
-		var complete := bool(SaveSystem.get_value("cafe_completed","region_%d_stage_%d" % [region,i],false))
-		if region==0: complete = bool(SaveSystem.get_value("progression","level_%d_complete" % (i+1),false)) or bool(SaveSystem.get_value("cafe_completed",ORIGINAL_BOARDS[i].get_file().get_basename(),false))
-		var open := CafeProgress.stage_unlocked(i) if region!=0 else (i==0 or bool(SaveSystem.get_value("progression","level_%d_unlocked" % (i+1),false)))
+		var complete := CafeProgress.stage_complete(region,i)
+		var unlocked := CafeProgress.stage_unlocked_for(region,i)
+		var played_today := CafeProgress.stage_played_today(region,i)
+		var open := unlocked and not played_today
 		var node := button("%d%s" % [i+1,"  ✓" if complete else ""],positions[i]-Vector2(53,53),Vector2(106,106),_open_stage.bind(i))
 		node.name = "Level%d" % (i+1)
 		node.disabled = not open
 		node.add_theme_font_size_override("font_size",38)
 		node.add_theme_stylebox_override("normal",style(Color("e9759e") if open else Color("bcb4bd")))
 		node.add_theme_color_override("font_color",Color.WHITE)
-		var caption := label(ORIGINAL_NAMES[i] if region==0 else ["Sweet beginnings","Break the frosting","A little twist","Blooming combos","Sugar pathways","The grand order"][i],positions[i]+Vector2(-108,58),Vector2(216,48),20)
+		var honeydew_names := ["Fruit-pie picnic","Ice-cream social","Flavored bakery","Boba & syrup café","Macaron match","Jelly donuts","Glacier ice pops","Chocolate-crust tarts"]
+		var cocoa_names := ["Moonlit juice bar","Cream macaron atelier","Chocolate box boutique","Cotton-candy gala","Gelatin moon","Frozen slushies","Layer-cake soirée","Midnight bakery"]
+		var region_names: Array = honeydew_names if region==1 else cocoa_names
+		var caption_text: String = ORIGINAL_NAMES[i] if region==0 else region_names[i]
+		if played_today: caption_text = "Played today"
+		elif i==7: caption_text = "Unlimited harvest"
+		var caption := label(caption_text,positions[i]+Vector2(-108,58),Vector2(216,48),20)
 		caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		caption.add_theme_stylebox_override("normal",style(Color(1.0,0.96,0.90,0.94)))
 	var names: Array[String] = []
@@ -66,7 +73,11 @@ func _draw() -> void:
 
 func _open_stage(index: int) -> void:
 	if CafeProgress.region==0:
-		if index==0 or bool(SaveSystem.get_value("progression","level_%d_unlocked" % (index+1),false)):
+		if CafeProgress.claim_daily_entry(0,index):
+			CafeProgress.stage = index
+			if index == 7: SaveSystem.set_section("marshmallow_match_objectives",{})
+			CafeProgress.begin_board(ORIGINAL_BOARDS[index])
+			CafeProgress.stage = index
 			SceneRouter.go_to_scene(ORIGINAL_BOARDS[index])
 	else: CafeProgress.open_stage(index)
 

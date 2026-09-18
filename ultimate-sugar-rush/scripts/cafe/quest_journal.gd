@@ -1,5 +1,7 @@
 extends RefCounted
 
+const MALLOW_MASCOT=preload("res://assets/cafe/mallow_bunny.png")
+
 const QUESTS := [
 	{"title":"Make 3 butter-cloud buns", "icon":18, "target":3, "key":"butter_cloud_buns", "description":"Give your café its first comforting bakery aroma. Bake a batch and collect it onto the display.", "tip":"Find flour, butter and sugar on Sugar Blossom boards. One oven batch makes 50 buns."},
 	{"title":"Collect 100 coins from sales", "icon":9, "target":100, "key":"coins", "description":"Keep your displays stocked and let visiting customers buy your freshly made treats.", "tip":"Coins count when customers purchase an item. Finished batches must be collected first."},
@@ -27,6 +29,8 @@ static func show(hub: Control, selected := 0) -> void:
 	panel.add_theme_stylebox_override("panel",hub.style(Color("ede5fa")))
 	shade.add_child(panel)
 	hub.label("Mallow’s quest journal",Vector2(35,20),Vector2(1100,70),42,panel)
+	var mascot_frame:=Control.new(); mascot_frame.position=Vector2(1135,8); mascot_frame.size=Vector2(145,145); mascot_frame.clip_contents=true; mascot_frame.mouse_filter=Control.MOUSE_FILTER_IGNORE; panel.add_child(mascot_frame)
+	var mascot:=TextureRect.new(); mascot.name="MallowMascot"; mascot.texture=MALLOW_MASCOT; mascot.expand_mode=TextureRect.EXPAND_IGNORE_SIZE; mascot.stretch_mode=TextureRect.STRETCH_KEEP_ASPECT_CENTERED; mascot.mouse_filter=Control.MOUSE_FILTER_IGNORE; mascot_frame.add_child(mascot); mascot.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	hub.button("×",Vector2(1295,20),Vector2(75,70),shade.queue_free,panel)
 	for i in QUESTS.size():
 		var tab: Button = hub.button("",Vector2(25,115+i*125),Vector2(180,112),show.bind(hub,i),panel)

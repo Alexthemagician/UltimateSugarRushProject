@@ -9,8 +9,8 @@
 
 [node name="MarshmallowMatchGame" instance=ExtResource("1")]
 script = ExtResource("2")
-target = 65
-move_limit = 45
+target = 85
+move_limit = 52
 save_section = "marshmallow_match_objectives"
 piece_names = Array[String](["STRAWBERRY", "LEMON", "MINT", "BLUEBERRY"])
 piece_textures = Array[Texture2D]([ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")])

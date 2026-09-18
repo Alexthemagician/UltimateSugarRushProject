@@ -1,0 +1,75 @@
+{
+	"cafe_completed": {
+		"region_1_stage_0": true,
+		"region_1_stage_1": true,
+		"region_1_stage_2": true,
+		"region_1_stage_3": true,
+		"region_1_stage_4": true,
+		"region_1_stage_5": true,
+		"region_1_stage_6": true,
+		"region_2_stage_0": true,
+		"region_2_stage_1": true,
+		"region_2_stage_2": true,
+		"region_2_stage_3": true,
+		"region_2_stage_4": true,
+		"region_2_stage_5": true,
+		"region_2_stage_6": true
+	},
+	"cafe_daily_entries": {
+		"region_0_stage_0": "2026-09-15",
+		"region_1_stage_0": "2026-09-15",
+		"region_2_stage_0": "2026-09-15"
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_edible_flowers",
+				"item_id": "edible_flowers",
+				"quantity": 6
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"item_id": "honey_glob",
+				"quantity": 6
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789524812,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789524812
+			}
+		]
+	},
+	"progression": {
+		"level_1_complete": true,
+		"level_2_complete": true,
+		"level_2_unlocked": true,
+		"level_3_complete": true,
+		"level_3_unlocked": true,
+		"level_4_complete": true,
+		"level_4_unlocked": true,
+		"level_5_complete": true,
+		"level_5_unlocked": true,
+		"level_6_complete": true,
+		"level_6_unlocked": true,
+		"level_7_complete": true,
+		"level_7_unlocked": true,
+		"level_8_unlocked": true
+	},
+	"save_version": 1
+}

@@ -5,7 +5,7 @@ func run() -> void:
 	var router := root.get_node("SceneRouter")
 	var save := root.get_node("SaveSystem")
 	for i in 8:
-		for level in range(2,9): save.set_value("progression","level_%d_unlocked" % level,true)
+		for cleared in i: save.set_value("progression","level_%d_complete" % (cleared+1),true)
 		router.replace_scene("res://scenes/map/world_map.tscn")
 		await create_timer(0.7).timeout
 		var target: String = current_scene.ORIGINAL_BOARDS[i]

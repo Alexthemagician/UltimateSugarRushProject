@@ -1,0 +1,61 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Menu directs to machine instead of crafting
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:19)
+ERROR: Craft button starts saved job
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:23)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] _select_station (res://scripts/cafe/cafe_hub.gd:379)
+       [2] run (res://tests/check_cafe_machine_flow.gd:30)
+ERROR: Collection moves the whole batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:32)
+ERROR: Stock appears in display case
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:33)
+ERROR: Collected icon disappears
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:34)
+ERROR: Regular reaches pickup counter and collects the requested item
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:46)
+ERROR: Purchase happens at movable pickup counter
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:47)
+ERROR: Purchase consumes one item
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:48)
+ERROR: Purchase pays listed price
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:51)
+ERROR: Customer carries purchased item
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_machine_flow.gd:6)
+       [1] run (res://tests/check_cafe_machine_flow.gd:52)
+Cafe machine flow: 10 failures

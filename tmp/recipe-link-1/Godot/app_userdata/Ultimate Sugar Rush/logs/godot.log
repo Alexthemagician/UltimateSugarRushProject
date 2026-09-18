@@ -1,0 +1,405 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+SCRIPT ERROR: Invalid operands 'Array' and 'Dictionary' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] run (res://tests/check_machine_jobs.gd:36)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+SCRIPT ERROR: Invalid operands 'Array' and 'Dictionary' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] run (res://tests/check_machine_jobs.gd:36)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+SCRIPT ERROR: Invalid operands 'Array' and 'Dictionary' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] run (res://tests/check_machine_jobs.gd:36)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+SCRIPT ERROR: Invalid operands 'Array' and 'Dictionary' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] run (res://tests/check_machine_jobs.gd:36)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+SCRIPT ERROR: Invalid operands 'Array' and 'Dictionary' in operator '=='.
+   at: set_value (res://scripts/core/save_system.gd:55)
+   GDScript backtrace (most recent call first):
+       [0] set_value (res://scripts/core/save_system.gd:55)
+       [1] run (res://tests/check_machine_jobs.gd:36)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+ERROR: Machine starts with ingredients
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:24)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Machine job survives reload
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:33)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:39)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+ERROR: Machine starts with ingredients
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:24)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Machine job survives reload
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:33)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:39)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+ERROR: Machine starts with ingredients
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:24)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Machine job survives reload
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:33)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:39)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+ERROR: Machine starts with ingredients
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:24)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Machine job survives reload
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:33)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:39)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+ERROR: Machine starts with ingredients
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:24)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Ingredients consumed exactly once
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:30)
+ERROR: Machine job survives reload
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:33)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Ready batch can be collected
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:37)
+ERROR: Collection stocks entire batch
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:38)
+SCRIPT ERROR: Invalid access to property or key 'quantity' on a base object of type 'Dictionary'.
+   at: collect_batch (res://scripts/core/cafe_progress.gd:275)
+   GDScript backtrace (most recent call first):
+       [0] collect_batch (res://scripts/core/cafe_progress.gd:275)
+       [1] run (res://tests/check_machine_jobs.gd:39)
+ERROR: Displayed product can be purchased
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:40)
+ERROR: Customer buys exactly one
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_machine_jobs.gd:8)
+       [1] run (res://tests/check_machine_jobs.gd:41)
+Machine jobs: 65 failures

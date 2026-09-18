@@ -1,8 +1,7 @@
 extends Control
 
 const HOLD_START_DELAY := 0.42
-const HOLD_REPEAT_INTERVAL := 0.20
-const MAX_ITEMS_PER_PRESS := 12
+const HOLD_REPEAT_INTERVAL := 0.22
 const OBJECTIVE_SAVE_SECTION := "cake_merge_objectives"
 const CAKE_XP_REWARD := "xp_small"
 const CAKE_COIN_REWARD := "coins_small"
@@ -41,11 +40,11 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if not _button_held or _spawn_count >= MAX_ITEMS_PER_PRESS:
+	if not _button_held:
 		return
 	_hold_time += delta
 	var next_spawn_time := HOLD_START_DELAY + float(_spawn_count - 1) * HOLD_REPEAT_INTERVAL
-	while _button_held and _spawn_count < MAX_ITEMS_PER_PRESS and _hold_time >= next_spawn_time:
+	while _button_held and _hold_time >= next_spawn_time:
 		if not _add_item():
 			_button_held = false
 			return
@@ -71,12 +70,12 @@ func _stop_adding() -> void:
 
 
 func _add_item() -> bool:
-	var item_id: String = board.add_random_base_item()
-	if item_id.is_empty():
+	var item_ids: Array[String] = board.add_random_base_items_burst(%AddItemButton.get_global_rect().get_center(), randi_range(4, 6))
+	if item_ids.is_empty():
 		status_label.text = "The board is full. Merge something first!"
 		return false
 	_spawn_count += 1
-	status_label.text = "%s appeared!" % item_id.replace("_", " ").capitalize()
+	status_label.text = "%d ingredients burst onto the board!" % item_ids.size()
 	return true
 
 
@@ -143,7 +142,7 @@ func _complete_board_if_ready() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, "LEVEL COMPLETED!")
-	SceneRouter.replace_scene(CafeProgress.HUB)
+	SceneRouter.replace_scene(CafeProgress.map_scene_for_region())
 
 
 func _all_objectives_complete() -> bool:

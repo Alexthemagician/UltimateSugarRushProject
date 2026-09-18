@@ -1,0 +1,116 @@
+{
+	"cafe_jobs": {
+		"butter_cloud_buns": {}
+	},
+	"cafe_layout": {
+		"position_version": 2
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_spring_water",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_fondant",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_eggs",
+				"quantity": 100
+			},
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 49
+			}
+		],
+		"player_stats": [
+			{
+				"batches_made": 1,
+				"coins": 1254,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 1,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 20
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789681811,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789681811
+			}
+		]
+	},
+	"quest_progress": {
+		"butter_cloud_buns": 50,
+		"coins": 4,
+		"xp": 20
+	},
+	"save_version": 1
+}

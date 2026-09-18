@@ -1,0 +1,22 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Index p_index = 0 is out of bounds ((int)data.children_cache.size() - data.internal_children_front_count_cache - data.internal_children_back_count_cache = 0).
+   at: get_child (scene/main/node.cpp:1861)
+   GDScript backtrace (most recent call first):
+       [0] _build_objectives (res://scripts/ui/regional_merge_game.gd:41)
+       [1] _ready (res://scripts/ui/regional_merge_game.gd:18)
+SCRIPT ERROR: Cannot call method 'get_node' on a null value.
+   at: _build_objectives (res://scripts/ui/regional_merge_game.gd:42)
+   GDScript backtrace (most recent call first):
+       [0] _build_objectives (res://scripts/ui/regional_merge_game.gd:42)
+       [1] _ready (res://scripts/ui/regional_merge_game.gd:18)
+ERROR: Node not found: "SafeArea/Layout/Header/Title" (relative to "/root/RegionalMergeGame").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/ui/regional_merge_game.gd:31)
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'null instance'.
+   at: _ready (res://scripts/ui/regional_merge_game.gd:31)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/ui/regional_merge_game.gd:31)

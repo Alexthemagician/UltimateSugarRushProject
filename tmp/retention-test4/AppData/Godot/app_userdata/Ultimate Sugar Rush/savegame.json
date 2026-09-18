@@ -1,0 +1,74 @@
+{
+	"daily_cafe": {
+		"stamps": 1,
+		"state": {
+			"claimed": true,
+			"date": "2026-09-18",
+			"goals": [
+				{
+					"id": "boards",
+					"label": "Clear %d puzzle boards",
+					"progress": 2,
+					"target": 2
+				},
+				{
+					"id": "craft",
+					"label": "Collect %d finished recipe batches",
+					"progress": 2,
+					"target": 2
+				},
+				{
+					"id": "regular",
+					"label": "Fulfill a regular's exact request",
+					"progress": 1,
+					"target": 1
+				}
+			]
+		}
+	},
+	"daily_first_win": {
+		"2026-09-18_0_0": true
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"item_id": "sugar_cubes",
+				"quantity": 2
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1450,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789760833,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789760833
+			}
+		]
+	},
+	"save_version": 1,
+	"weekly_cafe": {
+		"state": {
+			"category": "tea",
+			"claimed": [
+				0
+			],
+			"score": 5,
+			"streak": 0,
+			"week": "2959"
+		}
+	}
+}

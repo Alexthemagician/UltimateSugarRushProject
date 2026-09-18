@@ -1,0 +1,15 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Furniture penetration: Pip shop / display_0 at (-21.38961, 0.14, -13.3)
+Furniture penetration: Pip shop / display_0 at (-21.30436, 0.14, -13.3)
+Furniture penetration: Pip shop / display_0 at (-21.21054, 0.14, -13.3)
+Furniture penetration: Pip shop / display_0 at (-21.11498, 0.14, -13.3)
+Furniture penetration: Pip shop / display_0 at (-21.02, 0.14, -13.3)
+ERROR: Characters complete live visits without entering furniture footprints
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_cafe_navigation.gd:6)
+       [1] run (res://tests/check_cafe_navigation.gd:114)
+Cafe navigation: 1 failures

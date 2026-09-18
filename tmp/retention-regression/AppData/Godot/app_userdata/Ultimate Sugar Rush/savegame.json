@@ -1,0 +1,634 @@
+{
+	"cafe_challenge_2_6": {
+		"0": 0.0,
+		"1": 0.0,
+		"2": 0.0,
+		"3": 0.0,
+		"moves_remaining": 55.0,
+		"standby": 1.0
+	},
+	"cafe_challenge_2_7": {
+		"0": 0.0,
+		"1": 0.0,
+		"2": 0.0,
+		"3": 0.0,
+		"moves_remaining": 58.0,
+		"standby": 1.0
+	},
+	"cafe_completed": {
+		"region_1_stage_0": true,
+		"region_1_stage_1": true,
+		"region_1_stage_2": true,
+		"region_1_stage_3": true,
+		"region_1_stage_4": true,
+		"region_1_stage_5": true,
+		"region_1_stage_6": true,
+		"region_2_stage_0": true,
+		"region_2_stage_1": true,
+		"region_2_stage_2": true,
+		"region_2_stage_3": true,
+		"region_2_stage_4": true,
+		"region_2_stage_5": true,
+		"region_2_stage_6": true
+	},
+	"cafe_daily_clears": {
+		"region_0_stage_0": "2026-09-18",
+		"region_1_stage_0": "2026-09-18",
+		"region_2_stage_0": "2026-09-18"
+	},
+	"cafe_jobs": {
+		"blossom_oolong": [],
+		"butter_cloud_buns": [],
+		"caramel_cloud_buns": [],
+		"cocoa_cake": [],
+		"honey_mint_tea": [],
+		"honey_truffles": [],
+		"mocha_latte": [],
+		"petal_bonbons": [],
+		"strawberry_cake": [],
+		"vanilla_latte": []
+	},
+	"cafe_layout": {
+		"position_version": 2
+	},
+	"daily_cafe": {
+		"state": {
+			"claimed": false,
+			"date": "2026-09-18",
+			"goals": [
+				{
+					"id": "regular",
+					"label": "Fulfill a regular's exact request",
+					"progress": 0.0,
+					"target": 1.0
+				},
+				{
+					"id": "decorate",
+					"label": "Refresh one café decoration",
+					"progress": 0.0,
+					"target": 1.0
+				},
+				{
+					"id": "craft",
+					"label": "Collect %d finished recipe batches",
+					"progress": 2,
+					"target": 2.0
+				}
+			]
+		}
+	},
+	"daily_first_win": {
+		"2026-09-18_0_0": true,
+		"2026-09-18_1_0": true,
+		"2026-09-18_2_0": true
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"item_id": "sugar_cubes",
+				"quantity": 2.0
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"item_id": "edible_flowers",
+				"quantity": 8.0
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"item_id": "coffee_beans",
+				"quantity": 2.0
+			},
+			{
+				"id": "ingredient_spring_water",
+				"item_id": "spring_water",
+				"quantity": 6.0
+			},
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 50
+			},
+			{
+				"id": "product_vanilla_latte",
+				"quantity": 20
+			},
+			{
+				"id": "product_petal_bonbons",
+				"quantity": 30
+			},
+			{
+				"id": "product_strawberry_cake",
+				"quantity": 12
+			},
+			{
+				"id": "product_honey_mint_tea",
+				"quantity": 20
+			},
+			{
+				"id": "product_caramel_cloud_buns",
+				"quantity": 40
+			},
+			{
+				"id": "product_mocha_latte",
+				"quantity": 20
+			},
+			{
+				"id": "product_honey_truffles",
+				"quantity": 24
+			},
+			{
+				"id": "product_cocoa_cake",
+				"quantity": 12
+			},
+			{
+				"id": "product_blossom_oolong",
+				"quantity": 20
+			}
+		],
+		"player_stats": [
+			{
+				"batches_made": 10,
+				"coins": 1370.0,
+				"gems": 0.0,
+				"id": "local_player",
+				"level": 2,
+				"orders_completed": 0.0,
+				"quests_completed": 0.0,
+				"total_play_seconds": 0.0,
+				"xp": 200
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789760933.0,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789760933.0
+			}
+		]
+	},
+	"progression": {
+		"level_1_complete": true,
+		"level_2_complete": true,
+		"level_2_unlocked": true,
+		"level_3_complete": true,
+		"level_3_unlocked": true,
+		"level_4_complete": true,
+		"level_4_unlocked": true,
+		"level_5_complete": true,
+		"level_5_unlocked": true,
+		"level_6_complete": true,
+		"level_6_unlocked": true,
+		"level_7_complete": true,
+		"level_7_unlocked": true,
+		"level_8_unlocked": true
+	},
+	"quest_progress": {
+		"blossom_oolong": 20,
+		"butter_cloud_buns": 50,
+		"caramel_cloud_buns": 40,
+		"cocoa_cake": 12,
+		"honey_mint_tea": 20,
+		"honey_truffles": 24,
+		"mocha_latte": 20,
+		"petal_bonbons": 30,
+		"strawberry_cake": 12,
+		"vanilla_latte": 20,
+		"xp": 200
+	},
+	"regional_merge_board_1_0": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_raspberry_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": false,
+				"item_id": "regional_raspberry_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_blueberry_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_blueberry_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_1_1": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": false,
+				"item_id": "regional_neapolitan_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_neapolitan_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_cookies_cream_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": false,
+				"item_id": "regional_cookies_cream_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_mint_chip_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_mint_chip_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": false,
+				"item_id": "regional_raspberry_swirl_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_raspberry_swirl_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_1_2": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": false,
+				"item_id": "regional_matcha_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_matcha_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_tiramisu_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": false,
+				"item_id": "regional_tiramisu_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_coconut_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_coconut_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": false,
+				"item_id": "regional_oat_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_oat_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_1_3": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": true,
+				"item_id": "regional_peach_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_peach_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_mango_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": true,
+				"item_id": "regional_mango_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_honeydew_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_honeydew_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": true,
+				"item_id": "regional_taro_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_taro_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_2_0": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_pineapple_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": false,
+				"item_id": "regional_pineapple_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_grape_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_grape_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_watermelon_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_2_1": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": false,
+				"item_id": "regional_rose_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_rose_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_passion_fruit_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": false,
+				"item_id": "regional_passion_fruit_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_kiwi_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_kiwi_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": false,
+				"item_id": "regional_lychee_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_lychee_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_2_2": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": false,
+				"item_id": "regional_strawberry_star_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_strawberry_star_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_almond_square_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": false,
+				"item_id": "regional_almond_square_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_raspberry_heart_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_raspberry_heart_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": false,
+				"item_id": "regional_caramel_flower_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_caramel_flower_1",
+				"row": 4.0
+			}
+		]
+	},
+	"regional_merge_board_2_3": {
+		"columns": 10.0,
+		"items": [
+			{
+				"column": 0.0,
+				"frozen": true,
+				"item_id": "regional_blueberry_lavender_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_blueberry_lavender_1",
+				"row": 1.0
+			},
+			{
+				"column": 3.0,
+				"frozen": false,
+				"item_id": "regional_strawberry_cream_1",
+				"row": 1.0
+			},
+			{
+				"column": 4.0,
+				"frozen": true,
+				"item_id": "regional_strawberry_cream_1",
+				"row": 1.0
+			},
+			{
+				"column": 1.0,
+				"frozen": false,
+				"item_id": "regional_apple_cinnamon_1",
+				"row": 4.0
+			},
+			{
+				"column": 2.0,
+				"frozen": false,
+				"item_id": "regional_apple_cinnamon_1",
+				"row": 4.0
+			},
+			{
+				"column": 7.0,
+				"frozen": true,
+				"item_id": "regional_honey_lemon_1",
+				"row": 4.0
+			},
+			{
+				"column": 8.0,
+				"frozen": false,
+				"item_id": "regional_honey_lemon_1",
+				"row": 4.0
+			}
+		]
+	},
+	"save_version": 1,
+	"weekly_cafe": {
+		"state": {
+			"category": "tea",
+			"claimed": [],
+			"score": 9,
+			"streak": 3.0,
+			"week": "2959"
+		}
+	}
+}

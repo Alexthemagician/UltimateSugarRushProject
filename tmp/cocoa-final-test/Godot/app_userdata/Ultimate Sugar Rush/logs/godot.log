@@ -1,0 +1,30 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Node not found: "%Rules" (relative to "/root/CafeChallenge").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/cafe/challenge_match.gd:53)
+       [1] run (res://tests/check_daily_board_progression.gd:79)
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'null instance'.
+   at: _ready (res://scripts/cafe/challenge_match.gd:53)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/cafe/challenge_match.gd:53)
+       [1] run (res://tests/check_daily_board_progression.gd:79)
+ERROR: Cocoa Moon gelatin board uses a one-line tip under the board without a repeated tutorial
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_daily_board_progression.gd:8)
+       [1] run (res://tests/check_daily_board_progression.gd:83)
+ERROR: Node not found: "%Rules" (relative to "/root/CafeChallenge").
+   at: get_node (scene/main/node.cpp:1975)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/cafe/challenge_match.gd:56)
+       [1] run (res://tests/check_daily_board_progression.gd:79)
+SCRIPT ERROR: Invalid assignment of property or key 'text' with value of type 'String' on a base object of type 'null instance'.
+   at: _ready (res://scripts/cafe/challenge_match.gd:56)
+   GDScript backtrace (most recent call first):
+       [0] _ready (res://scripts/cafe/challenge_match.gd:56)
+       [1] run (res://tests/check_daily_board_progression.gd:79)
+Daily board progression: 1 failures

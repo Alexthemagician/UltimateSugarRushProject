@@ -1,0 +1,239 @@
+{
+	"database": {
+		"inventory": [],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789535476,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789535476
+			}
+		]
+	},
+	"regional_merge_board_1_0": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "regional_raspberry_1",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "regional_raspberry_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_blueberry_1",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "regional_blueberry_1",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "regional_cherry_1",
+				"row": 4
+			}
+		]
+	},
+	"regional_merge_board_1_1": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "regional_neapolitan_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_neapolitan_1",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "regional_cookies_cream_1",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "regional_cookies_cream_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_mint_chip_1",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "regional_mint_chip_1",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "regional_raspberry_swirl_1",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "regional_raspberry_swirl_1",
+				"row": 4
+			}
+		]
+	},
+	"regional_merge_board_1_2": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": false,
+				"item_id": "regional_matcha_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_matcha_1",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "regional_tiramisu_1",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": false,
+				"item_id": "regional_tiramisu_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_coconut_1",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "regional_coconut_1",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": false,
+				"item_id": "regional_oat_1",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "regional_oat_1",
+				"row": 4
+			}
+		]
+	},
+	"regional_merge_board_1_3": {
+		"columns": 10,
+		"items": [
+			{
+				"column": 0,
+				"frozen": true,
+				"item_id": "regional_peach_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_peach_1",
+				"row": 1
+			},
+			{
+				"column": 3,
+				"frozen": false,
+				"item_id": "regional_mango_1",
+				"row": 1
+			},
+			{
+				"column": 4,
+				"frozen": true,
+				"item_id": "regional_mango_1",
+				"row": 1
+			},
+			{
+				"column": 1,
+				"frozen": false,
+				"item_id": "regional_honeydew_1",
+				"row": 4
+			},
+			{
+				"column": 2,
+				"frozen": false,
+				"item_id": "regional_honeydew_1",
+				"row": 4
+			},
+			{
+				"column": 7,
+				"frozen": true,
+				"item_id": "regional_taro_1",
+				"row": 4
+			},
+			{
+				"column": 8,
+				"frozen": false,
+				"item_id": "regional_taro_1",
+				"row": 4
+			}
+		]
+	},
+	"save_version": 1
+}

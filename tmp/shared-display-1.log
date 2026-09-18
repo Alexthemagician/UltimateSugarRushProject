@@ -1,0 +1,29 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Selecting variant stores only its stock
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_shared_display.gd:21)
+       [2] click (res://tests/check_quest_gui.gd:20)
+SCRIPT ERROR: Cannot call method 'get_global_rect' on a null value.
+   at: click (res://tests/check_quest_gui.gd:9)
+   GDScript backtrace (most recent call first):
+       [0] click (res://tests/check_quest_gui.gd:9)
+       [1] run (res://tests/check_shared_display.gd:25)
+       [2] click (res://tests/check_quest_gui.gd:20)
+ERROR: Remaining original opens direct storage menu
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_shared_display.gd:26)
+       [2] click (res://tests/check_quest_gui.gd:20)
+ERROR: Original transfer preserves stored variant
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_shared_display.gd:27)
+       [2] click (res://tests/check_quest_gui.gd:20)
+Shared display: 3 failures

@@ -1,0 +1,4 @@
+SCRIPT ERROR: Compile Error: Identifier not found: GameDatabase
+   at: GDScript::reload (res://tests/render_recipe_book.gd:4)
+ERROR: Failed to load script "res://tests/render_recipe_book.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

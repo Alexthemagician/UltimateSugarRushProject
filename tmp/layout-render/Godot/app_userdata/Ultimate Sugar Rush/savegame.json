@@ -1,0 +1,118 @@
+{
+	"cafe_jobs": {
+		"butter_cloud_buns": {
+			"quantity": 50,
+			"ready_at": 1789627614.82
+		},
+		"petal_bonbons": {
+			"quantity": 30,
+			"ready_at": 1789627610.826
+		},
+		"strawberry_cake": {
+			"quantity": 12,
+			"ready_at": 1789627618.837
+		},
+		"vanilla_latte": {
+			"quantity": 20,
+			"ready_at": 1789627608.822
+		}
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"quantity": 8
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_spring_water",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_fondant",
+				"quantity": 10
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"quantity": 10
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"quantity": 11
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"quantity": 12
+			},
+			{
+				"id": "ingredient_eggs",
+				"quantity": 10
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789627598,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789627598
+			}
+		]
+	},
+	"save_version": 1
+}

@@ -1,0 +1,137 @@
+{
+	"cafe_jobs": {
+		"butter_cloud_buns": {},
+		"honey_mint_tea": {},
+		"petal_bonbons": {},
+		"strawberry_cake": {},
+		"vanilla_latte": {}
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"quantity": 96
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_spring_water",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_fondant",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_eggs",
+				"quantity": 98
+			},
+			{
+				"id": "product_butter_cloud_buns",
+				"quantity": 49
+			},
+			{
+				"id": "product_vanilla_latte",
+				"quantity": 19
+			},
+			{
+				"id": "product_petal_bonbons",
+				"quantity": 29
+			},
+			{
+				"id": "product_strawberry_cake",
+				"quantity": 11
+			},
+			{
+				"id": "product_honey_mint_tea",
+				"quantity": 19
+			}
+		],
+		"player_stats": [
+			{
+				"batches_made": 5,
+				"coins": 1297,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 5,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 100
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789271294,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789271294
+			}
+		]
+	},
+	"quest_progress": {
+		"butter_cloud_buns": 50.0,
+		"coins": 47,
+		"honey_mint_tea": 20,
+		"petal_bonbons": 30.0,
+		"strawberry_cake": 12.0,
+		"vanilla_latte": 20.0,
+		"xp": 100
+	},
+	"save_version": 1
+}

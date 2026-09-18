@@ -1,0 +1,8 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "item_id" variable because the value doesn't have a set type.
+   at: GDScript::reload (res://scripts/ui/regional_merge_game.gd:39)
+ERROR: Failed to load script "res://scripts/ui/regional_merge_game.gd" with error "Parse error".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)

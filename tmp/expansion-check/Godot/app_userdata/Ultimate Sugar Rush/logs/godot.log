@@ -1,0 +1,49 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Customer did not complete repeated purchases
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:66)
+ERROR: Customer did not complete repeated purchases
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:66)
+ERROR: Customer route intersects display cases
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:69)
+Customer visits: 3 failures; closest separation 0.560; case intersections 189
+ run (res://tests/check_neighborhood.gd:22)
+ERROR: Every facade faces nearest road
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:22)
+ERROR: Populated varied neighborhood
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:26)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:40)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:40)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:40)
+ERROR: Pan limits clamp
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:43)
+NEIGHBORHOOD CHECKS: 9 failures

@@ -1,0 +1,118 @@
+{
+	"cafe": {
+		"boards_won": 5
+	},
+	"cafe_jobs": {
+		"caramel_cloud_buns": {
+			"quantity": 40,
+			"ready_at": 1789617371.391
+		},
+		"mocha_latte": {
+			"quantity": 20,
+			"ready_at": 1789617365.392
+		}
+	},
+	"database": {
+		"inventory": [
+			{
+				"id": "ingredient_sugar_cubes",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_ultra_fine_flour",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_edible_flowers",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_caramel_syrup",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_chocolate_syrup",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_strawberry_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_honey_glob",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_spring_water",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_creamy_butter",
+				"quantity": 99
+			},
+			{
+				"id": "ingredient_fondant",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_sugar_syrup",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_coffee_beans",
+				"quantity": 98
+			},
+			{
+				"id": "ingredient_oolong_leaves",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_peppermint_leaves",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_vanilla_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_strawberry_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_chocolate_frosting",
+				"quantity": 100
+			},
+			{
+				"id": "ingredient_eggs",
+				"quantity": 100
+			}
+		],
+		"player_stats": [
+			{
+				"coins": 1250,
+				"gems": 0,
+				"id": "local_player",
+				"level": 1,
+				"orders_completed": 0,
+				"quests_completed": 0,
+				"total_play_seconds": 0,
+				"xp": 0
+			}
+		],
+		"quest_progress": [],
+		"users": [
+			{
+				"created_at_unix": 1789617353,
+				"display_name": "Chef",
+				"id": "local_player",
+				"last_played_at_unix": 1789617353
+			}
+		]
+	},
+	"regular_friendship": {
+		"berry": 3,
+		"coco": 3,
+		"mint": 3
+	},
+	"save_version": 1
+}

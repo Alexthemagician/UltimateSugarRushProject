@@ -1,8 +1,7 @@
 extends Control
 
 const HOLD_START_DELAY := 0.42
-const HOLD_REPEAT_INTERVAL := 0.20
-const MAX_FRUIT_PER_PRESS := 12
+const HOLD_REPEAT_INTERVAL := 0.22
 const OBJECTIVE_SAVE_SECTION := "merge_objectives"
 const PITCHER_XP_REWARD := "xp_small"
 const PITCHER_COIN_REWARD := "coins_small"
@@ -47,11 +46,11 @@ func _go_back() -> void:
 
 
 func _process(delta: float) -> void:
-	if not _fruit_button_held or _fruit_spawn_count >= MAX_FRUIT_PER_PRESS:
+	if not _fruit_button_held:
 		return
 	_fruit_hold_time += delta
 	var next_spawn_time := HOLD_START_DELAY + float(_fruit_spawn_count - 1) * HOLD_REPEAT_INTERVAL
-	while _fruit_button_held and _fruit_spawn_count < MAX_FRUIT_PER_PRESS and _fruit_hold_time >= next_spawn_time:
+	while _fruit_button_held and _fruit_hold_time >= next_spawn_time:
 		if not _add_item():
 			_fruit_button_held = false
 			return
@@ -71,8 +70,9 @@ func _stop_adding_fruit() -> void:
 
 
 func _add_item() -> bool:
-	var item_id: String = board.add_random_fruit()
-	if not item_id.is_empty():
+	var item_ids: Array[String] = board.add_random_fruit_burst(%AddItemButton.get_global_rect().get_center(), randi_range(4, 6))
+	var item_id := item_ids[-1] if not item_ids.is_empty() else ""
+	if not item_ids.is_empty():
 		_fruit_spawn_count += 1
 	match item_id:
 		"lemon":
@@ -83,7 +83,7 @@ func _add_item() -> bool:
 			status_label.text = "A ruby apple appeared!"
 		_:
 			status_label.text = "The board is full. Merge something first!"
-	return not item_id.is_empty()
+	return not item_ids.is_empty()
 
 
 func _reset_board() -> void:
@@ -174,4 +174,4 @@ func _complete_board() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, "LEVEL COMPLETED!")
-	SceneRouter.replace_scene(CafeProgress.HUB)
+	SceneRouter.replace_scene(CafeProgress.map_scene_for_region())

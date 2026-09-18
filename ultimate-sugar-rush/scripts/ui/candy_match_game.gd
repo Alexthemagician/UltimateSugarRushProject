@@ -90,7 +90,7 @@ func _complete_level() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, "SWEET MATCH COMPLETE!")
-	SceneRouter.replace_scene(CafeProgress.HUB)
+	SceneRouter.replace_scene(CafeProgress.map_scene_for_region())
 
 
 func _reset() -> void:

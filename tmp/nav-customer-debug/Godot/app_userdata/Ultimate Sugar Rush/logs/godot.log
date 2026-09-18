@@ -1,0 +1,22 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+Overlap at frame 0 Berry shop (-24.57481, 0.14, -14.30075) / Mint shop (-24.57481, 0.14, -14.30075)
+ERROR: Customer did not complete a purchase cycle: Berry state=shop nav=39
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:74)
+ERROR: Customer did not complete a purchase cycle: Mint state=shop nav=42
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:74)
+ERROR: Customer did not complete a purchase cycle: Coco state=shop nav=40
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:74)
+ERROR: Customer did not complete a purchase cycle: Pip state=to_seat nav=43
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_customer_visits.gd:74)
+Customer visits: 4 failures; closest separation 0.000; case intersections 0

@@ -1,0 +1,75 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Ground covers every corner at all zoom-out pan extrema
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:37)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:42)
+ERROR: Ground covers every corner at all zoom-out pan extrema
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:37)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:42)
+ERROR: Ground covers every corner at all zoom-out pan extrema
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:37)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:42)
+ERROR: Ground covers every corner at all zoom-out pan extrema
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:37)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:42)
+ERROR: Ground covers every corner at all zoom-out pan extrema
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:37)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:42)
+ERROR: Ground covers every corner at all zoom-out pan extrema
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:37)
+ERROR: Visible boundary remains populated
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:42)
+ERROR: Repeat arrivals enter from far road
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:78)
+ERROR: Departures continue toward front road
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_neighborhood.gd:7)
+       [1] run (res://tests/check_neighborhood.gd:80)
+NEIGHBORHOOD CHECKS: 14 failures

@@ -1,6 +1,7 @@
 extends Control
 
 @export var target := 55
+@export var objective_requirements: Array[int] = []
 @export var move_limit := 40
 @export var save_section := "variant_match_objectives"
 @export var piece_names: Array[String] = ["RED", "ORANGE", "GREEN", "BLUE"]
@@ -10,12 +11,18 @@ extends Control
 @export var completion_message := "PUZZLE COMPLETE!"
 @export var completion_flag := "level_complete"
 @export var unlock_flag := "level_unlocked"
+@export var standby_name := ""
+@export var standby_texture: Texture2D
+@export var standby_requirement := 0
 
 @onready var board: MatchThreeBoard = %MatchThreeBoard
 @onready var labels: Array[Label] = [%RedObjective, %GreenObjective, %GoldObjective, %BlueObjective]
 var progress := [0, 0, 0, 0]
 var moves_remaining := 0
 var completing := false
+var standby_progress := 0
+var standby_label: Label
+var standby_icon: TextureRect
 
 
 func _ready() -> void:
@@ -42,6 +49,10 @@ func _ready() -> void:
 	for icon: TextureRect in icons:
 		targets.append(icon)
 	board.set_objective_targets(targets)
+	if standby_requirement>0 and standby_texture:
+		_build_standby_objective()
+		standby_progress=int(saved.get("standby",0))
+		board.large_match_created.connect(_on_large_match_created)
 	_update_labels()
 	_update_moves()
 	if moves_remaining <= 0 and not _complete():
@@ -51,7 +62,7 @@ func _ready() -> void:
 func _on_objective_changed(kind: int, amount: int) -> void:
 	if completing:
 		return
-	progress[kind] = mini(target, int(progress[kind]) + amount)
+	progress[kind] = mini(_target_for_kind(kind), int(progress[kind]) + amount)
 	_save()
 	_update_labels()
 	if _complete():
@@ -71,7 +82,9 @@ func _on_move_finished() -> void:
 
 func _update_labels() -> void:
 	for kind in 4:
-		labels[kind].text = "%s\n%d / %d" % [piece_names[kind], progress[kind], target]
+		labels[kind].text = "%s\n%d / %d" % [piece_names[kind], progress[kind], _target_for_kind(kind)]
+	if standby_label:
+		standby_label.text="%s\n%d / %d" % [standby_name,standby_progress,standby_requirement]
 
 
 func _update_moves() -> void:
@@ -88,14 +101,19 @@ func _save() -> void:
 	var values := {"moves_remaining": moves_remaining}
 	for kind in 4:
 		values[str(kind)] = progress[kind]
+	if standby_requirement>0: values.standby=standby_progress
 	SaveSystem.set_section(save_section, values)
 
 
 func _complete() -> bool:
-	for value: int in progress:
-		if value < target:
+	for kind in progress.size():
+		if int(progress[kind]) < _target_for_kind(kind):
 			return false
-	return true
+	return standby_requirement<=0 or standby_progress>=standby_requirement
+
+
+func _target_for_kind(kind: int) -> int:
+	return objective_requirements[kind] if kind >= 0 and kind < objective_requirements.size() else target
 
 
 func _complete_level() -> void:
@@ -104,11 +122,17 @@ func _complete_level() -> void:
 	SaveSystem.save_now()
 	var collectible_rewards: Node = get_node("/root/CollectibleRewards")
 	await collectible_rewards.play_completion(self, board, completion_message)
-	SceneRouter.replace_scene(CafeProgress.HUB)
+	if CafeProgress.is_unlimited_board(scene_file_path):
+		var wheel = load("res://scripts/ui/ingredient_wheel.gd").new()
+		wheel.region = CafeProgress.region
+		add_child(wheel)
+		await wheel.wheel_closed
+	SceneRouter.replace_scene(CafeProgress.map_scene_for_region())
 
 
 func _reset() -> void:
 	progress = [0, 0, 0, 0]
+	standby_progress = 0
 	moves_remaining = move_limit
 	_save()
 	board.reset_board()
@@ -118,3 +142,26 @@ func _reset() -> void:
 	_update_moves()
 	%MovesLabel.remove_theme_color_override("font_color")
 	%StatusLabel.text = "Board fully reset for testing."
+
+
+func _build_standby_objective() -> void:
+	var container: Container = get_node("LandscapeLayout/RightObjectives")
+	container.add_theme_constant_override("separation",8)
+	var cards := container.get_children()
+	for card: Control in cards: card.custom_minimum_size=Vector2(460,72)
+	var card: Control = cards[0].duplicate()
+	card.custom_minimum_size=Vector2(460,72); container.add_child(card)
+	standby_label=card.find_children("*","Label",true,false)[0]
+	standby_icon=card.find_children("*","TextureRect",true,false)[0]
+	standby_icon.texture=standby_texture; standby_icon.custom_minimum_size=Vector2(58,58)
+	standby_label.add_theme_font_size_override("font_size",16)
+
+
+func _on_large_match_created(position: Vector2i) -> void:
+	if completing or standby_progress>=standby_requirement: return
+	await board.animate_bonus_collection(position,standby_texture,standby_icon)
+	standby_progress=mini(standby_progress+1,standby_requirement)
+	_save(); _update_labels()
+	if _complete() and not completing:
+		completing=true
+		await _complete_level()

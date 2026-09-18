@@ -3,8 +3,6 @@ extends "res://scripts/cafe/cafe_region.gd"
 func _ready() -> void:
 	CafeProgress.region = 0
 	_reconcile_saved_unlocks()
-	# Preserve the original development access to boards 5–8.
-	for level in [5,6,7,8]: SaveSystem.set_value("progression","level_%d_unlocked" % level,true)
 	super._ready()
 
 func _reconcile_saved_unlocks() -> void:

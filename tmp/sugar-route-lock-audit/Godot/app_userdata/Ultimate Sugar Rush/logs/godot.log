@@ -1,0 +1,29 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Sugar Blossom board route failed: res://scenes/merge/cookie_merge_game.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_sugar_map_routes.gd:16)
+ERROR: Sugar Blossom board route failed: res://scenes/merge/ice_cream_merge_game.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_sugar_map_routes.gd:16)
+ERROR: Sugar Blossom board route failed: res://scenes/merge/mixed_merge_game.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_sugar_map_routes.gd:16)
+ERROR: Sugar Blossom board route failed: res://scenes/match3/candy_match_game.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_sugar_map_routes.gd:16)
+ERROR: Sugar Blossom board route failed: res://scenes/match3/gummy_match_game.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_sugar_map_routes.gd:16)
+ERROR: Sugar Blossom board route failed: res://scenes/match3/marshmallow_match_game.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] run (res://tests/check_sugar_map_routes.gd:16)
+SUGAR MAP ROUTES: 6 failures

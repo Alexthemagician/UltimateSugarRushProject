@@ -1,0 +1,33 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Customer buys GUI-collected stock
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:51)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Sale removes one requested recipe
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:52)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Sale pays recipe price plus event bonus
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:53)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Sale advances coin quest
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:54)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Quest progress persists
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:58)
+       [2] click (res://tests/check_quest_gui.gd:23)
+Quest GUI: 5 failures

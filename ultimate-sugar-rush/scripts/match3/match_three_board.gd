@@ -2,6 +2,7 @@ class_name MatchThreeBoard
 extends Control
 
 signal objective_changed(kind: int, amount: int)
+signal large_match_created(position: Vector2i)
 signal move_finished
 
 enum Candy { RED, GREEN, GOLD, BLUE }
@@ -32,6 +33,7 @@ var buttons: Array[Button] = []
 var candy_items: Array[MergeItem] = []
 var selected := Vector2i(-1, -1)
 var busy := false
+var power_busy := false
 var rng := RandomNumberGenerator.new()
 var candy_bag: Array[int] = []
 var drag_source := Vector2i(-1, -1)
@@ -45,6 +47,7 @@ var locked_cells: Dictionary = {}
 var lock_overlays: Dictionary = {}
 var initial_locks: Array[Vector2i] = []
 var shift_bottom_each_move := false
+var blocker_style := "cage"
 var objective_targets: Array[Control] = []
 var collection_starts: Dictionary = {}
 
@@ -67,6 +70,7 @@ func configure(textures: Array[Texture2D], lock_positions: Array[Vector2i] = [],
 
 func reset_board() -> void:
 	selected = Vector2i(-1, -1)
+	power_busy = false
 	candy_bag.clear()
 	_clear_lock_overlays()
 	locked_cells.clear()
@@ -150,7 +154,8 @@ func _set_item_home(item: MergeItem, pos: Vector2i, animated: bool) -> void:
 
 
 func _on_candy_drag_started(item: MergeItem) -> void:
-	if busy or not interaction_enabled or locked_cells.has(item.cell):
+	var is_power := _is_power_cell(item.cell)
+	if not interaction_enabled or locked_cells.has(item.cell) or power_busy or (busy and not is_power):
 		item.dragging = false
 		item.return_home()
 		return
@@ -169,12 +174,11 @@ func _on_candy_drag_ended(item: MergeItem, screen_position: Vector2) -> void:
 	drag_source = Vector2i(-1, -1)
 	drag_target = Vector2i(-1, -1)
 	_refresh_highlights()
-	if target == source and int(cells[source.y][source.x].special) != Special.NONE:
-		busy = true
-		await _activate_special(source, _tap_target_kind(source))
-		await _after_completed_move()
-		busy = false
-		move_finished.emit()
+	if target == source and _is_power_cell(source):
+		_request_power_activation(source)
+		return
+	if busy:
+		item.return_home()
 		return
 	if not _adjacent(source, target):
 		item.return_home()
@@ -227,8 +231,7 @@ func _try_item_swap(dragged: MergeItem, a: Vector2i, b: Vector2i) -> void:
 	candy_items[b_index] = dragged
 	_refresh()
 	if activates_special:
-		var other_pos := a if special_pos == b else b
-		await _activate_special(special_pos, int(cells[other_pos.y][other_pos.x].kind))
+		await _activate_swapped_special(a,b,special_pos)
 	else:
 		await _resolve_cascades(b)
 	await _after_completed_move()
@@ -390,7 +393,11 @@ func _highlight_drop_target() -> void:
 
 
 func _cell_pressed(pos: Vector2i) -> void:
-	if busy or not interaction_enabled:
+	if not interaction_enabled or power_busy:
+		return
+	if busy:
+		if _is_power_cell(pos):
+			_request_power_activation(pos)
 		return
 	if locked_cells.has(pos):
 		_animate_locked_nudge(pos)
@@ -412,6 +419,54 @@ func _cell_pressed(pos: Vector2i) -> void:
 	await _try_swap(first, pos)
 
 
+func _is_power_cell(pos: Vector2i) -> bool:
+	return pos.x >= 0 and pos.x < COLS and pos.y >= 0 and pos.y < ROWS and cells[pos.y][pos.x] != null and int(cells[pos.y][pos.x].special) != Special.NONE
+
+
+func _request_power_activation(pos: Vector2i) -> void:
+	if power_busy or not _is_power_cell(pos):
+		return
+	power_busy = true
+	# Store the request on the candy data itself. Gravity moves this dictionary,
+	# so a power-up tapped during a refill is still the one that activates after
+	# the current board mutation finishes.
+	cells[pos.y][pos.x]["activation_queued"] = true
+	var item: MergeItem = candy_items[pos.y * COLS + pos.x]
+	var acknowledgement := create_tween().set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	acknowledgement.tween_property(item, "scale", Vector2(1.18, 1.18), 0.08)
+	acknowledgement.tween_property(item, "scale", Vector2.ONE, 0.10)
+	_run_queued_power.call_deferred()
+
+
+func _run_queued_power() -> void:
+	while busy and is_inside_tree():
+		await get_tree().process_frame
+	if not is_inside_tree():
+		power_busy = false
+		return
+	var queued := Vector2i(-1, -1)
+	for y in ROWS:
+		for x in COLS:
+			if cells[y][x] != null and bool(cells[y][x].get("activation_queued", false)):
+				queued = Vector2i(x, y)
+				break
+		if queued.x >= 0:
+			break
+	if queued.x < 0 or not _is_power_cell(queued):
+		power_busy = false
+		return
+	cells[queued.y][queued.x].erase("activation_queued")
+	# The queued-input lock ends as the effect begins. _play_power_effect_locked()
+	# owns the lock during the actual power animation; once that visual ends, a
+	# second power-up may be queued during the remaining candy fall animations.
+	power_busy = false
+	busy = true
+	await _activate_special(queued, _tap_target_kind(queued))
+	await _after_completed_move()
+	busy = false
+	move_finished.emit()
+
+
 func _try_swap(a: Vector2i, b: Vector2i, from_drag := false) -> void:
 	busy = true
 	var completed_move := false
@@ -422,8 +477,7 @@ func _try_swap(a: Vector2i, b: Vector2i, from_drag := false) -> void:
 	var special_pos := b if int(cells[b.y][b.x].special) != Special.NONE else (a if int(cells[a.y][a.x].special) != Special.NONE else Vector2i(-1, -1))
 	if special_pos.x >= 0:
 		completed_move = true
-		var other_pos := a if special_pos == b else b
-		await _activate_special(special_pos, int(cells[other_pos.y][other_pos.x].kind))
+		await _activate_swapped_special(a,b,special_pos)
 	elif not _has_match():
 		await _animate_invalid_swap(a, b)
 		_swap(a, b)
@@ -503,6 +557,9 @@ func _resolve_cascades(preferred: Vector2i) -> void:
 		_expand_triggered_specials(clear_set)
 		_remove_locked_from_clear(clear_set)
 		var creation: Dictionary = _choose_special(matches, preferred)
+		var bonus_positions: Array[Vector2i] = _large_match_positions(matches, preferred)
+		for bonus_position: Vector2i in bonus_positions:
+			large_match_created.emit(bonus_position)
 		var score_set: Dictionary = clear_set.duplicate()
 		if not creation.is_empty():
 			clear_set.erase(creation.pos)
@@ -527,6 +584,36 @@ func _resolve_cascades(preferred: Vector2i) -> void:
 		await _animate_refill(fall_rows)
 		preferred = Vector2i(-1, -1)
 	await _ensure_playable_board()
+
+
+func _large_match_positions(matches: Dictionary, preferred: Vector2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	for run: Dictionary in matches.runs:
+		if run.items.size() >= 4:
+			var pos: Vector2i = preferred if preferred in run.items else run.items[run.items.size()/2]
+			if pos not in result: result.append(pos)
+	for square: Dictionary in matches.squares:
+		var pos: Vector2i = preferred if preferred in square.items else square.items[0]
+		if pos not in result: result.append(pos)
+	return result
+
+
+func animate_bonus_collection(origin: Vector2i, texture: Texture2D, target: Control) -> void:
+	if not is_instance_valid(target): return
+	var start := buttons[origin.y*COLS+origin.x].position+Vector2(14,14)
+	var destination_center := _global_to_board(target.get_global_rect().get_center())
+	var destination := destination_center-Vector2(39,39)
+	var sprite := _make_moving_sprite(texture,start)
+	sprite.size=Vector2(82,82); sprite.pivot_offset=sprite.size*0.5; sprite.scale=Vector2(0.35,0.35); sprite.z_index=140
+	var tween := create_tween()
+	tween.tween_property(sprite,"scale",Vector2(1.08,1.08),0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(sprite,"position:y",start.y-42.0,0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	var midpoint := start.lerp(destination,0.5)+Vector2(0,-115)
+	tween.tween_property(sprite,"position",midpoint,0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(sprite,"position",destination,0.26).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.parallel().tween_property(sprite,"scale",Vector2(0.38,0.38),0.26)
+	await tween.finished
+	sprite.queue_free(); _spawn_sugar_burst(destination_center,Color("fff3c7"),16); _pulse_objective(target)
 
 
 func _ensure_playable_board() -> void:
@@ -770,7 +857,7 @@ func _activate_special(pos: Vector2i, kind: int) -> void:
 	else:
 		_expand_triggered_specials(clear_set)
 	_remove_locked_from_clear(clear_set)
-	await _animate_power_effect(special, pos, clear_set)
+	await _play_power_effect_locked(special, pos, clear_set)
 	await _animate_chained_effects(clear_set, pos)
 	await _animate_clear(clear_set)
 	await _damage_adjacent_locks(clear_set)
@@ -788,13 +875,64 @@ func _activate_target(pos: Vector2i, kind: int) -> void:
 	await _activate_special(pos, kind)
 
 
+func _activate_swapped_special(a: Vector2i, b: Vector2i, fallback_special_pos: Vector2i) -> void:
+	var a_special := int(cells[a.y][a.x].special)
+	var b_special := int(cells[b.y][b.x].special)
+	if a_special==Special.TARGET and b_special in [Special.ROW,Special.COLUMN,Special.FLYER,Special.BOMB]:
+		await _activate_target_powerup_combo(a,b,b_special)
+		return
+	if b_special==Special.TARGET and a_special in [Special.ROW,Special.COLUMN,Special.FLYER,Special.BOMB]:
+		await _activate_target_powerup_combo(b,a,a_special)
+		return
+	var other_pos := a if fallback_special_pos==b else b
+	await _activate_special(fallback_special_pos,int(cells[other_pos.y][other_pos.x].kind))
+
+
+func _activate_target_powerup_combo(target_pos: Vector2i, power_pos: Vector2i, powerup: int) -> void:
+	# A disco-ball combination transforms random occupied squares into copies of
+	# the paired power-up, replacing whatever normal item was in each square.
+	var candidates: Array[Vector2i] = []
+	for y in ROWS:
+		for x in COLS:
+			var pos := Vector2i(x,y)
+			if pos!=target_pos and pos!=power_pos and not locked_cells.has(pos): candidates.append(pos)
+	for index in range(candidates.size()-1,0,-1):
+		var swap_index := rng.randi_range(0,index)
+		var value := candidates[index]; candidates[index]=candidates[swap_index]; candidates[swap_index]=value
+	var spawn_count := mini(8,candidates.size())
+	cells[target_pos.y][target_pos.x]={"kind":rng.randi_range(0,COLORS-1),"special":Special.NONE}
+	cells[power_pos.y][power_pos.x]={"kind":rng.randi_range(0,COLORS-1),"special":Special.NONE}
+	for index in spawn_count:
+		var pos: Vector2i = candidates[index]
+		cells[pos.y][pos.x].special=powerup
+	_refresh()
+	var owned_power_lock := not power_busy
+	power_busy = true
+	await _animate_disco_electricity(target_pos,{target_pos:true,power_pos:true})
+	if owned_power_lock:
+		power_busy = false
+	for index in spawn_count:
+		var item: MergeItem = candy_items[candidates[index].y*COLS+candidates[index].x]
+		item.scale=Vector2(0.25,0.25)
+		create_tween().tween_property(item,"scale",Vector2.ONE,0.28).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	await get_tree().create_timer(0.32).timeout
+
+
 func _animate_chained_effects(clear_set: Dictionary, already_played := Vector2i(-1, -1)) -> void:
 	for pos: Vector2i in clear_set:
 		if pos == already_played:
 			continue
 		var special := int(cells[pos.y][pos.x].special)
 		if special in [Special.ROW, Special.COLUMN, Special.BOMB]:
-			await _animate_power_effect(special, pos, clear_set)
+			await _play_power_effect_locked(special, pos, clear_set)
+
+
+func _play_power_effect_locked(special: int, origin: Vector2i, clear_set: Dictionary) -> void:
+	var owned_power_lock := not power_busy
+	power_busy = true
+	await _animate_power_effect(special, origin, clear_set)
+	if owned_power_lock:
+		power_busy = false
 
 
 func _animate_power_effect(special: int, origin: Vector2i, clear_set: Dictionary) -> void:
@@ -1059,6 +1197,36 @@ func _create_lock_overlay(pos: Vector2i) -> void:
 	overlay.size = buttons[pos.y * COLS + pos.x].size - Vector2(8, 8)
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.z_index = 35
+	if blocker_style != "cage":
+		var cover := Panel.new()
+		cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		cover.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var style := StyleBoxFlat.new()
+		if blocker_style == "jelly":
+			style.bg_color = Color("dc77b5d8")
+			style.border_color = Color("ffbde7ee")
+		elif blocker_style == "ice":
+			style.bg_color = Color("a9e5f3c8")
+			style.border_color = Color("e9fbffff")
+		else:
+			style.bg_color = Color("6b351ee8")
+			style.border_color = Color("c17a4cff")
+		style.set_border_width_all(5)
+		style.set_corner_radius_all(18 if blocker_style=="jelly" else 8)
+		cover.add_theme_stylebox_override("panel",style)
+		overlay.add_child(cover)
+		var mark := Label.new()
+		mark.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		mark.text = "●" if blocker_style=="jelly" else ("✧" if blocker_style=="ice" else "✦")
+		mark.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER
+		mark.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+		mark.add_theme_font_size_override("font_size",44)
+		mark.add_theme_color_override("font_color",Color("ffd8eff0") if blocker_style=="jelly" else (Color("ffffffff") if blocker_style=="ice" else Color("d99a70ff")))
+		mark.mouse_filter=Control.MOUSE_FILTER_IGNORE
+		overlay.add_child(mark)
+		add_child(overlay)
+		lock_overlays[pos]=overlay
+		return
 	for x_offset in [18.0, 48.0, 78.0]:
 		var bar := ColorRect.new()
 		bar.position = Vector2(x_offset, 4)

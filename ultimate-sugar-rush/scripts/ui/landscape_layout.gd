@@ -22,8 +22,10 @@ static func apply(root: Control) -> void:
 				control.position = Vector2(45,165)
 				control.size = Vector2(1240,90)
 			"Rules":
-				control.position = Vector2(1110,965)
-				control.size = Vector2(750,85)
+				# Keep the power-up hint directly beneath the board and out of the
+				# objective column, including layouts with a fifth objective.
+				control.position = Vector2(180,965)
+				control.size = Vector2(900,85)
 	var objectives := VBoxContainer.new()
 	objectives.name = "RightObjectives"
 	objectives.position = Vector2(1370,195)

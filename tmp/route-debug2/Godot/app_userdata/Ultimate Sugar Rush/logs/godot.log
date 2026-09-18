@@ -1,0 +1,28 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+0 Berry enter (-9.15, -0.63, -5.249222) p0 s0
+0 Mint enter (-9.15, -0.63, -12.74922) p0 s0
+0 Coco enter (-9.15, -0.63, -20.24922) p0 s0
+900 Berry enter (-7.925502, -0.395984, 4.2) p1 s0
+900 Mint enter (-9.15, -0.63, -2.024592) p0 s0
+900 Coco enter (-9.15, -0.63, -9.524921) p0 s0
+1800 Berry enter (-3.965279, 0.14, -2.691773) p6 s0
+1800 Mint enter (-5.955877, 0.14, 3.9587) p5 s0
+1800 Coco enter (-9.15, -0.63, 1.275129) p0 s0
+2700 Berry exit (3.847859, 0.14, -1.632859) p1 s1
+2700 Mint enter (-0.920992, 0.14, -1.355321) p6 s0
+2700 Coco enter (-5.648026, 0.14, 2.035899) p5 s0
+3600 Berry exit (1.918882, 0.14, -0.593067) p2 s1
+3600 Mint enter (1.411509, 0.14, -0.830159) p6 s0
+3600 Coco enter (0.85165, 0.14, -0.801598) p6 s0
+4500 Berry exit (1.918882, 0.14, -0.593067) p2 s1
+4500 Mint enter (1.411509, 0.14, -0.830159) p6 s0
+4500 Coco enter (0.85165, 0.14, -0.801598) p6 s0
+5400 Berry exit (1.918882, 0.14, -0.593067) p2 s1
+5400 Mint enter (1.411509, 0.14, -0.830159) p6 s0
+5400 Coco enter (0.85165, 0.14, -0.801598) p6 s0
+6300 Berry exit (1.918882, 0.14, -0.593067) p2 s1
+6300 Mint enter (1.411509, 0.14, -0.830159) p6 s0
+6300 Coco enter (0.85165, 0.14, -0.801598) p6 s0

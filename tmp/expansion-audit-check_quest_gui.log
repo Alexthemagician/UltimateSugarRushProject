@@ -1,0 +1,28 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+ERROR: Sale removes one bun
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:49)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Sale pays four coins
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:50)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Sale advances coin quest
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:51)
+       [2] click (res://tests/check_quest_gui.gd:23)
+ERROR: Quest progress persists
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] check (res://tests/check_quest_gui.gd:7)
+       [1] run (res://tests/check_quest_gui.gd:55)
+       [2] click (res://tests/check_quest_gui.gd:23)
